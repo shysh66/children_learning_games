@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/children_learning_games/static/css/main.3e271355.css",
+    "main.js": "/children_learning_games/static/js/main.de42b8aa.js",
+    "index.html": "/children_learning_games/index.html",
+    "main.3e271355.css.map": "/children_learning_games/static/css/main.3e271355.css.map",
+    "main.de42b8aa.js.map": "/children_learning_games/static/js/main.de42b8aa.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3e271355.css",
+    "static/js/main.de42b8aa.js"
+  ]
+}
