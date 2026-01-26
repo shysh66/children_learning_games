@@ -258,7 +258,7 @@ const MathGameApp = () => {
     if (currentQuestion.type === 'multiply') {
       return (
         <div className="flex flex-col items-center gap-4 mb-8">
-          <div className="text-6xl font-bold text-white mb-2">
+          <div className="text-6xl font-bold text-white mb-2" dir="ltr">
             {currentQuestion.num1} × {currentQuestion.num2}
           </div>
           <div className="flex flex-wrap justify-center gap-4 max-w-2xl">
@@ -278,7 +278,7 @@ const MathGameApp = () => {
       const total = Math.min(currentQuestion.visual.total, 30);
       return (
         <div className="flex flex-col items-center gap-4 mb-8">
-          <div className="text-6xl font-bold text-white mb-2">
+          <div className="text-6xl font-bold text-white mb-2" dir="ltr">
             {currentQuestion.num1} {currentQuestion.type === 'add' ? '+' : '-'} {currentQuestion.num2}
           </div>
           <div className="flex flex-wrap justify-center gap-2 max-w-3xl">
