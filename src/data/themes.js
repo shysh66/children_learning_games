@@ -1,0 +1,58 @@
+// Theme configurations for the app
+// Each theme affects colors, icons, and visual style across all screens
+
+export const themes = {
+  space: {
+    id: 'space',
+    name: 'חלל',
+    icon: '🚀',
+    bg: 'bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900',
+    primary: 'bg-indigo-600 hover:bg-indigo-500',
+    primarySolid: 'bg-indigo-600',
+    secondary: 'bg-purple-600 hover:bg-purple-500',
+    accent: 'text-yellow-300',
+    cardBg: 'bg-indigo-800/40 backdrop-blur-sm border-2 border-indigo-500/30',
+    visualIcon: '⭐',
+    font: 'font-mono',
+    confettiColors: ['#818cf8', '#c084fc', '#fbbf24'],
+    mapBg: 'bg-gradient-to-b from-indigo-950 via-purple-900 to-indigo-900',
+    starColor: 'text-yellow-400',
+    lockedColor: 'bg-gray-600/50',
+  },
+  dino: {
+    id: 'dino',
+    name: 'דינוזאורים',
+    icon: '🦕',
+    bg: 'bg-gradient-to-br from-green-800 via-emerald-700 to-teal-800',
+    primary: 'bg-green-600 hover:bg-green-500',
+    primarySolid: 'bg-green-600',
+    secondary: 'bg-emerald-600 hover:bg-emerald-500',
+    accent: 'text-lime-300',
+    cardBg: 'bg-green-800/40 backdrop-blur-sm border-2 border-green-500/30',
+    visualIcon: '🦖',
+    font: 'font-bold',
+    confettiColors: ['#86efac', '#a3e635', '#fde047'],
+    mapBg: 'bg-gradient-to-b from-green-950 via-emerald-900 to-green-900',
+    starColor: 'text-yellow-400',
+    lockedColor: 'bg-gray-600/50',
+  },
+  unicorn: {
+    id: 'unicorn',
+    name: 'חדי-קרן',
+    icon: '🦄',
+    bg: 'bg-gradient-to-br from-pink-400 via-purple-400 to-cyan-400',
+    primary: 'bg-pink-500 hover:bg-pink-400',
+    primarySolid: 'bg-pink-500',
+    secondary: 'bg-purple-500 hover:bg-purple-400',
+    accent: 'text-fuchsia-200',
+    cardBg: 'bg-white/30 backdrop-blur-sm border-2 border-pink-300/50',
+    visualIcon: '🌟',
+    font: 'font-semibold',
+    confettiColors: ['#f9a8d4', '#c084fc', '#67e8f9'],
+    mapBg: 'bg-gradient-to-b from-pink-300 via-purple-300 to-cyan-300',
+    starColor: 'text-yellow-500',
+    lockedColor: 'bg-gray-400/50',
+  },
+};
+
+export const getTheme = (themeId) => themes[themeId] || themes.space;
