@@ -17,7 +17,7 @@ const ThemeSelectScreen = ({ onSelectTheme, version, lastUpdate }) => {
           >
             🎮 משחקי החשבון שלי 🎮
           </h1>
-          <p className="text-2xl text-white/90 font-semibold">בחר נושא למשחק!</p>
+          <p className="text-2xl text-white/90 font-semibold">בחר דמות למשחק!</p>
         </div>
 
         {/* Theme cards */}
