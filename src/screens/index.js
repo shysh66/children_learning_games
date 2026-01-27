@@ -3,4 +3,5 @@ export { default as ThemeSelectScreen } from './ThemeSelectScreen';
 export { default as GameSelectScreen } from './GameSelectScreen';
 export { default as LevelMapScreen } from './LevelMapScreen';
 export { default as GameScreen } from './GameScreen';
+export { default as JuniorGameScreen } from './JuniorGameScreen';
 export { default as WinScreen } from './WinScreen';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Lock } from 'lucide-react';
 import { getTheme } from '../data/themes';
-import { gameModes, TOTAL_LEVELS } from '../data/levelConfigs';
+import { gameModes } from '../data/levelConfigs';
 import { StarRating } from '../components';
 import { isLevelUnlocked, getLevelStars } from '../utils/storage';
 
@@ -10,10 +10,11 @@ const LevelMapScreen = ({ themeId, gameMode, onSelectLevel, onBack }) => {
   const theme = getTheme(themeId);
   const mode = gameModes[gameMode];
   const levels = mode.levels;
+  const totalLevels = mode.totalLevels;
 
   // Generate level nodes
   const levelNodes = [];
-  for (let i = 1; i <= TOTAL_LEVELS; i++) {
+  for (let i = 1; i <= totalLevels; i++) {
     const unlocked = isLevelUnlocked(gameMode, i);
     const stars = getLevelStars(gameMode, i);
     const levelConfig = levels[i];

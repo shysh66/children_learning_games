@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, RotateCcw, Trophy, Map } from 'lucide-react';
 import { getTheme } from '../data/themes';
-import { QUESTIONS_PER_LEVEL, calculateStars, TOTAL_LEVELS } from '../data/levelConfigs';
+import { gameModes, QUESTIONS_PER_LEVEL, calculateStars } from '../data/levelConfigs';
 import { getRandomMedal } from '../data/medals';
 import { updateLevelStars } from '../utils/storage';
 import { StarRating, Modal, Button } from '../components';
@@ -18,9 +18,10 @@ const WinScreen = ({
   triggerConfetti,
 }) => {
   const theme = getTheme(themeId);
+  const mode = gameModes[gameMode];
   const stars = calculateStars(score, QUESTIONS_PER_LEVEL);
   const passed = stars >= 1;
-  const hasNextLevel = level < TOTAL_LEVELS;
+  const hasNextLevel = level < mode.totalLevels;
 
   // Medal modal state
   const [showMedal, setShowMedal] = useState(false);

@@ -7,6 +7,7 @@ import {
   GameSelectScreen,
   LevelMapScreen,
   GameScreen,
+  JuniorGameScreen,
   WinScreen,
 } from './screens';
 
@@ -17,7 +18,7 @@ import { getTheme } from './data/themes';
 import { saveTheme, getSelectedTheme } from './utils/storage';
 
 // Version info
-const APP_VERSION = '2.0.2';
+const APP_VERSION = '2.1.0';
 const LAST_UPDATE = '27.1.2026';
 
 // Screen names for navigation
@@ -167,8 +168,10 @@ const App = () => {
         );
 
       case SCREENS.GAME:
+        // Use JuniorGameScreen for junior mode, regular GameScreen for others
+        const GameComponent = selectedGameMode === 'junior' ? JuniorGameScreen : GameScreen;
         return (
-          <GameScreen
+          <GameComponent
             themeId={selectedTheme}
             gameMode={selectedGameMode}
             level={selectedLevel}
