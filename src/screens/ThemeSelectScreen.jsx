@@ -5,7 +5,7 @@ import { themes } from '../data/themes';
 const ThemeSelectScreen = ({ onSelectTheme, version, lastUpdate }) => {
   return (
     <div
-      className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center p-8 font-sans"
+      className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center p-8 font-sans relative"
       dir="rtl"
     >
       <div className="max-w-4xl w-full">
@@ -35,15 +35,11 @@ const ThemeSelectScreen = ({ onSelectTheme, version, lastUpdate }) => {
             </button>
           ))}
         </div>
+      </div>
 
-        {/* Version info */}
-        <div className="mt-6 text-center">
-          <div className="inline-block bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-3 border border-white/20">
-            <p className="text-white/80 text-lg font-semibold">
-              גרסה {version} • {lastUpdate}
-            </p>
-          </div>
-        </div>
+      {/* Version info - bottom right corner */}
+      <div className="fixed bottom-4 left-4 text-white/60 text-sm">
+        גרסא {version} עודכנה בתאריך {lastUpdate}
       </div>
     </div>
   );

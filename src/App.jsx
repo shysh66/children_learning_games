@@ -17,8 +17,8 @@ import { getTheme } from './data/themes';
 import { saveTheme, getSelectedTheme } from './utils/storage';
 
 // Version info
-const APP_VERSION = '2.0.1';
-const LAST_UPDATE = '27.01.2026';
+const APP_VERSION = '2.0.2';
+const LAST_UPDATE = '27.1.2026';
 
 // Screen names for navigation
 const SCREENS = {
