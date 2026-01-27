@@ -3,7 +3,60 @@
 
 export const QUESTIONS_PER_LEVEL = 8;
 export const STARS_TO_UNLOCK_NEXT = 1; // Minimum stars needed to unlock next level
-export const TOTAL_LEVELS = 4; // Total levels per game mode
+
+// Junior Math level configurations (for ages 4-5)
+export const juniorLevels = {
+  1: {
+    id: 1,
+    name: 'שלב 1',
+    description: 'ספירה עד 5',
+    type: 'counting',
+    maxNumber: 5,
+    visualRequired: true,
+  },
+  2: {
+    id: 2,
+    name: 'שלב 2',
+    description: 'חיבור עד 5',
+    type: 'addition',
+    maxResult: 5,
+    visualRequired: true,
+  },
+  3: {
+    id: 3,
+    name: 'שלב 3',
+    description: 'חיסור עד 5',
+    type: 'subtraction',
+    maxNumber: 5,
+    visualRequired: true,
+  },
+  4: {
+    id: 4,
+    name: 'שלב 4',
+    description: 'חיבור וחיסור עד 10',
+    type: 'mixed',
+    maxResult: 10,
+    visualRequired: true,
+  },
+  5: {
+    id: 5,
+    name: 'שלב 5',
+    description: 'חיבור וחיסור עד 15',
+    type: 'mixed',
+    maxResult: 15,
+    visualRequired: true,
+    useGrid: true,
+  },
+  6: {
+    id: 6,
+    name: 'שלב 6',
+    description: 'חיבור וחיסור עד 20',
+    type: 'mixed',
+    maxResult: 20,
+    visualRequired: true,
+    useGrid: true,
+  },
+};
 
 // Addition & Subtraction level configurations
 export const addSubLevels = {
@@ -83,13 +136,21 @@ export const multiplyLevels = {
 
 // Game modes
 export const gameModes = {
+  junior: {
+    id: 'junior',
+    name: 'חשבון לקטנטנים',
+    icon: '🧒',
+    description: 'לגילאי 4-5',
+    levels: juniorLevels,
+    totalLevels: 6,
+  },
   multiply: {
     id: 'multiply',
     name: 'לוח הכפל',
     icon: '✖️',
     description: 'תרגול כפל מהנה',
     levels: multiplyLevels,
-    totalLevels: TOTAL_LEVELS,
+    totalLevels: 4,
   },
   addsub: {
     id: 'addsub',
@@ -97,8 +158,13 @@ export const gameModes = {
     icon: '➕➖',
     description: 'תרגול חיבור וחיסור',
     levels: addSubLevels,
-    totalLevels: TOTAL_LEVELS,
+    totalLevels: 4,
   },
+};
+
+// Get total levels for a game mode
+export const getTotalLevels = (gameMode) => {
+  return gameModes[gameMode]?.totalLevels || 4;
 };
 
 // Calculate stars based on score

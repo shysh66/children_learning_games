@@ -1,7 +1,7 @@
 // Game logic for generating questions based on level configurations
-// Handles both Addition/Subtraction and Multiplication games
+// Handles Junior Math, Addition/Subtraction, and Multiplication games
 
-import { addSubLevels, multiplyLevels } from '../data/levelConfigs';
+import { addSubLevels, multiplyLevels, juniorLevels } from '../data/levelConfigs';
 
 // Generate random integer between min and max (inclusive)
 const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -17,32 +17,111 @@ const shuffleArray = (array) => {
 };
 
 // Generate wrong answers that are close to the correct answer
-const generateWrongAnswers = (correct, count = 3, minValue = 1) => {
+const generateWrongAnswers = (correct, count = 3, minValue = 0, maxOffset = 5) => {
   const answers = new Set();
   let attempts = 0;
   const maxAttempts = 100;
 
   while (answers.size < count && attempts < maxAttempts) {
     // Generate wrong answer within reasonable range
-    const offset = randomInt(-10, 10);
+    const offset = randomInt(-maxOffset, maxOffset);
     const wrong = correct + offset;
 
-    if (wrong > minValue && wrong !== correct && !answers.has(wrong)) {
+    if (wrong >= minValue && wrong !== correct && !answers.has(wrong)) {
       answers.add(wrong);
     }
     attempts++;
   }
 
   // Fallback: add sequential wrong answers if not enough
-  let fallback = correct + 1;
+  let fallback = minValue;
   while (answers.size < count) {
-    if (fallback !== correct && fallback > minValue && !answers.has(fallback)) {
+    if (fallback !== correct && !answers.has(fallback)) {
       answers.add(fallback);
     }
     fallback++;
   }
 
   return Array.from(answers);
+};
+
+// Generate Junior Math question based on level
+export const generateJuniorQuestion = (levelId) => {
+  const config = juniorLevels[levelId];
+  if (!config) {
+    console.error(`Invalid junior level: ${levelId}`);
+    return generateJuniorQuestion(1); // Fallback to level 1
+  }
+
+  const { type, maxNumber, maxResult } = config;
+  let questionType, num1, num2, correct;
+
+  switch (type) {
+    case 'counting':
+      // Just counting - "How many items?"
+      questionType = 'counting';
+      num1 = randomInt(1, maxNumber);
+      num2 = 0;
+      correct = num1;
+      break;
+
+    case 'addition':
+      // Addition only
+      questionType = 'junior_add';
+      num1 = randomInt(1, maxResult - 1);
+      num2 = randomInt(1, maxResult - num1);
+      correct = num1 + num2;
+      break;
+
+    case 'subtraction':
+      // Subtraction only
+      questionType = 'junior_subtract';
+      num1 = randomInt(2, maxNumber);
+      num2 = randomInt(1, num1 - 1);
+      correct = num1 - num2;
+      break;
+
+    case 'mixed':
+    default:
+      // Mixed addition and subtraction
+      const isAddition = Math.random() > 0.5;
+      if (isAddition) {
+        questionType = 'junior_add';
+        num1 = randomInt(1, Math.floor(maxResult / 2));
+        num2 = randomInt(1, maxResult - num1);
+        correct = num1 + num2;
+      } else {
+        questionType = 'junior_subtract';
+        num1 = randomInt(2, maxResult);
+        num2 = randomInt(1, Math.min(num1 - 1, Math.floor(maxResult / 2)));
+        correct = num1 - num2;
+      }
+      break;
+  }
+
+  // Generate wrong answers - smaller range for young children
+  const maxOffset = Math.min(3, Math.max(2, Math.floor(correct / 2)));
+  const wrongAnswers = generateWrongAnswers(correct, 3, 0, maxOffset);
+  const allAnswers = shuffleArray([correct, ...wrongAnswers]);
+
+  return {
+    type: questionType,
+    num1,
+    num2,
+    correct,
+    answers: allAnswers,
+    showVisual: true, // Always show visual for junior
+    useGrid: config.useGrid || false,
+    visual: {
+      // For counting: just num1 items
+      // For addition: num1 items + num2 items (two groups)
+      // For subtraction: num1 items with num2 crossed out
+      group1: num1,
+      group2: num2,
+      total: questionType === 'junior_add' ? correct : num1,
+      subtracted: questionType === 'junior_subtract' ? num2 : 0,
+    },
+  };
 };
 
 // Generate Addition/Subtraction question based on level
@@ -121,7 +200,7 @@ export const generateAddSubQuestion = (levelId) => {
   } while (attempts < maxAttempts);
 
   // Generate wrong answers
-  const wrongAnswers = generateWrongAnswers(correct, 3, 0);
+  const wrongAnswers = generateWrongAnswers(correct, 3, 0, 10);
   const allAnswers = shuffleArray([correct, ...wrongAnswers]);
 
   return {
@@ -161,7 +240,7 @@ export const generateMultiplicationQuestion = (levelId) => {
   const correct = num1 * num2;
 
   // Generate wrong answers
-  const wrongAnswers = generateWrongAnswers(correct, 3, 1);
+  const wrongAnswers = generateWrongAnswers(correct, 3, 1, 10);
   const allAnswers = shuffleArray([correct, ...wrongAnswers]);
 
   // Determine if visual should be shown (limit for performance)
@@ -183,6 +262,9 @@ export const generateMultiplicationQuestion = (levelId) => {
 
 // Generate question based on game mode and level
 export const generateQuestion = (gameMode, levelId) => {
+  if (gameMode === 'junior') {
+    return generateJuniorQuestion(levelId);
+  }
   if (gameMode === 'multiply') {
     return generateMultiplicationQuestion(levelId);
   }
@@ -193,12 +275,21 @@ export const generateQuestion = (gameMode, levelId) => {
 export const getOperatorSymbol = (type) => {
   switch (type) {
     case 'add':
+    case 'junior_add':
       return '+';
     case 'subtract':
+    case 'junior_subtract':
       return '-';
     case 'multiply':
       return '×';
+    case 'counting':
+      return '?';
     default:
       return '?';
   }
+};
+
+// Check if question type is a junior type
+export const isJuniorType = (type) => {
+  return type === 'counting' || type === 'junior_add' || type === 'junior_subtract';
 };
