@@ -5,9 +5,13 @@ const STORAGE_KEY = 'mathGameProgress';
 
 // Default progress structure
 const getDefaultProgress = () => ({
-  multiply: {
+  junior: {
     unlockedLevel: 1,
     stars: {}, // { levelId: starsEarned }
+  },
+  multiply: {
+    unlockedLevel: 1,
+    stars: {},
   },
   addsub: {
     unlockedLevel: 1,
@@ -26,6 +30,7 @@ export const loadProgress = () => {
       return {
         ...getDefaultProgress(),
         ...parsed,
+        junior: { ...getDefaultProgress().junior, ...parsed.junior },
         multiply: { ...getDefaultProgress().multiply, ...parsed.multiply },
         addsub: { ...getDefaultProgress().addsub, ...parsed.addsub },
       };
