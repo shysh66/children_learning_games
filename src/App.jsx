@@ -16,10 +16,11 @@ import { getTheme } from './data/themes';
 
 // Utils
 import { saveTheme, getSelectedTheme } from './utils/storage';
+import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '2.1.0';
-const LAST_UPDATE = '27.1.2026';
+const APP_VERSION = '2.1.1';
+const LAST_UPDATE = '29.1.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -48,13 +49,14 @@ const App = () => {
     }
   }, []);
 
-  // Confetti trigger function using canvas-confetti
+  // Confetti trigger function using canvas-confetti with sound
   const triggerConfetti = useCallback((type = 'normal') => {
     const theme = selectedTheme ? getTheme(selectedTheme) : null;
     const colors = theme?.confettiColors || ['#818cf8', '#c084fc', '#fbbf24'];
 
     if (type === 'big') {
-      // Big celebration confetti
+      // Big celebration confetti with fanfare sound
+      playCelebrationSound();
       const duration = 3000;
       const end = Date.now() + duration;
 
@@ -80,7 +82,8 @@ const App = () => {
       };
       frame();
     } else {
-      // Normal confetti burst
+      // Normal confetti burst with cheer sound
+      playCheerSound();
       confetti({
         particleCount: 50,
         spread: 70,
