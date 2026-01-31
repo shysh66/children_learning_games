@@ -1,10 +1,16 @@
 // LocalStorage utilities for persisting game progress
-// Handles unlocked levels, stars earned, and XP tracking
+// Handles profiles, unlocked levels, stars earned, and XP tracking
 
 const STORAGE_KEY = 'mathGameProgress';
 
-// Default progress structure
-const getDefaultProgress = () => ({
+// Available avatars for profile creation
+export const AVATARS = ['🦁', '🦄', '🦖', '🚀', '🤖', '🐱', '🐶', '👑', '⚽', '🦋'];
+
+// Generate unique ID for profiles
+const generateId = () => `profile_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+// Default progress structure for a single profile
+const getDefaultProfileProgress = () => ({
   junior: {
     unlockedLevel: 1,
     stars: {}, // { levelId: starsEarned }
@@ -25,36 +31,176 @@ const getDefaultProgress = () => ({
   totalXP: 0, // Global XP for ranking system
 });
 
-// Load progress from localStorage
-export const loadProgress = () => {
+// Default data structure with profiles
+const getDefaultData = () => ({
+  profiles: [],
+  activeProfileId: null,
+});
+
+// Check if data is in old format (no profiles array)
+const isOldFormat = (data) => {
+  return data && !data.profiles && (data.junior || data.multiply || data.addsub || data.totalXP !== undefined);
+};
+
+// Migrate old data to new profile format
+const migrateOldData = (oldData) => {
+  const defaultProfile = {
+    id: generateId(),
+    name: 'שחקן ראשי',
+    avatar: '🦁',
+    createdAt: Date.now(),
+    progress: {
+      junior: oldData.junior || getDefaultProfileProgress().junior,
+      multiply: oldData.multiply || getDefaultProfileProgress().multiply,
+      divide: oldData.divide || getDefaultProfileProgress().divide,
+      addsub: oldData.addsub || getDefaultProfileProgress().addsub,
+      selectedTheme: oldData.selectedTheme || null,
+      totalXP: oldData.totalXP || 0,
+    },
+  };
+
+  return {
+    profiles: [defaultProfile],
+    activeProfileId: defaultProfile.id,
+  };
+};
+
+// Load raw data from localStorage
+const loadRawData = () => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
-      // Merge with defaults to handle new fields
-      return {
-        ...getDefaultProgress(),
-        ...parsed,
-        junior: { ...getDefaultProgress().junior, ...parsed.junior },
-        multiply: { ...getDefaultProgress().multiply, ...parsed.multiply },
-        divide: { ...getDefaultProgress().divide, ...parsed.divide },
-        addsub: { ...getDefaultProgress().addsub, ...parsed.addsub },
-        totalXP: parsed.totalXP || 0,
-      };
+
+      // Check for old format and migrate
+      if (isOldFormat(parsed)) {
+        console.log('Migrating old data format to profiles...');
+        const migrated = migrateOldData(parsed);
+        saveRawData(migrated);
+        return migrated;
+      }
+
+      return parsed;
     }
   } catch (error) {
-    console.error('Error loading progress:', error);
+    console.error('Error loading data:', error);
   }
-  return getDefaultProgress();
+  return getDefaultData();
 };
 
-// Save progress to localStorage
-export const saveProgress = (progress) => {
+// Save raw data to localStorage
+const saveRawData = (data) => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch (error) {
-    console.error('Error saving progress:', error);
+    console.error('Error saving data:', error);
   }
+};
+
+// ============ Profile Management ============
+
+// Get all profiles
+export const getProfiles = () => {
+  const data = loadRawData();
+  return data.profiles || [];
+};
+
+// Get active profile
+export const getActiveProfile = () => {
+  const data = loadRawData();
+  if (!data.activeProfileId || !data.profiles) return null;
+  return data.profiles.find(p => p.id === data.activeProfileId) || null;
+};
+
+// Get active profile ID
+export const getActiveProfileId = () => {
+  const data = loadRawData();
+  return data.activeProfileId;
+};
+
+// Set active profile
+export const setActiveProfile = (profileId) => {
+  const data = loadRawData();
+  if (data.profiles.some(p => p.id === profileId)) {
+    data.activeProfileId = profileId;
+    saveRawData(data);
+    return true;
+  }
+  return false;
+};
+
+// Create new profile
+export const createProfile = (name, avatar) => {
+  const data = loadRawData();
+  const newProfile = {
+    id: generateId(),
+    name: name.trim() || 'שחקן',
+    avatar: avatar || '🦁',
+    createdAt: Date.now(),
+    progress: getDefaultProfileProgress(),
+  };
+
+  data.profiles.push(newProfile);
+  data.activeProfileId = newProfile.id;
+  saveRawData(data);
+
+  return newProfile;
+};
+
+// Delete profile
+export const deleteProfile = (profileId) => {
+  const data = loadRawData();
+  data.profiles = data.profiles.filter(p => p.id !== profileId);
+
+  // If deleted profile was active, clear active or set to first available
+  if (data.activeProfileId === profileId) {
+    data.activeProfileId = data.profiles.length > 0 ? data.profiles[0].id : null;
+  }
+
+  saveRawData(data);
+};
+
+// Log out (clear active profile)
+export const logoutProfile = () => {
+  const data = loadRawData();
+  data.activeProfileId = null;
+  saveRawData(data);
+};
+
+// ============ Progress Functions (use active profile) ============
+
+// Load progress for active profile
+export const loadProgress = () => {
+  const profile = getActiveProfile();
+  if (!profile) {
+    return getDefaultProfileProgress();
+  }
+
+  // Merge with defaults to handle new fields
+  const defaults = getDefaultProfileProgress();
+  return {
+    ...defaults,
+    ...profile.progress,
+    junior: { ...defaults.junior, ...profile.progress?.junior },
+    multiply: { ...defaults.multiply, ...profile.progress?.multiply },
+    divide: { ...defaults.divide, ...profile.progress?.divide },
+    addsub: { ...defaults.addsub, ...profile.progress?.addsub },
+    totalXP: profile.progress?.totalXP || 0,
+  };
+};
+
+// Save progress for active profile
+export const saveProgress = (progress) => {
+  const data = loadRawData();
+  const profileIndex = data.profiles.findIndex(p => p.id === data.activeProfileId);
+
+  if (profileIndex === -1) {
+    console.error('No active profile to save progress');
+    return;
+  }
+
+  data.profiles[profileIndex].progress = progress;
+  saveRawData(data);
 };
 
 // Update stars for a specific level
@@ -108,9 +254,9 @@ export const getSelectedTheme = () => {
   return progress.selectedTheme;
 };
 
-// Reset all progress (for testing/debug)
+// Reset all progress for active profile
 export const resetProgress = () => {
-  saveProgress(getDefaultProgress());
+  saveProgress(getDefaultProfileProgress());
 };
 
 // Get total XP
@@ -137,4 +283,15 @@ export const setTotalXP = (amount) => {
   const progress = loadProgress();
   progress.totalXP = amount;
   saveProgress(progress);
+};
+
+// Check if any profiles exist
+export const hasProfiles = () => {
+  const profiles = getProfiles();
+  return profiles.length > 0;
+};
+
+// Check if there's an active logged-in profile
+export const hasActiveProfile = () => {
+  return getActiveProfile() !== null;
 };

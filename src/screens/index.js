@@ -1,4 +1,6 @@
 // Central export for all screens
+export { default as ProfileSelectScreen } from './ProfileSelectScreen';
+export { default as ProfileCreateScreen } from './ProfileCreateScreen';
 export { default as ThemeSelectScreen } from './ThemeSelectScreen';
 export { default as GameSelectScreen } from './GameSelectScreen';
 export { default as LevelMapScreen } from './LevelMapScreen';
