@@ -1,5 +1,5 @@
 // LocalStorage utilities for persisting game progress
-// Handles unlocked levels and stars earned per level
+// Handles unlocked levels, stars earned, and XP tracking
 
 const STORAGE_KEY = 'mathGameProgress';
 
@@ -13,11 +13,16 @@ const getDefaultProgress = () => ({
     unlockedLevel: 1,
     stars: {},
   },
+  divide: {
+    unlockedLevel: 1,
+    stars: {},
+  },
   addsub: {
     unlockedLevel: 1,
     stars: {},
   },
   selectedTheme: null,
+  totalXP: 0, // Global XP for ranking system
 });
 
 // Load progress from localStorage
@@ -32,7 +37,9 @@ export const loadProgress = () => {
         ...parsed,
         junior: { ...getDefaultProgress().junior, ...parsed.junior },
         multiply: { ...getDefaultProgress().multiply, ...parsed.multiply },
+        divide: { ...getDefaultProgress().divide, ...parsed.divide },
         addsub: { ...getDefaultProgress().addsub, ...parsed.addsub },
+        totalXP: parsed.totalXP || 0,
       };
     }
   } catch (error) {
@@ -104,4 +111,30 @@ export const getSelectedTheme = () => {
 // Reset all progress (for testing/debug)
 export const resetProgress = () => {
   saveProgress(getDefaultProgress());
+};
+
+// Get total XP
+export const getTotalXP = () => {
+  const progress = loadProgress();
+  return progress.totalXP || 0;
+};
+
+// Add XP to total
+export const addXP = (amount) => {
+  const progress = loadProgress();
+  const previousXP = progress.totalXP || 0;
+  progress.totalXP = previousXP + amount;
+  saveProgress(progress);
+  return {
+    previousXP,
+    newXP: progress.totalXP,
+    added: amount,
+  };
+};
+
+// Set total XP (use sparingly, prefer addXP)
+export const setTotalXP = (amount) => {
+  const progress = loadProgress();
+  progress.totalXP = amount;
+  saveProgress(progress);
 };

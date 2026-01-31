@@ -67,6 +67,35 @@ const VisualQuestion = ({
     );
   };
 
+  // Render division visual (show dividend as icons)
+  const renderDivideVisual = () => {
+    if (!showVisual || !visual) return null;
+
+    const { total } = visual;
+    const displayTotal = Math.min(total, 20); // Limit for performance
+
+    return (
+      <div className="flex flex-wrap justify-center gap-2 max-w-3xl">
+        {[...Array(displayTotal)].map((_, idx) => (
+          <span
+            key={idx}
+            className="text-3xl animate-bounce"
+            style={{ animationDelay: `${idx * 0.05}s` }}
+          >
+            {theme.visualIcon}
+          </span>
+        ))}
+      </div>
+    );
+  };
+
+  // Choose which visual to render
+  const renderVisual = () => {
+    if (type === 'multiply') return renderMultiplyVisual();
+    if (type === 'divide') return renderDivideVisual();
+    return renderAddSubVisual();
+  };
+
   return (
     <div className="flex flex-col items-center gap-4 mb-8">
       {/* Math expression */}
@@ -75,7 +104,7 @@ const VisualQuestion = ({
       </div>
 
       {/* Visual representation */}
-      {type === 'multiply' ? renderMultiplyVisual() : renderAddSubVisual()}
+      {renderVisual()}
     </div>
   );
 };

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { getTheme } from '../data/themes';
 import { gameModes, QUESTIONS_PER_LEVEL } from '../data/levelConfigs';
 import { generateLevelQuestions } from '../utils/gameLogic';
-import { ProgressBar, VisualQuestion, AnswerButton } from '../components';
+import { calculateAnswerXP } from '../data/ranks';
+import { ProgressBar, VisualQuestion, AnswerButton, FloatingXP } from '../components';
 
 // Main game screen where questions are answered
 const GameScreen = ({
@@ -21,9 +22,15 @@ const GameScreen = ({
   const [questions, setQuestions] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [earnedXP, setEarnedXP] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [shakeWrong, setShakeWrong] = useState(false);
+  const [showFloatingXP, setShowFloatingXP] = useState(false);
+  const [currentXPGain, setCurrentXPGain] = useState(0);
+
+  // Calculate XP per correct answer based on level
+  const xpPerAnswer = calculateAnswerXP(level - 1);
 
   // Pre-generate all questions at the start of the level
   useEffect(() => {
@@ -31,12 +38,18 @@ const GameScreen = ({
     setQuestions(levelQuestions);
     setQuestionIndex(0);
     setScore(0);
+    setEarnedXP(0);
     setSelectedAnswer(null);
     setShowFeedback(false);
   }, [gameMode, level]);
 
   // Get current question from pre-generated list
   const currentQuestion = questions[questionIndex];
+
+  // Handle floating XP animation complete
+  const handleFloatingXPComplete = useCallback(() => {
+    setShowFloatingXP(false);
+  }, []);
 
   // Handle answer selection
   const handleAnswer = (answer) => {
@@ -49,6 +62,9 @@ const GameScreen = ({
 
     if (isCorrect) {
       setScore((prev) => prev + 1);
+      setEarnedXP((prev) => prev + xpPerAnswer);
+      setCurrentXPGain(xpPerAnswer);
+      setShowFloatingXP(true);
       triggerConfetti?.('normal');
     } else {
       setShakeWrong(true);
@@ -62,9 +78,10 @@ const GameScreen = ({
         setSelectedAnswer(null);
         setShowFeedback(false);
       } else {
-        // Game complete
+        // Game complete - pass both score and earned XP
         const finalScore = isCorrect ? score + 1 : score;
-        onComplete(finalScore);
+        const finalXP = isCorrect ? earnedXP + xpPerAnswer : earnedXP;
+        onComplete(finalScore, finalXP);
       }
     }, 1500);
   };
@@ -82,8 +99,15 @@ const GameScreen = ({
       className={`min-h-screen ${theme.bg} flex flex-col items-center justify-center p-8 ${theme.font}`}
       dir="rtl"
     >
+      {/* Floating XP animation */}
+      <FloatingXP
+        xp={currentXPGain}
+        show={showFloatingXP}
+        onComplete={handleFloatingXPComplete}
+      />
+
       <div className="max-w-5xl w-full">
-        {/* Header with back button */}
+        {/* Header with back button and XP display */}
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={onBack}
@@ -92,9 +116,14 @@ const GameScreen = ({
             <ArrowRight size={20} />
             חזרה למפה
           </button>
-          <div className="flex items-center gap-2">
-            <span className="text-3xl">{theme.icon}</span>
-            <span className="text-3xl">{mode.icon}</span>
+          <div className="flex items-center gap-4">
+            <div className="bg-green-500/30 px-3 py-1 rounded-lg">
+              <span className="text-green-300 font-bold">+{earnedXP} XP</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-3xl">{theme.icon}</span>
+              <span className="text-3xl">{mode.icon}</span>
+            </div>
           </div>
         </div>
 
