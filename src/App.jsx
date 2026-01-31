@@ -19,8 +19,8 @@ import { saveTheme, getSelectedTheme } from './utils/storage';
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '2.2.0';
-const LAST_UPDATE = '30.1.2026';
+const APP_VERSION = '2.3.0';
+const LAST_UPDATE = '31.1.2026';
 
 // Screen names for navigation
 const SCREENS = {

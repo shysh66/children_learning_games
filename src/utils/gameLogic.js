@@ -53,14 +53,14 @@ export const generateJuniorQuestion = (levelId) => {
     return generateJuniorQuestion(1); // Fallback to level 1
   }
 
-  const { type, maxNumber, maxResult } = config;
+  const { type, maxNumber, maxResult, minNumber = 1 } = config;
   let questionType, num1, num2, correct;
 
   switch (type) {
     case 'counting':
       // Just counting - "How many items?"
       questionType = 'counting';
-      num1 = randomInt(1, maxNumber);
+      num1 = randomInt(minNumber, maxNumber);
       num2 = 0;
       correct = num1;
       break;
@@ -87,13 +87,18 @@ export const generateJuniorQuestion = (levelId) => {
       const isAddition = Math.random() > 0.5;
       if (isAddition) {
         questionType = 'junior_add';
-        num1 = randomInt(1, Math.floor(maxResult / 2));
-        num2 = randomInt(1, maxResult - num1);
+        // Ensure result is at least minNumber
+        const minNum1 = Math.max(1, Math.ceil(minNumber / 2));
+        num1 = randomInt(minNum1, Math.floor(maxResult / 2));
+        const minNum2 = Math.max(1, minNumber - num1);
+        num2 = randomInt(minNum2, maxResult - num1);
         correct = num1 + num2;
       } else {
         questionType = 'junior_subtract';
-        num1 = randomInt(2, maxResult);
-        num2 = randomInt(1, Math.min(num1 - 1, Math.floor(maxResult / 2)));
+        // For subtraction, num1 should be at least minNumber + 1
+        const minStart = Math.max(minNumber + 1, 2);
+        num1 = randomInt(minStart, maxResult);
+        num2 = randomInt(1, Math.min(num1 - minNumber, Math.floor(num1 / 2)));
         correct = num1 - num2;
       }
       break;
@@ -132,7 +137,7 @@ export const generateAddSubQuestion = (levelId) => {
     return generateAddSubQuestion(1); // Fallback to level 1
   }
 
-  const { maxResult, allowSubtraction, allowCrossing } = config;
+  const { maxResult, allowSubtraction, allowCrossing, minResult = 1 } = config;
 
   // Decide operation type
   let isAddition = true;
@@ -149,8 +154,11 @@ export const generateAddSubQuestion = (levelId) => {
       // Addition
       if (allowCrossing) {
         // Allow crossing the ten (e.g., 8+5=13)
-        num1 = randomInt(1, maxResult - 1);
-        num2 = randomInt(1, maxResult - num1);
+        // Ensure result is at least minResult
+        const minNum1 = Math.max(1, Math.floor(minResult / 2));
+        num1 = randomInt(minNum1, maxResult - 1);
+        const minNum2 = Math.max(1, minResult - num1);
+        num2 = randomInt(minNum2, maxResult - num1);
       } else {
         // No crossing - keep within decade
         if (maxResult <= 10) {
@@ -173,8 +181,11 @@ export const generateAddSubQuestion = (levelId) => {
       // Subtraction - ensure num1 > num2 (positive result)
       if (allowCrossing) {
         // Allow borrowing (e.g., 12-4=8)
-        num1 = randomInt(Math.min(6, maxResult), maxResult);
-        num2 = randomInt(1, num1 - 1);
+        // Ensure result is at least minResult
+        const minNum1 = Math.max(minResult + 1, Math.min(6, maxResult));
+        num1 = randomInt(minNum1, maxResult);
+        const maxNum2 = num1 - minResult;
+        num2 = randomInt(1, Math.max(1, maxNum2));
       } else {
         // No borrowing - stay within decade
         if (maxResult <= 10) {
@@ -194,7 +205,7 @@ export const generateAddSubQuestion = (levelId) => {
     attempts++;
 
     // Validate result
-    if (correct > 0 && correct <= maxResult) {
+    if (correct >= minResult && correct <= maxResult) {
       break;
     }
   } while (attempts < maxAttempts);
