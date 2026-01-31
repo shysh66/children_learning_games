@@ -1,7 +1,7 @@
 // Level configurations for each game mode
 // Defines difficulty progression and question parameters
 
-export const QUESTIONS_PER_LEVEL = 8;
+export const QUESTIONS_PER_LEVEL = 10;
 export const STARS_TO_UNLOCK_NEXT = 1; // Minimum stars needed to unlock next level
 
 // Junior Math level configurations (for ages 4-5)
@@ -17,42 +17,63 @@ export const juniorLevels = {
   2: {
     id: 2,
     name: 'שלב 2',
-    description: 'חיבור עד 5',
-    type: 'addition',
-    maxResult: 5,
+    description: 'ספירה עד 10',
+    type: 'counting',
+    minNumber: 4,
+    maxNumber: 10,
     visualRequired: true,
   },
   3: {
     id: 3,
     name: 'שלב 3',
-    description: 'חיסור עד 5',
-    type: 'subtraction',
-    maxNumber: 5,
+    description: 'חיבור עד 5',
+    type: 'addition',
+    maxResult: 5,
     visualRequired: true,
   },
   4: {
     id: 4,
     name: 'שלב 4',
-    description: 'חיבור וחיסור עד 10',
-    type: 'mixed',
-    maxResult: 10,
+    description: 'חיסור עד 5',
+    type: 'subtraction',
+    maxNumber: 5,
     visualRequired: true,
   },
   5: {
     id: 5,
     name: 'שלב 5',
-    description: 'חיבור וחיסור עד 15',
+    description: 'חיבור וחיסור עד 10',
     type: 'mixed',
-    maxResult: 15,
+    maxResult: 10,
     visualRequired: true,
-    useGrid: true,
   },
   6: {
     id: 6,
     name: 'שלב 6',
-    description: 'חיבור וחיסור עד 20',
+    description: 'חיבור וחיסור 3-15',
     type: 'mixed',
+    minNumber: 3,
+    maxResult: 15,
+    visualRequired: true,
+    useGrid: true,
+  },
+  7: {
+    id: 7,
+    name: 'שלב 7',
+    description: 'חיבור וחיסור 5-20',
+    type: 'mixed',
+    minNumber: 5,
     maxResult: 20,
+    visualRequired: true,
+    useGrid: true,
+  },
+  8: {
+    id: 8,
+    name: 'שלב 8',
+    description: 'חיבור וחיסור 7-25',
+    type: 'mixed',
+    minNumber: 7,
+    maxResult: 25,
     visualRequired: true,
     useGrid: true,
   },
@@ -81,7 +102,7 @@ export const addSubLevels = {
   3: {
     id: 3,
     name: 'שלב 3',
-    description: 'מעבר העשרת',
+    description: 'חיבור וחיסור עם מעבר עשרת (8+5, 12-4)',
     maxResult: 20,
     allowSubtraction: true,
     allowCrossing: true, // Carrying/borrowing (e.g., 8+5, 12-4)
@@ -92,6 +113,46 @@ export const addSubLevels = {
     name: 'שלב 4',
     description: 'מספרים עד 50',
     maxResult: 50,
+    allowSubtraction: true,
+    allowCrossing: true,
+    visualRequired: false,
+  },
+  5: {
+    id: 5,
+    name: 'שלב 5',
+    description: 'מספרים 30-80',
+    minResult: 30,
+    maxResult: 80,
+    allowSubtraction: true,
+    allowCrossing: true,
+    visualRequired: false,
+  },
+  6: {
+    id: 6,
+    name: 'שלב 6',
+    description: 'מספרים 40-100',
+    minResult: 40,
+    maxResult: 100,
+    allowSubtraction: true,
+    allowCrossing: true,
+    visualRequired: false,
+  },
+  7: {
+    id: 7,
+    name: 'שלב 7',
+    description: 'מספרים 50-120',
+    minResult: 50,
+    maxResult: 120,
+    allowSubtraction: true,
+    allowCrossing: true,
+    visualRequired: false,
+  },
+  8: {
+    id: 8,
+    name: 'שלב 8',
+    description: 'מספרים 60-150',
+    minResult: 60,
+    maxResult: 150,
     allowSubtraction: true,
     allowCrossing: true,
     visualRequired: false,
@@ -132,6 +193,14 @@ export const multiplyLevels = {
     maxMultiplier: 10,
     visualRequired: false,
   },
+  5: {
+    id: 5,
+    name: 'שלב 5',
+    description: 'כפולות קשות (3,4,6,7,8,9)',
+    multipliers: [3, 4, 6, 7, 8, 9],
+    maxMultiplier: 10,
+    visualRequired: false,
+  },
 };
 
 // Game modes
@@ -142,7 +211,7 @@ export const gameModes = {
     icon: '🧒',
     description: 'לגילאי 4-5',
     levels: juniorLevels,
-    totalLevels: 6,
+    totalLevels: 8,
   },
   multiply: {
     id: 'multiply',
@@ -150,7 +219,7 @@ export const gameModes = {
     icon: '✖️',
     description: 'תרגול כפל מהנה',
     levels: multiplyLevels,
-    totalLevels: 4,
+    totalLevels: 5,
   },
   addsub: {
     id: 'addsub',
@@ -158,7 +227,7 @@ export const gameModes = {
     icon: '➕➖',
     description: 'תרגול חיבור וחיסור',
     levels: addSubLevels,
-    totalLevels: 4,
+    totalLevels: 8,
   },
 };
 
