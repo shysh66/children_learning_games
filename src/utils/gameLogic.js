@@ -271,6 +271,41 @@ export const generateQuestion = (gameMode, levelId) => {
   return generateAddSubQuestion(levelId);
 };
 
+// Create a unique key for a question to detect duplicates
+const getQuestionKey = (question) => {
+  return `${question.type}-${question.num1}-${question.num2}`;
+};
+
+// Generate all questions for a level at once, ensuring no duplicates
+export const generateLevelQuestions = (gameMode, levelId, count = 8) => {
+  const questions = [];
+  const usedKeys = new Set();
+  const maxAttempts = count * 10; // Prevent infinite loop
+  let attempts = 0;
+
+  while (questions.length < count && attempts < maxAttempts) {
+    const question = generateQuestion(gameMode, levelId);
+    const key = getQuestionKey(question);
+
+    // Only add if this question hasn't been used yet
+    if (!usedKeys.has(key)) {
+      usedKeys.add(key);
+      questions.push(question);
+    }
+
+    attempts++;
+  }
+
+  // If we couldn't generate enough unique questions, fill with regenerated ones
+  // (this can happen with very limited question ranges like counting to 5)
+  while (questions.length < count) {
+    const question = generateQuestion(gameMode, levelId);
+    questions.push(question);
+  }
+
+  return questions;
+};
+
 // Get operator symbol for display
 export const getOperatorSymbol = (type) => {
   switch (type) {

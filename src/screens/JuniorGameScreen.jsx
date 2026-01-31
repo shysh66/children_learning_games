@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { getTheme } from '../data/themes';
 import { gameModes, QUESTIONS_PER_LEVEL } from '../data/levelConfigs';
-import { generateQuestion } from '../utils/gameLogic';
+import { generateLevelQuestions } from '../utils/gameLogic';
 import { ProgressBar } from '../components';
 
 // Junior answer button with visual dots
@@ -217,25 +217,25 @@ const JuniorGameScreen = ({
   const mode = gameModes[gameMode];
 
   // Game state
+  const [questions, setQuestions] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
-  const [currentQuestion, setCurrentQuestion] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [shakeWrong, setShakeWrong] = useState(false);
 
-  // Generate new question
-  const loadQuestion = useCallback(() => {
-    const question = generateQuestion(gameMode, level);
-    setCurrentQuestion(question);
+  // Pre-generate all questions at the start of the level
+  useEffect(() => {
+    const levelQuestions = generateLevelQuestions(gameMode, level, QUESTIONS_PER_LEVEL);
+    setQuestions(levelQuestions);
+    setQuestionIndex(0);
+    setScore(0);
     setSelectedAnswer(null);
     setShowFeedback(false);
   }, [gameMode, level]);
 
-  // Initialize first question
-  useEffect(() => {
-    loadQuestion();
-  }, [loadQuestion]);
+  // Get current question from pre-generated list
+  const currentQuestion = questions[questionIndex];
 
   // Handle answer selection
   const handleAnswer = (answer) => {
@@ -258,7 +258,8 @@ const JuniorGameScreen = ({
     setTimeout(() => {
       if (questionIndex + 1 < QUESTIONS_PER_LEVEL) {
         setQuestionIndex((prev) => prev + 1);
-        loadQuestion();
+        setSelectedAnswer(null);
+        setShowFeedback(false);
       } else {
         // Game complete
         const finalScore = isCorrect ? score + 1 : score;
@@ -267,7 +268,7 @@ const JuniorGameScreen = ({
     }, 1500);
   };
 
-  if (!currentQuestion) {
+  if (!currentQuestion || questions.length === 0) {
     return (
       <div className={`min-h-screen ${theme.bg} flex items-center justify-center`}>
         <div className="text-4xl text-white animate-pulse">טוען...</div>
