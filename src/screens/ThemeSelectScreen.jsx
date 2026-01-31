@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { themes } from '../data/themes';
-import { getTotalXP } from '../utils/storage';
+import { getTotalXP, getActiveProfile } from '../utils/storage';
 import { getRankByXP, getNextRank, getProgressToNextRank, getXPToNextRank } from '../data/ranks';
 
-// Theme selection screen - first screen users see
-const ThemeSelectScreen = ({ onSelectTheme, version, lastUpdate }) => {
+// Theme selection screen - main menu after profile selection
+const ThemeSelectScreen = ({ onSelectTheme, onSwitchUser, version, lastUpdate }) => {
   const [totalXP, setTotalXP] = useState(0);
   const [rank, setRank] = useState(null);
   const [nextRank, setNextRank] = useState(null);
   const [progress, setProgress] = useState(0);
   const [xpToNext, setXPToNext] = useState(0);
+  const [profile, setProfile] = useState(null);
 
-  // Load XP and rank on mount
+  // Load XP, rank, and profile on mount
   useEffect(() => {
+    const activeProfile = getActiveProfile();
+    setProfile(activeProfile);
+
     const xp = getTotalXP();
     setTotalXP(xp);
     const currentRank = getRankByXP(xp);
@@ -28,6 +32,24 @@ const ThemeSelectScreen = ({ onSelectTheme, version, lastUpdate }) => {
       dir="rtl"
     >
       <div className="max-w-4xl w-full">
+        {/* Profile display - Top Right */}
+        {profile && (
+          <div className="absolute top-4 right-4">
+            <div className="flex items-center gap-3 bg-white/15 backdrop-blur-md rounded-2xl px-4 py-3 border-2 border-white/30">
+              <span className="text-4xl">{profile.avatar}</span>
+              <div>
+                <div className="text-lg font-bold text-white">{profile.name}</div>
+                <button
+                  onClick={onSwitchUser}
+                  className="text-sm text-white/70 hover:text-white transition-colors"
+                >
+                  החלף שחקן ←
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Rank Display - Top Center */}
         {rank && (
           <div className="flex justify-center mb-8">
@@ -94,7 +116,7 @@ const ThemeSelectScreen = ({ onSelectTheme, version, lastUpdate }) => {
         </div>
       </div>
 
-      {/* Version info - bottom right corner */}
+      {/* Version info - bottom left corner */}
       <div className="fixed bottom-4 left-4 text-white/60 text-sm">
         גרסא {version} עודכנה בתאריך {lastUpdate}
       </div>

@@ -3,6 +3,8 @@ import confetti from 'canvas-confetti';
 
 // Screens
 import {
+  ProfileSelectScreen,
+  ProfileCreateScreen,
   ThemeSelectScreen,
   GameSelectScreen,
   LevelMapScreen,
@@ -15,15 +17,22 @@ import {
 import { getTheme } from './data/themes';
 
 // Utils
-import { saveTheme, getSelectedTheme } from './utils/storage';
+import {
+  saveTheme,
+  getSelectedTheme,
+  hasActiveProfile,
+  logoutProfile
+} from './utils/storage';
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '3.0.0';
+const APP_VERSION = '4.0.0';
 const LAST_UPDATE = '31.1.2026';
 
 // Screen names for navigation
 const SCREENS = {
+  PROFILE_SELECT: 'profileSelect',
+  PROFILE_CREATE: 'profileCreate',
   THEME_SELECT: 'themeSelect',
   GAME_SELECT: 'gameSelect',
   LEVEL_MAP: 'levelMap',
@@ -32,8 +41,10 @@ const SCREENS = {
 };
 
 const App = () => {
-  // Navigation state
-  const [currentScreen, setCurrentScreen] = useState(SCREENS.THEME_SELECT);
+  // Navigation state - start with profile select if no active profile
+  const [currentScreen, setCurrentScreen] = useState(
+    hasActiveProfile() ? SCREENS.THEME_SELECT : SCREENS.PROFILE_SELECT
+  );
 
   // Game context state
   const [selectedTheme, setSelectedTheme] = useState(null);
@@ -42,13 +53,15 @@ const App = () => {
   const [lastScore, setLastScore] = useState(0);
   const [lastEarnedXP, setLastEarnedXP] = useState(0);
 
-  // Load saved theme on mount
+  // Load saved theme for active profile on mount or profile change
   useEffect(() => {
-    const savedTheme = getSelectedTheme();
-    if (savedTheme) {
-      setSelectedTheme(savedTheme);
+    if (hasActiveProfile()) {
+      const savedTheme = getSelectedTheme();
+      if (savedTheme) {
+        setSelectedTheme(savedTheme);
+      }
     }
-  }, []);
+  }, [currentScreen]);
 
   // Confetti trigger function using canvas-confetti with sound
   const triggerConfetti = useCallback((type = 'normal') => {
@@ -93,6 +106,39 @@ const App = () => {
       });
     }
   }, [selectedTheme]);
+
+  // Profile handlers
+  const handleSelectProfile = (profile) => {
+    // Load the profile's saved theme
+    const savedTheme = getSelectedTheme();
+    if (savedTheme) {
+      setSelectedTheme(savedTheme);
+    } else {
+      setSelectedTheme(null);
+    }
+    setCurrentScreen(SCREENS.THEME_SELECT);
+  };
+
+  const handleAddProfile = () => {
+    setCurrentScreen(SCREENS.PROFILE_CREATE);
+  };
+
+  const handleProfileCreated = (profile) => {
+    // New profile - no theme selected yet
+    setSelectedTheme(null);
+    setCurrentScreen(SCREENS.THEME_SELECT);
+  };
+
+  const handleBackToProfileSelect = () => {
+    setCurrentScreen(SCREENS.PROFILE_SELECT);
+  };
+
+  const handleSwitchUser = () => {
+    logoutProfile();
+    setSelectedTheme(null);
+    setSelectedGameMode(null);
+    setCurrentScreen(SCREENS.PROFILE_SELECT);
+  };
 
   // Navigation handlers
   const handleSelectTheme = (themeId) => {
@@ -144,10 +190,29 @@ const App = () => {
   // Render current screen
   const renderScreen = () => {
     switch (currentScreen) {
+      case SCREENS.PROFILE_SELECT:
+        return (
+          <ProfileSelectScreen
+            onSelectProfile={handleSelectProfile}
+            onAddProfile={handleAddProfile}
+            version={APP_VERSION}
+            lastUpdate={LAST_UPDATE}
+          />
+        );
+
+      case SCREENS.PROFILE_CREATE:
+        return (
+          <ProfileCreateScreen
+            onProfileCreated={handleProfileCreated}
+            onBack={handleBackToProfileSelect}
+          />
+        );
+
       case SCREENS.THEME_SELECT:
         return (
           <ThemeSelectScreen
             onSelectTheme={handleSelectTheme}
+            onSwitchUser={handleSwitchUser}
             version={APP_VERSION}
             lastUpdate={LAST_UPDATE}
           />
@@ -203,8 +268,9 @@ const App = () => {
 
       default:
         return (
-          <ThemeSelectScreen
-            onSelectTheme={handleSelectTheme}
+          <ProfileSelectScreen
+            onSelectProfile={handleSelectProfile}
+            onAddProfile={handleAddProfile}
             version={APP_VERSION}
             lastUpdate={LAST_UPDATE}
           />
