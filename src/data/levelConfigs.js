@@ -203,6 +203,42 @@ export const multiplyLevels = {
   },
 };
 
+// Division level configurations (integer results only)
+export const divideLevels = {
+  1: {
+    id: 1,
+    name: 'שלב 1',
+    description: 'חילוק ב-2 וב-10',
+    divisors: [2, 10],
+    maxDividend: 20,
+    visualRequired: true,
+  },
+  2: {
+    id: 2,
+    name: 'שלב 2',
+    description: 'חילוק ב-5',
+    divisors: [2, 5, 10],
+    maxDividend: 50,
+    visualRequired: true,
+  },
+  3: {
+    id: 3,
+    name: 'שלב 3',
+    description: 'חילוק ב-3 וב-4',
+    divisors: [2, 3, 4, 5, 10],
+    maxDividend: 40,
+    visualRequired: false,
+  },
+  4: {
+    id: 4,
+    name: 'שלב 4',
+    description: 'חילוק קשה (6,7,8,9)',
+    divisors: [6, 7, 8, 9],
+    maxDividend: 90,
+    visualRequired: false,
+  },
+};
+
 // Game modes
 export const gameModes = {
   junior: {
@@ -220,6 +256,14 @@ export const gameModes = {
     description: 'תרגול כפל מהנה',
     levels: multiplyLevels,
     totalLevels: 5,
+  },
+  divide: {
+    id: 'divide',
+    name: 'חילוק',
+    icon: '➗',
+    description: 'תרגול חילוק',
+    levels: divideLevels,
+    totalLevels: 4,
   },
   addsub: {
     id: 'addsub',

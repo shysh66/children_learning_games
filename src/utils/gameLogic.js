@@ -1,7 +1,7 @@
 // Game logic for generating questions based on level configurations
-// Handles Junior Math, Addition/Subtraction, and Multiplication games
+// Handles Junior Math, Addition/Subtraction, Multiplication, and Division games
 
-import { addSubLevels, multiplyLevels, juniorLevels } from '../data/levelConfigs';
+import { addSubLevels, multiplyLevels, divideLevels, juniorLevels } from '../data/levelConfigs';
 
 // Generate random integer between min and max (inclusive)
 const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -271,6 +271,49 @@ export const generateMultiplicationQuestion = (levelId) => {
   };
 };
 
+// Generate Division question based on level (integer results only)
+export const generateDivisionQuestion = (levelId) => {
+  const config = divideLevels[levelId];
+  if (!config) {
+    console.error(`Invalid division level: ${levelId}`);
+    return generateDivisionQuestion(1); // Fallback to level 1
+  }
+
+  const { divisors, maxDividend } = config;
+
+  // Select random divisor from allowed list
+  const divisor = divisors[randomInt(0, divisors.length - 1)];
+
+  // Generate a quotient (result) that makes sense
+  const maxQuotient = Math.floor(maxDividend / divisor);
+  const quotient = randomInt(1, Math.max(1, maxQuotient));
+
+  // Calculate dividend (the number being divided)
+  const dividend = quotient * divisor;
+
+  const correct = quotient;
+
+  // Generate wrong answers
+  const wrongAnswers = generateWrongAnswers(correct, 3, 1, 5);
+  const allAnswers = shuffleArray([correct, ...wrongAnswers]);
+
+  // Show visual if dividend is small enough (20 or less)
+  const showVisual = config.visualRequired && dividend <= 20;
+
+  return {
+    type: 'divide',
+    num1: dividend,    // The dividend (total)
+    num2: divisor,     // The divisor
+    correct,
+    answers: allAnswers,
+    showVisual,
+    visual: {
+      total: dividend, // Show this many icons
+      groups: divisor, // Divide into this many groups
+    },
+  };
+};
+
 // Generate question based on game mode and level
 export const generateQuestion = (gameMode, levelId) => {
   if (gameMode === 'junior') {
@@ -278,6 +321,9 @@ export const generateQuestion = (gameMode, levelId) => {
   }
   if (gameMode === 'multiply') {
     return generateMultiplicationQuestion(levelId);
+  }
+  if (gameMode === 'divide') {
+    return generateDivisionQuestion(levelId);
   }
   return generateAddSubQuestion(levelId);
 };
@@ -328,6 +374,8 @@ export const getOperatorSymbol = (type) => {
       return '-';
     case 'multiply':
       return '×';
+    case 'divide':
+      return '÷';
     case 'counting':
       return '?';
     default:

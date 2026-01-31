@@ -19,7 +19,7 @@ import { saveTheme, getSelectedTheme } from './utils/storage';
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '2.3.0';
+const APP_VERSION = '3.0.0';
 const LAST_UPDATE = '31.1.2026';
 
 // Screen names for navigation
@@ -40,6 +40,7 @@ const App = () => {
   const [selectedGameMode, setSelectedGameMode] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(1);
   const [lastScore, setLastScore] = useState(0);
+  const [lastEarnedXP, setLastEarnedXP] = useState(0);
 
   // Load saved theme on mount
   useEffect(() => {
@@ -110,8 +111,9 @@ const App = () => {
     setCurrentScreen(SCREENS.GAME);
   };
 
-  const handleGameComplete = (score) => {
+  const handleGameComplete = (score, earnedXP = 0) => {
     setLastScore(score);
+    setLastEarnedXP(earnedXP);
     setCurrentScreen(SCREENS.WIN);
   };
 
@@ -191,6 +193,7 @@ const App = () => {
             gameMode={selectedGameMode}
             level={selectedLevel}
             score={lastScore}
+            earnedXP={lastEarnedXP}
             onNextLevel={handleNextLevel}
             onRetry={handleRetry}
             onBackToMap={handleBackToMap}
