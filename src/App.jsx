@@ -11,10 +11,14 @@ import {
   GameScreen,
   JuniorGameScreen,
   WinScreen,
+  EnglishPracticeScreen,
+  AudioMemoryGame,
+  FindItFastGame,
 } from './screens';
 
 // Data
 import { getTheme } from './data/themes';
+import { gameModes } from './data/levelConfigs';
 
 // Utils
 import {
@@ -26,7 +30,7 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '4.0.0';
+const APP_VERSION = '4.1.0';
 const LAST_UPDATE = '31.1.2026';
 
 // Screen names for navigation
@@ -38,6 +42,9 @@ const SCREENS = {
   LEVEL_MAP: 'levelMap',
   GAME: 'game',
   WIN: 'win',
+  ENGLISH_PRACTICE: 'englishPractice',
+  MEMORY_GAME: 'memoryGame',
+  FIND_IT_GAME: 'findItGame',
 };
 
 const App = () => {
@@ -149,7 +156,26 @@ const App = () => {
 
   const handleSelectGame = (gameMode) => {
     setSelectedGameMode(gameMode);
-    setCurrentScreen(SCREENS.LEVEL_MAP);
+
+    // Check if this is a practice zone (like English)
+    const mode = gameModes[gameMode];
+    if (mode?.isPracticeZone) {
+      setCurrentScreen(SCREENS.ENGLISH_PRACTICE);
+    } else {
+      setCurrentScreen(SCREENS.LEVEL_MAP);
+    }
+  };
+
+  const handleSelectPracticeGame = (practiceGameId) => {
+    if (practiceGameId === 'memory') {
+      setCurrentScreen(SCREENS.MEMORY_GAME);
+    } else if (practiceGameId === 'findit') {
+      setCurrentScreen(SCREENS.FIND_IT_GAME);
+    }
+  };
+
+  const handleBackToEnglishPractice = () => {
+    setCurrentScreen(SCREENS.ENGLISH_PRACTICE);
   };
 
   const handleSelectLevel = (level) => {
@@ -262,6 +288,33 @@ const App = () => {
             onNextLevel={handleNextLevel}
             onRetry={handleRetry}
             onBackToMap={handleBackToMap}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.ENGLISH_PRACTICE:
+        return (
+          <EnglishPracticeScreen
+            themeId={selectedTheme}
+            onSelectGame={handleSelectPracticeGame}
+            onBack={handleBackToGameSelect}
+          />
+        );
+
+      case SCREENS.MEMORY_GAME:
+        return (
+          <AudioMemoryGame
+            themeId={selectedTheme}
+            onBack={handleBackToEnglishPractice}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.FIND_IT_GAME:
+        return (
+          <FindItFastGame
+            themeId={selectedTheme}
+            onBack={handleBackToEnglishPractice}
             triggerConfetti={triggerConfetti}
           />
         );

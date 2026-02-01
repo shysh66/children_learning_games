@@ -273,6 +273,13 @@ export const gameModes = {
     levels: addSubLevels,
     totalLevels: 8,
   },
+  english: {
+    id: 'english',
+    name: 'אנגלית',
+    icon: '🔤',
+    description: 'לימוד מילים באנגלית',
+    isPracticeZone: true, // Special flag - goes to practice zone instead of level map
+  },
 };
 
 // Get total levels for a game mode
