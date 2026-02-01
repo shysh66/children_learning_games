@@ -96,7 +96,7 @@ const GameScreen = ({
 
   return (
     <div
-      className={`min-h-screen ${theme.bg} flex flex-col items-center justify-center p-8 ${theme.font}`}
+      className={`min-h-screen ${theme.bg} flex flex-col items-center justify-center p-4 sm:p-8 ${theme.font}`}
       dir="rtl"
     >
       {/* Floating XP animation */}
@@ -137,7 +137,7 @@ const GameScreen = ({
         />
 
         {/* Question Card */}
-        <div className={`${theme.cardBg} rounded-3xl p-10 mb-8 mt-8`}>
+        <div className={`${theme.cardBg} rounded-3xl p-6 sm:p-10 mb-6 sm:mb-8 mt-6 sm:mt-8`}>
           <VisualQuestion question={currentQuestion} theme={theme} />
         </div>
 
