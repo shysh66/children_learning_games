@@ -24,10 +24,13 @@ const FindItFastGame = ({ themeId, onBack, onComplete, triggerConfetti }) => {
     setScore(0);
     setGameComplete(false);
 
+    // Shuffle the order of targets (random question order)
+    const shuffledTargets = [...words].sort(() => Math.random() - 0.5);
+
     // Set first target after a short delay
     setTimeout(() => {
-      setCurrentTarget(words[0]);
-      speakWord(`Find the ${words[0].word}`);
+      setCurrentTarget(shuffledTargets[0]);
+      speakWord(`Find the ${shuffledTargets[0].word}`);
     }, 500);
   }, []);
 
@@ -68,9 +71,10 @@ const FindItFastGame = ({ themeId, onBack, onComplete, triggerConfetti }) => {
           triggerConfetti('big');
         }, 500);
       } else {
-        // Move to next target
+        // Move to next target (random from remaining)
         setTimeout(() => {
-          const nextTarget = remaining[0];
+          const randomIndex = Math.floor(Math.random() * remaining.length);
+          const nextTarget = remaining[randomIndex];
           setCurrentTarget(nextTarget);
           speakWord(`Find the ${nextTarget.word}`);
         }, 800);
