@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { getRandomWords, speakWord } from '../data/englishWords';
 import { getTheme } from '../data/themes';
-import { addXP } from '../utils/storage';
+import { addXP, recordGameStats } from '../utils/storage';
 import { playCheerSound } from '../utils/sounds';
 
 // Audio Memory Match Game - 4x3 grid (6 pairs)
@@ -88,8 +88,8 @@ const AudioMemoryGame = ({ themeId, onBack, onComplete, triggerConfetti }) => {
           if (newMatched.length === 6) {
             setTimeout(() => {
               setGameComplete(true);
-              // Add XP for completing the game
               addXP(50);
+              recordGameStats('english', 6, 6);
               triggerConfetti('big');
             }, 500);
           }

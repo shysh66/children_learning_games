@@ -37,6 +37,18 @@ const getDefaultProfileProgress = () => ({
   },
   selectedTheme: null,
   totalXP: 0, // Global XP for ranking system
+  stats: {
+    categoryStats: {
+      junior: { attempts: 0, correct: 0 },
+      multiply: { attempts: 0, correct: 0 },
+      divide: { attempts: 0, correct: 0 },
+      addsub: { attempts: 0, correct: 0 },
+      compare: { attempts: 0, correct: 0 },
+      sequence: { attempts: 0, correct: 0 },
+      english: { attempts: 0, correct: 0 },
+    },
+    dailyXP: {},
+  },
 });
 
 // Default data structure with profiles
@@ -186,6 +198,18 @@ export const loadProgress = () => {
 
   // Merge with defaults to handle new fields
   const defaults = getDefaultProfileProgress();
+  const defaultCategoryStats = defaults.stats.categoryStats;
+  const savedCategoryStats = profile.progress?.stats?.categoryStats || {};
+
+  // Deep merge each category's stats
+  const mergedCategoryStats = {};
+  for (const key of Object.keys(defaultCategoryStats)) {
+    mergedCategoryStats[key] = {
+      ...defaultCategoryStats[key],
+      ...savedCategoryStats[key],
+    };
+  }
+
   return {
     ...defaults,
     ...profile.progress,
@@ -196,6 +220,10 @@ export const loadProgress = () => {
     compare: { ...defaults.compare, ...profile.progress?.compare },
     sequence: { ...defaults.sequence, ...profile.progress?.sequence },
     totalXP: profile.progress?.totalXP || 0,
+    stats: {
+      categoryStats: mergedCategoryStats,
+      dailyXP: { ...profile.progress?.stats?.dailyXP },
+    },
   };
 };
 
@@ -275,11 +303,18 @@ export const getTotalXP = () => {
   return progress.totalXP || 0;
 };
 
-// Add XP to total
+// Add XP to total (also tracks daily XP)
 export const addXP = (amount) => {
   const progress = loadProgress();
   const previousXP = progress.totalXP || 0;
   progress.totalXP = previousXP + amount;
+
+  // Track daily XP
+  if (!progress.stats) progress.stats = getDefaultProfileProgress().stats;
+  if (!progress.stats.dailyXP) progress.stats.dailyXP = {};
+  const today = new Date().toISOString().split('T')[0];
+  progress.stats.dailyXP[today] = (progress.stats.dailyXP[today] || 0) + amount;
+
   saveProgress(progress);
   return {
     previousXP,
@@ -304,4 +339,53 @@ export const hasProfiles = () => {
 // Check if there's an active logged-in profile
 export const hasActiveProfile = () => {
   return getActiveProfile() !== null;
+};
+
+// Record game stats (attempts + correct answers) for a category
+export const recordGameStats = (gameMode, attempts, correct) => {
+  const progress = loadProgress();
+  if (!progress.stats) progress.stats = getDefaultProfileProgress().stats;
+  if (!progress.stats.categoryStats) progress.stats.categoryStats = {};
+  if (!progress.stats.categoryStats[gameMode]) {
+    progress.stats.categoryStats[gameMode] = { attempts: 0, correct: 0 };
+  }
+  progress.stats.categoryStats[gameMode].attempts += attempts;
+  progress.stats.categoryStats[gameMode].correct += correct;
+  saveProgress(progress);
+};
+
+// Get stats for a specific profile by ID (for parent dashboard)
+export const getProfileById = (profileId) => {
+  const data = loadRawData();
+  return data.profiles.find(p => p.id === profileId) || null;
+};
+
+// Get all profiles with their stats (for parent dashboard)
+export const getAllProfilesWithStats = () => {
+  const data = loadRawData();
+  const defaults = getDefaultProfileProgress();
+
+  return (data.profiles || []).map(profile => {
+    const savedStats = profile.progress?.stats || {};
+    const savedCategoryStats = savedStats.categoryStats || {};
+
+    const mergedCategoryStats = {};
+    for (const key of Object.keys(defaults.stats.categoryStats)) {
+      mergedCategoryStats[key] = {
+        ...defaults.stats.categoryStats[key],
+        ...savedCategoryStats[key],
+      };
+    }
+
+    return {
+      id: profile.id,
+      name: profile.name,
+      avatar: profile.avatar,
+      totalXP: profile.progress?.totalXP || 0,
+      stats: {
+        categoryStats: mergedCategoryStats,
+        dailyXP: savedStats.dailyXP || {},
+      },
+    };
+  });
 };

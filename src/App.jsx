@@ -17,7 +17,11 @@ import {
   LogicSelectScreen,
   CompareGameScreen,
   SequenceGameScreen,
+  ParentDashboard,
 } from './screens';
+
+// Components
+import ParentGateModal from './components/ParentGateModal';
 
 // Data
 import { getTheme } from './data/themes';
@@ -32,7 +36,7 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '4.2.0';
+const APP_VERSION = '4.3.0';
 const LAST_UPDATE = '4.2.2026';
 
 // Screen names for navigation
@@ -48,6 +52,7 @@ const SCREENS = {
   MEMORY_GAME: 'memoryGame',
   FIND_IT_GAME: 'findItGame',
   LOGIC_SELECT: 'logicSelect',
+  PARENT_DASHBOARD: 'parentDashboard',
 };
 
 const App = () => {
@@ -62,6 +67,7 @@ const App = () => {
   const [selectedLevel, setSelectedLevel] = useState(1);
   const [lastScore, setLastScore] = useState(0);
   const [lastEarnedXP, setLastEarnedXP] = useState(0);
+  const [showParentGate, setShowParentGate] = useState(false);
 
   // Load saved theme for active profile on mount or profile change
   useEffect(() => {
@@ -150,6 +156,16 @@ const App = () => {
     setCurrentScreen(SCREENS.PROFILE_SELECT);
   };
 
+  // Parent zone handlers
+  const handleParentsZone = () => {
+    setShowParentGate(true);
+  };
+
+  const handleParentGateSuccess = () => {
+    setShowParentGate(false);
+    setCurrentScreen(SCREENS.PARENT_DASHBOARD);
+  };
+
   // Navigation handlers
   const handleSelectTheme = (themeId) => {
     setSelectedTheme(themeId);
@@ -235,6 +251,7 @@ const App = () => {
           <ProfileSelectScreen
             onSelectProfile={handleSelectProfile}
             onAddProfile={handleAddProfile}
+            onParentsZone={handleParentsZone}
             version={APP_VERSION}
             lastUpdate={LAST_UPDATE}
           />
@@ -352,11 +369,19 @@ const App = () => {
           />
         );
 
+      case SCREENS.PARENT_DASHBOARD:
+        return (
+          <ParentDashboard
+            onBack={handleBackToProfileSelect}
+          />
+        );
+
       default:
         return (
           <ProfileSelectScreen
             onSelectProfile={handleSelectProfile}
             onAddProfile={handleAddProfile}
+            onParentsZone={handleParentsZone}
             version={APP_VERSION}
             lastUpdate={LAST_UPDATE}
           />
@@ -364,7 +389,16 @@ const App = () => {
     }
   };
 
-  return <>{renderScreen()}</>;
+  return (
+    <>
+      {renderScreen()}
+      <ParentGateModal
+        isOpen={showParentGate}
+        onClose={() => setShowParentGate(false)}
+        onSuccess={handleParentGateSuccess}
+      />
+    </>
+  );
 };
 
 export default App;

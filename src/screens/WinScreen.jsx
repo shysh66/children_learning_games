@@ -3,7 +3,7 @@ import { ArrowRight, RotateCcw, Map } from 'lucide-react';
 import { getTheme } from '../data/themes';
 import { gameModes, QUESTIONS_PER_LEVEL, calculateStars } from '../data/levelConfigs';
 import { getRankByXP, calculateLevelBonusXP } from '../data/ranks';
-import { updateLevelStars, addXP, getTotalXP } from '../utils/storage';
+import { updateLevelStars, addXP, getTotalXP, recordGameStats } from '../utils/storage';
 import { StarRating, Modal, Button } from '../components';
 
 // Win/Summary screen after completing a level
@@ -41,6 +41,9 @@ const WinScreen = ({
       updateLevelStars(gameMode, level, stars);
     }
 
+    // Record game stats for parent dashboard
+    recordGameStats(gameMode, QUESTIONS_PER_LEVEL, score);
+
     // Get previous XP and rank
     const previousXP = getTotalXP();
     const prevRank = getRankByXP(previousXP);
@@ -68,7 +71,7 @@ const WinScreen = ({
     setTimeout(() => {
       setShowXPBreakdown(true);
     }, 500);
-  }, [gameMode, level, stars, totalEarnedXP, triggerConfetti]);
+  }, [gameMode, level, stars, score, totalEarnedXP, triggerConfetti]);
 
   // Handle close level up modal
   const handleCloseLevelUp = () => {
