@@ -239,6 +239,95 @@ export const divideLevels = {
   },
 };
 
+// Comparison level configurations (Hungry Alligator)
+export const compareLevels = {
+  1: {
+    id: 1,
+    name: 'שלב 1',
+    description: 'מספרים עד 20',
+    type: 'numbers',
+    maxNumber: 20,
+  },
+  2: {
+    id: 2,
+    name: 'שלב 2',
+    description: 'מספרים עד 100',
+    type: 'numbers',
+    maxNumber: 100,
+  },
+  3: {
+    id: 3,
+    name: 'שלב 3',
+    description: 'תרגיל מול מספר',
+    type: 'equation_vs_number',
+    maxNumber: 20,
+  },
+  4: {
+    id: 4,
+    name: 'שלב 4',
+    description: 'תרגיל מול תרגיל',
+    type: 'equation_vs_equation',
+    maxNumber: 20,
+  },
+  5: {
+    id: 5,
+    name: 'שלב 5',
+    description: 'מאות (100-999)',
+    type: 'numbers',
+    maxNumber: 999,
+    minNumber: 100,
+  },
+};
+
+// Sequence level configurations (Number Train)
+export const sequenceLevels = {
+  1: {
+    id: 1,
+    name: 'שלב 1',
+    description: 'קפיצות של 1 ו-10',
+    jumps: [1, 10],
+    direction: 'ascending',
+    missingPosition: 'last',
+    maxStart: 50,
+  },
+  2: {
+    id: 2,
+    name: 'שלב 2',
+    description: 'קפיצות של 2 ו-5',
+    jumps: [2, 5],
+    direction: 'ascending',
+    missingPosition: 'last',
+    maxStart: 50,
+  },
+  3: {
+    id: 3,
+    name: 'שלב 3',
+    description: 'ספירה אחורה',
+    jumps: [1, 2, 5, 10],
+    direction: 'descending',
+    missingPosition: 'last',
+    maxStart: 60,
+  },
+  4: {
+    id: 4,
+    name: 'שלב 4',
+    description: 'קפיצות של 3 ו-4',
+    jumps: [3, 4],
+    direction: 'ascending',
+    missingPosition: 'last',
+    maxStart: 40,
+  },
+  5: {
+    id: 5,
+    name: 'שלב 5',
+    description: 'החוליה החסרה (באמצע)',
+    jumps: [1, 2, 3, 5, 10],
+    direction: 'mixed',
+    missingPosition: 'middle',
+    maxStart: 50,
+  },
+};
+
 // Game modes
 export const gameModes = {
   junior: {
@@ -279,6 +368,31 @@ export const gameModes = {
     icon: '🔤',
     description: 'לימוד מילים באנגלית',
     isPracticeZone: true, // Special flag - goes to practice zone instead of level map
+  },
+  logic: {
+    id: 'logic',
+    name: 'חשיבה ולוגיקה',
+    icon: '🧠',
+    description: 'השוואה וסדרות',
+    isPracticeZone: true, // Routes to LogicSelectScreen
+  },
+  compare: {
+    id: 'compare',
+    name: 'התנין הרעב',
+    icon: '🐊',
+    description: 'גדול, קטן או שווה?',
+    levels: compareLevels,
+    totalLevels: 5,
+    hidden: true, // Don't show in main menu, accessed via logic
+  },
+  sequence: {
+    id: 'sequence',
+    name: 'רכבת המספרים',
+    icon: '🚂',
+    description: 'השלם את הסדרה',
+    levels: sequenceLevels,
+    totalLevels: 5,
+    hidden: true, // Don't show in main menu, accessed via logic
   },
 };
 

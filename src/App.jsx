@@ -14,11 +14,13 @@ import {
   EnglishPracticeScreen,
   AudioMemoryGame,
   FindItFastGame,
+  LogicSelectScreen,
+  CompareGameScreen,
+  SequenceGameScreen,
 } from './screens';
 
 // Data
 import { getTheme } from './data/themes';
-import { gameModes } from './data/levelConfigs';
 
 // Utils
 import {
@@ -30,8 +32,8 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '4.1.0';
-const LAST_UPDATE = '1.2.2026';
+const APP_VERSION = '4.2.0';
+const LAST_UPDATE = '4.2.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -45,6 +47,7 @@ const SCREENS = {
   ENGLISH_PRACTICE: 'englishPractice',
   MEMORY_GAME: 'memoryGame',
   FIND_IT_GAME: 'findItGame',
+  LOGIC_SELECT: 'logicSelect',
 };
 
 const App = () => {
@@ -157,10 +160,11 @@ const App = () => {
   const handleSelectGame = (gameMode) => {
     setSelectedGameMode(gameMode);
 
-    // Check if this is a practice zone (like English)
-    const mode = gameModes[gameMode];
-    if (mode?.isPracticeZone) {
+    // Route practice zones to their custom screens
+    if (gameMode === 'english') {
       setCurrentScreen(SCREENS.ENGLISH_PRACTICE);
+    } else if (gameMode === 'logic') {
+      setCurrentScreen(SCREENS.LOGIC_SELECT);
     } else {
       setCurrentScreen(SCREENS.LEVEL_MAP);
     }
@@ -176,6 +180,16 @@ const App = () => {
 
   const handleBackToEnglishPractice = () => {
     setCurrentScreen(SCREENS.ENGLISH_PRACTICE);
+  };
+
+  const handleSelectLogicGame = (logicGameMode) => {
+    setSelectedGameMode(logicGameMode);
+    setCurrentScreen(SCREENS.LEVEL_MAP);
+  };
+
+  const handleBackToLogicSelect = () => {
+    setSelectedGameMode('logic');
+    setCurrentScreen(SCREENS.LOGIC_SELECT);
   };
 
   const handleSelectLevel = (level) => {
@@ -253,19 +267,28 @@ const App = () => {
           />
         );
 
-      case SCREENS.LEVEL_MAP:
+      case SCREENS.LEVEL_MAP: {
+        const levelMapBackHandler =
+          selectedGameMode === 'compare' || selectedGameMode === 'sequence'
+            ? handleBackToLogicSelect
+            : handleBackToGameSelect;
         return (
           <LevelMapScreen
             themeId={selectedTheme}
             gameMode={selectedGameMode}
             onSelectLevel={handleSelectLevel}
-            onBack={handleBackToGameSelect}
+            onBack={levelMapBackHandler}
           />
         );
+      }
 
-      case SCREENS.GAME:
-        // Use JuniorGameScreen for junior mode, regular GameScreen for others
-        const GameComponent = selectedGameMode === 'junior' ? JuniorGameScreen : GameScreen;
+      case SCREENS.GAME: {
+        // Route to specialized game screens based on game mode
+        let GameComponent;
+        if (selectedGameMode === 'junior') GameComponent = JuniorGameScreen;
+        else if (selectedGameMode === 'compare') GameComponent = CompareGameScreen;
+        else if (selectedGameMode === 'sequence') GameComponent = SequenceGameScreen;
+        else GameComponent = GameScreen;
         return (
           <GameComponent
             themeId={selectedTheme}
@@ -276,6 +299,7 @@ const App = () => {
             triggerConfetti={triggerConfetti}
           />
         );
+      }
 
       case SCREENS.WIN:
         return (
@@ -316,6 +340,15 @@ const App = () => {
             themeId={selectedTheme}
             onBack={handleBackToEnglishPractice}
             triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.LOGIC_SELECT:
+        return (
+          <LogicSelectScreen
+            themeId={selectedTheme}
+            onSelectGame={handleSelectLogicGame}
+            onBack={handleBackToGameSelect}
           />
         );
 

@@ -10,3 +10,6 @@ export { default as WinScreen } from './WinScreen';
 export { default as EnglishPracticeScreen } from './EnglishPracticeScreen';
 export { default as AudioMemoryGame } from './AudioMemoryGame';
 export { default as FindItFastGame } from './FindItFastGame';
+export { default as LogicSelectScreen } from './LogicSelectScreen';
+export { default as CompareGameScreen } from './CompareGameScreen';
+export { default as SequenceGameScreen } from './SequenceGameScreen';

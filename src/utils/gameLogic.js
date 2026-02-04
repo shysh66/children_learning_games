@@ -1,7 +1,7 @@
 // Game logic for generating questions based on level configurations
 // Handles Junior Math, Addition/Subtraction, Multiplication, and Division games
 
-import { addSubLevels, multiplyLevels, divideLevels, juniorLevels } from '../data/levelConfigs';
+import { addSubLevels, multiplyLevels, divideLevels, juniorLevels, compareLevels, sequenceLevels } from '../data/levelConfigs';
 
 // Generate random integer between min and max (inclusive)
 const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -314,6 +314,123 @@ export const generateDivisionQuestion = (levelId) => {
   };
 };
 
+// Generate a simple equation for comparison levels
+const generateSimpleEquation = (maxNumber) => {
+  const isAdd = Math.random() > 0.5;
+  if (isAdd) {
+    const a = randomInt(1, maxNumber - 1);
+    const b = randomInt(1, maxNumber - a);
+    return { text: `${a} + ${b}`, value: a + b };
+  } else {
+    const a = randomInt(2, maxNumber);
+    const b = randomInt(1, a - 1);
+    return { text: `${a} - ${b}`, value: a - b };
+  }
+};
+
+// Generate Comparison question (Hungry Alligator)
+export const generateCompareQuestion = (levelId) => {
+  const config = compareLevels[levelId];
+  if (!config) return generateCompareQuestion(1);
+
+  const { type, maxNumber, minNumber = 1 } = config;
+  let leftDisplay, rightDisplay, leftValue, rightValue;
+
+  if (type === 'numbers') {
+    leftValue = randomInt(minNumber, maxNumber);
+    rightValue = randomInt(minNumber, maxNumber);
+    // Ensure some variety - avoid equal too often but allow it sometimes
+    if (Math.random() > 0.15 && leftValue === rightValue) {
+      rightValue = randomInt(minNumber, maxNumber);
+    }
+    leftDisplay = String(leftValue);
+    rightDisplay = String(rightValue);
+  } else if (type === 'equation_vs_number') {
+    const eq = generateSimpleEquation(maxNumber);
+    leftDisplay = eq.text;
+    leftValue = eq.value;
+    rightValue = randomInt(1, maxNumber);
+    rightDisplay = String(rightValue);
+  } else if (type === 'equation_vs_equation') {
+    const eq1 = generateSimpleEquation(maxNumber);
+    const eq2 = generateSimpleEquation(maxNumber);
+    leftDisplay = eq1.text;
+    leftValue = eq1.value;
+    rightDisplay = eq2.text;
+    rightValue = eq2.value;
+  }
+
+  let correct;
+  if (leftValue > rightValue) correct = '>';
+  else if (leftValue < rightValue) correct = '<';
+  else correct = '=';
+
+  return {
+    type: 'compare',
+    leftDisplay,
+    rightDisplay,
+    leftValue,
+    rightValue,
+    correct,
+    answers: ['<', '=', '>'],
+    num1: leftValue,
+    num2: rightValue,
+  };
+};
+
+// Generate Sequence question (Number Train)
+export const generateSequenceQuestion = (levelId) => {
+  const config = sequenceLevels[levelId];
+  if (!config) return generateSequenceQuestion(1);
+
+  const { jumps, direction, missingPosition, maxStart } = config;
+  const jump = jumps[randomInt(0, jumps.length - 1)];
+
+  let isAscending;
+  if (direction === 'ascending') isAscending = true;
+  else if (direction === 'descending') isAscending = false;
+  else isAscending = Math.random() > 0.5;
+
+  let start;
+  if (isAscending) {
+    start = randomInt(1, Math.max(1, maxStart - jump * 3));
+  } else {
+    start = randomInt(jump * 3 + 1, Math.max(jump * 3 + 1, maxStart));
+  }
+
+  // Build the sequence of 4 numbers
+  const sequence = [];
+  for (let i = 0; i < 4; i++) {
+    sequence.push(isAscending ? start + jump * i : start - jump * i);
+  }
+
+  // Decide missing position
+  let missingIdx;
+  if (missingPosition === 'middle') {
+    missingIdx = randomInt(1, 2); // Index 1 or 2
+  } else {
+    missingIdx = 3; // Last position
+  }
+
+  const correct = sequence[missingIdx];
+
+  // Generate wrong answers close to correct
+  const wrongAnswers = generateWrongAnswers(correct, 3, 0, jump * 2 || 5);
+  const allAnswers = shuffleArray([correct, ...wrongAnswers]);
+
+  return {
+    type: 'sequence',
+    sequence,
+    missingIndex: missingIdx,
+    correct,
+    answers: allAnswers,
+    jump,
+    isAscending,
+    num1: sequence[0],
+    num2: sequence[1],
+  };
+};
+
 // Generate question based on game mode and level
 export const generateQuestion = (gameMode, levelId) => {
   if (gameMode === 'junior') {
@@ -324,6 +441,12 @@ export const generateQuestion = (gameMode, levelId) => {
   }
   if (gameMode === 'divide') {
     return generateDivisionQuestion(levelId);
+  }
+  if (gameMode === 'compare') {
+    return generateCompareQuestion(levelId);
+  }
+  if (gameMode === 'sequence') {
+    return generateSequenceQuestion(levelId);
   }
   return generateAddSubQuestion(levelId);
 };

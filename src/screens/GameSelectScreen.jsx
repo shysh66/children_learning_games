@@ -23,7 +23,7 @@ const GameSelectScreen = ({ themeId, onSelectGame, onBack }) => {
 
         {/* Game mode cards */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {Object.entries(gameModes).map(([key, mode]) => (
+          {Object.entries(gameModes).filter(([, mode]) => !mode.hidden).map(([key, mode]) => (
             <button
               key={key}
               onClick={() => onSelectGame(key)}
