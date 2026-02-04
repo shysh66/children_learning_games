@@ -27,6 +27,14 @@ const getDefaultProfileProgress = () => ({
     unlockedLevel: 1,
     stars: {},
   },
+  compare: {
+    unlockedLevel: 1,
+    stars: {},
+  },
+  sequence: {
+    unlockedLevel: 1,
+    stars: {},
+  },
   selectedTheme: null,
   totalXP: 0, // Global XP for ranking system
 });
@@ -185,6 +193,8 @@ export const loadProgress = () => {
     multiply: { ...defaults.multiply, ...profile.progress?.multiply },
     divide: { ...defaults.divide, ...profile.progress?.divide },
     addsub: { ...defaults.addsub, ...profile.progress?.addsub },
+    compare: { ...defaults.compare, ...profile.progress?.compare },
+    sequence: { ...defaults.sequence, ...profile.progress?.sequence },
     totalXP: profile.progress?.totalXP || 0,
   };
 };
