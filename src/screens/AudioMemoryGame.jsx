@@ -161,8 +161,8 @@ const AudioMemoryGame = ({ themeId, onBack, onComplete, triggerConfetti }) => {
         </div>
       </div>
 
-      {/* Card Grid - 4x3 */}
-      <div className="grid grid-cols-4 gap-3 max-w-lg">
+      {/* Card Grid - 3x4 on mobile, 4x3 on larger screens */}
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3 max-w-lg">
         {cards.map((card, index) => (
           <button
             key={card.id}
