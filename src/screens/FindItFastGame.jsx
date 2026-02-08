@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { getRandomWords, speakWord } from '../data/englishWords';
 import { getTheme } from '../data/themes';
-import { addXP } from '../utils/storage';
+import { addXP, recordGameStats } from '../utils/storage';
 import { playCheerSound } from '../utils/sounds';
 
 // Find it Fast Game - Listen and find the correct emoji
@@ -68,6 +68,7 @@ const FindItFastGame = ({ themeId, onBack, onComplete, triggerConfetti }) => {
         setTimeout(() => {
           setGameComplete(true);
           addXP(50);
+          recordGameStats('english', totalItems, score + 1);
           triggerConfetti('big');
         }, 500);
       } else {

@@ -13,3 +13,4 @@ export { default as FindItFastGame } from './FindItFastGame';
 export { default as LogicSelectScreen } from './LogicSelectScreen';
 export { default as CompareGameScreen } from './CompareGameScreen';
 export { default as SequenceGameScreen } from './SequenceGameScreen';
+export { default as ParentDashboard } from './ParentDashboard';

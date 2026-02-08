@@ -2,7 +2,7 @@ import React from 'react';
 import { getProfiles, setActiveProfile } from '../utils/storage';
 
 // Profile selection screen - "Who is playing?" Netflix-style
-const ProfileSelectScreen = ({ onSelectProfile, onAddProfile, version, lastUpdate }) => {
+const ProfileSelectScreen = ({ onSelectProfile, onAddProfile, onParentsZone, version, lastUpdate }) => {
   const profiles = getProfiles();
 
   const handleSelectProfile = (profile) => {
@@ -71,6 +71,15 @@ const ProfileSelectScreen = ({ onSelectProfile, onAddProfile, version, lastUpdat
           <span className="animate-bounce" style={{ animationDelay: '300ms' }}>✨</span>
         </div>
       </div>
+
+      {/* Parents Zone button - top left corner */}
+      <button
+        onClick={onParentsZone}
+        className="fixed top-4 left-4 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/50 hover:text-white text-sm font-medium transition-all flex items-center gap-2"
+      >
+        <span className="text-lg">📊</span>
+        הורים
+      </button>
 
       {/* Version info - bottom left corner */}
       <div className="fixed bottom-4 left-4 text-white/40 text-sm">
