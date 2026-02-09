@@ -21,6 +21,7 @@ import {
   ParentDashboard,
   LittleExplorersMenuScreen,
   SorterGame,
+  FeedTheAnimalGame,
 } from './screens';
 
 // Components
@@ -40,8 +41,8 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '4.3.0';
-const LAST_UPDATE = '4.2.2026';
+const APP_VERSION = '5.1.0';
+const LAST_UPDATE = '9.2.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -52,6 +53,7 @@ const SCREENS = {
   GAME_SELECT: 'gameSelect',
   LITTLE_EXPLORERS_MENU: 'littleExplorersMenu',
   SORTER_GAME: 'sorterGame',
+  FEED_ANIMAL_GAME: 'feedAnimalGame',
   LEVEL_MAP: 'levelMap',
   GAME: 'game',
   WIN: 'win',
@@ -192,6 +194,8 @@ const App = () => {
   const handleSelectExplorerGame = (gameId) => {
     if (gameId === 'sorter') {
       setCurrentScreen(SCREENS.SORTER_GAME);
+    } else if (gameId === 'feedAnimal') {
+      setCurrentScreen(SCREENS.FEED_ANIMAL_GAME);
     }
   };
 
@@ -338,6 +342,15 @@ const App = () => {
       case SCREENS.SORTER_GAME:
         return (
           <SorterGame
+            themeId={selectedTheme}
+            onBack={handleBackToExplorersMenu}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.FEED_ANIMAL_GAME:
+        return (
+          <FeedTheAnimalGame
             themeId={selectedTheme}
             onBack={handleBackToExplorersMenu}
             triggerConfetti={triggerConfetti}

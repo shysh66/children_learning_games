@@ -17,3 +17,4 @@ export { default as ParentDashboard } from './ParentDashboard';
 export { default as ZoneSelectScreen } from './ZoneSelectScreen';
 export { default as LittleExplorersMenuScreen } from './LittleExplorersMenuScreen';
 export { default as SorterGame } from './SorterGame';
+export { default as FeedTheAnimalGame } from './FeedTheAnimalGame';
