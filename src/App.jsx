@@ -20,6 +20,7 @@ import {
   SequenceGameScreen,
   ParentDashboard,
   LittleExplorersMenuScreen,
+  SorterGame,
 } from './screens';
 
 // Components
@@ -50,6 +51,7 @@ const SCREENS = {
   ZONE_SELECT: 'zoneSelect',
   GAME_SELECT: 'gameSelect',
   LITTLE_EXPLORERS_MENU: 'littleExplorersMenu',
+  SORTER_GAME: 'sorterGame',
   LEVEL_MAP: 'levelMap',
   GAME: 'game',
   WIN: 'win',
@@ -187,6 +189,16 @@ const App = () => {
     }
   };
 
+  const handleSelectExplorerGame = (gameId) => {
+    if (gameId === 'sorter') {
+      setCurrentScreen(SCREENS.SORTER_GAME);
+    }
+  };
+
+  const handleBackToExplorersMenu = () => {
+    setCurrentScreen(SCREENS.LITTLE_EXPLORERS_MENU);
+  };
+
   const handleBackToZoneSelect = () => {
     setCurrentScreen(SCREENS.ZONE_SELECT);
   };
@@ -319,6 +331,16 @@ const App = () => {
           <LittleExplorersMenuScreen
             themeId={selectedTheme}
             onBack={handleBackToZoneSelect}
+            onSelectGame={handleSelectExplorerGame}
+          />
+        );
+
+      case SCREENS.SORTER_GAME:
+        return (
+          <SorterGame
+            themeId={selectedTheme}
+            onBack={handleBackToExplorersMenu}
+            triggerConfetti={triggerConfetti}
           />
         );
 
