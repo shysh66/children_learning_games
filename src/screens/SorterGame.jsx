@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { getTheme } from '../data/themes';
 import { addXP, recordGameStats } from '../utils/storage';
-import { playCheerSound, playCelebrationSound } from '../utils/sounds';
+import { playCheerSound } from '../utils/sounds';
 
 // ============ Level Data ============
 
@@ -231,8 +231,6 @@ const SorterGame = ({ themeId, onBack, triggerConfetti }) => {
   // Drag state (pointer events for touch + mouse)
   const [dragging, setDragging] = useState(false);
   const [dragPos, setDragPos] = useState({ x: 0, y: 0 });
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-  const [itemVisible, setItemVisible] = useState(true);
   const itemRef = useRef(null);
   const containerRefs = useRef({});
   const dragStartPos = useRef({ x: 0, y: 0 });
