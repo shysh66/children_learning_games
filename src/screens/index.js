@@ -14,3 +14,5 @@ export { default as LogicSelectScreen } from './LogicSelectScreen';
 export { default as CompareGameScreen } from './CompareGameScreen';
 export { default as SequenceGameScreen } from './SequenceGameScreen';
 export { default as ParentDashboard } from './ParentDashboard';
+export { default as ZoneSelectScreen } from './ZoneSelectScreen';
+export { default as LittleExplorersMenuScreen } from './LittleExplorersMenuScreen';

@@ -6,6 +6,7 @@ import {
   ProfileSelectScreen,
   ProfileCreateScreen,
   ThemeSelectScreen,
+  ZoneSelectScreen,
   GameSelectScreen,
   LevelMapScreen,
   GameScreen,
@@ -18,6 +19,7 @@ import {
   CompareGameScreen,
   SequenceGameScreen,
   ParentDashboard,
+  LittleExplorersMenuScreen,
 } from './screens';
 
 // Components
@@ -31,7 +33,8 @@ import {
   saveTheme,
   getSelectedTheme,
   hasActiveProfile,
-  logoutProfile
+  logoutProfile,
+  saveSelectedZone,
 } from './utils/storage';
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
@@ -44,7 +47,9 @@ const SCREENS = {
   PROFILE_SELECT: 'profileSelect',
   PROFILE_CREATE: 'profileCreate',
   THEME_SELECT: 'themeSelect',
+  ZONE_SELECT: 'zoneSelect',
   GAME_SELECT: 'gameSelect',
+  LITTLE_EXPLORERS_MENU: 'littleExplorersMenu',
   LEVEL_MAP: 'levelMap',
   GAME: 'game',
   WIN: 'win',
@@ -170,7 +175,20 @@ const App = () => {
   const handleSelectTheme = (themeId) => {
     setSelectedTheme(themeId);
     saveTheme(themeId);
-    setCurrentScreen(SCREENS.GAME_SELECT);
+    setCurrentScreen(SCREENS.ZONE_SELECT);
+  };
+
+  const handleSelectZone = (zoneId) => {
+    saveSelectedZone(zoneId);
+    if (zoneId === 'aceAcademy') {
+      setCurrentScreen(SCREENS.GAME_SELECT);
+    } else {
+      setCurrentScreen(SCREENS.LITTLE_EXPLORERS_MENU);
+    }
+  };
+
+  const handleBackToZoneSelect = () => {
+    setCurrentScreen(SCREENS.ZONE_SELECT);
   };
 
   const handleSelectGame = (gameMode) => {
@@ -275,12 +293,32 @@ const App = () => {
           />
         );
 
+      case SCREENS.ZONE_SELECT:
+        return (
+          <ZoneSelectScreen
+            onSelectZone={handleSelectZone}
+            onBack={handleBackToThemeSelect}
+            onParentsZone={handleParentsZone}
+            onSwitchUser={handleSwitchUser}
+            version={APP_VERSION}
+            lastUpdate={LAST_UPDATE}
+          />
+        );
+
       case SCREENS.GAME_SELECT:
         return (
           <GameSelectScreen
             themeId={selectedTheme}
             onSelectGame={handleSelectGame}
-            onBack={handleBackToThemeSelect}
+            onBack={handleBackToZoneSelect}
+          />
+        );
+
+      case SCREENS.LITTLE_EXPLORERS_MENU:
+        return (
+          <LittleExplorersMenuScreen
+            themeId={selectedTheme}
+            onBack={handleBackToZoneSelect}
           />
         );
 
