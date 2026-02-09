@@ -247,7 +247,6 @@ const SorterGame = ({ themeId, onBack, triggerConfetti }) => {
     setCurrentLevel(levelIndex);
     setGameComplete(false);
     setFeedback(null);
-    setItemVisible(true);
   }, []);
 
   // Speak instruction when round changes
@@ -281,10 +280,6 @@ const SorterGame = ({ themeId, onBack, triggerConfetti }) => {
     const el = itemRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    setDragOffset({
-      x: e.clientX - rect.left - rect.width / 2,
-      y: e.clientY - rect.top - rect.height / 2,
-    });
     setDragPos({ x: e.clientX, y: e.clientY });
     dragStartPos.current = { x: e.clientX, y: e.clientY };
     setDragging(true);
@@ -324,7 +319,6 @@ const SorterGame = ({ themeId, onBack, triggerConfetti }) => {
 
       setTimeout(() => {
         setFeedback(null);
-        setItemVisible(true);
         if (roundIndex + 1 >= rounds.length) {
           // Level complete
           setGameComplete(true);
