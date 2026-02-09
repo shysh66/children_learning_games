@@ -279,7 +279,6 @@ const SorterGame = ({ themeId, onBack, triggerConfetti }) => {
     e.preventDefault();
     const el = itemRef.current;
     if (!el) return;
-    const rect = el.getBoundingClientRect();
     setDragPos({ x: e.clientX, y: e.clientY });
     dragStartPos.current = { x: e.clientX, y: e.clientY };
     setDragging(true);
