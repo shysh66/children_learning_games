@@ -24,7 +24,7 @@ const ZONES = [
   },
 ];
 
-const ZoneSelectScreen = ({ onSelectZone, onParentsZone, onSwitchUser, version, lastUpdate }) => {
+const ZoneSelectScreen = ({ onSelectZone, onBack, onParentsZone, onSwitchUser, version, lastUpdate }) => {
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
@@ -93,6 +93,14 @@ const ZoneSelectScreen = ({ onSelectZone, onParentsZone, onSwitchUser, version, 
             </button>
           ))}
         </div>
+
+        {/* Back button */}
+        <button
+          onClick={onBack}
+          className="mx-auto block px-8 py-4 bg-white/20 hover:bg-white/30 rounded-2xl text-white text-xl font-bold transition-all mb-8"
+        >
+          ← חזרה לבחירת דמות
+        </button>
 
         {/* Decorative elements */}
         <div className="flex justify-center gap-4 text-4xl opacity-50">

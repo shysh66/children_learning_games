@@ -35,7 +35,6 @@ import {
   hasActiveProfile,
   logoutProfile,
   saveSelectedZone,
-  getSelectedZone
 } from './utils/storage';
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
@@ -73,7 +72,6 @@ const App = () => {
   const [selectedLevel, setSelectedLevel] = useState(1);
   const [lastScore, setLastScore] = useState(0);
   const [lastEarnedXP, setLastEarnedXP] = useState(0);
-  const [selectedZone, setSelectedZone] = useState(null);
   const [showParentGate, setShowParentGate] = useState(false);
 
   // Load saved theme for active profile on mount or profile change
@@ -160,7 +158,6 @@ const App = () => {
     logoutProfile();
     setSelectedTheme(null);
     setSelectedGameMode(null);
-    setSelectedZone(null);
     setCurrentScreen(SCREENS.PROFILE_SELECT);
   };
 
@@ -182,7 +179,6 @@ const App = () => {
   };
 
   const handleSelectZone = (zoneId) => {
-    setSelectedZone(zoneId);
     saveSelectedZone(zoneId);
     if (zoneId === 'aceAcademy') {
       setCurrentScreen(SCREENS.GAME_SELECT);
@@ -192,7 +188,6 @@ const App = () => {
   };
 
   const handleBackToZoneSelect = () => {
-    setSelectedZone(null);
     setCurrentScreen(SCREENS.ZONE_SELECT);
   };
 
@@ -263,7 +258,6 @@ const App = () => {
   const handleBackToThemeSelect = () => {
     setSelectedTheme(null);
     setSelectedGameMode(null);
-    setSelectedZone(null);
     setCurrentScreen(SCREENS.THEME_SELECT);
   };
 
@@ -303,6 +297,7 @@ const App = () => {
         return (
           <ZoneSelectScreen
             onSelectZone={handleSelectZone}
+            onBack={handleBackToThemeSelect}
             onParentsZone={handleParentsZone}
             onSwitchUser={handleSwitchUser}
             version={APP_VERSION}
