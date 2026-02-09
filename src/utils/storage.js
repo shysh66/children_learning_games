@@ -46,6 +46,7 @@ const getDefaultProfileProgress = () => ({
       compare: { attempts: 0, correct: 0 },
       sequence: { attempts: 0, correct: 0 },
       english: { attempts: 0, correct: 0 },
+      sorter: { attempts: 0, correct: 0 },
     },
     dailyXP: {},
   },

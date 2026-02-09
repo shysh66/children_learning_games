@@ -16,3 +16,4 @@ export { default as SequenceGameScreen } from './SequenceGameScreen';
 export { default as ParentDashboard } from './ParentDashboard';
 export { default as ZoneSelectScreen } from './ZoneSelectScreen';
 export { default as LittleExplorersMenuScreen } from './LittleExplorersMenuScreen';
+export { default as SorterGame } from './SorterGame';
