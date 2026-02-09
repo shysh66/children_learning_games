@@ -292,6 +292,19 @@ export const getSelectedTheme = () => {
   return progress.selectedTheme;
 };
 
+// Save selected zone (littleExplorers or aceAcademy)
+export const saveSelectedZone = (zone) => {
+  const progress = loadProgress();
+  progress.selectedZone = zone;
+  saveProgress(progress);
+};
+
+// Get selected zone
+export const getSelectedZone = () => {
+  const progress = loadProgress();
+  return progress.selectedZone || null;
+};
+
 // Reset all progress for active profile
 export const resetProgress = () => {
   saveProgress(getDefaultProfileProgress());

@@ -41,7 +41,7 @@ const GameSelectScreen = ({ themeId, onSelectGame, onBack }) => {
           onClick={onBack}
           className="mx-auto block px-8 py-4 bg-white/20 hover:bg-white/30 rounded-2xl text-white text-xl font-bold transition-all"
         >
-          ← חזרה לבחירת נושא
+          ← חזרה לבחירת אזור
         </button>
       </div>
     </div>
