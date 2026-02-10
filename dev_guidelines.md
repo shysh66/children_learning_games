@@ -49,3 +49,14 @@ const LAST_UPDATE = 'DD.MM.YYYY'; // עדכן תאריך
 - [ ] עודכן LAST_UPDATE ב-App.jsx
 - [ ] עודכן version ב-package.json
 - [ ] נוספה רשומה ל-CHANGELOG.md בעברית
+
+---
+
+## 🛡️ איכות קוד (Code Quality & Linting)
+Vercel נכשל בבנייה אם יש אזהרות (Warnings). הקפד על הכללים הבאים:
+
+1. **אין משתנים מיותרים:** אל תשאיר משתנים או פונקציות לא בשימוש (`no-unused-vars`).
+2. **אין ייבוא מיותר:** אל תעשה `import` לרכיבים שאינם בשימוש (`no-unused-imports`).
+3. **ניקוי:** מחק קוד מת ו-`console.log` לפני סיום.
+
+---
