@@ -22,6 +22,7 @@ import {
   LittleExplorersMenuScreen,
   SorterGame,
   FeedTheAnimalGame,
+  SmartMemoryGame,
 } from './screens';
 
 // Components
@@ -37,12 +38,13 @@ import {
   hasActiveProfile,
   logoutProfile,
   saveSelectedZone,
+  getSelectedZone,
 } from './utils/storage';
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '5.1.0';
-const LAST_UPDATE = '9.2.2026';
+const APP_VERSION = '5.2.0';
+const LAST_UPDATE = '10.2.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -61,6 +63,7 @@ const SCREENS = {
   MEMORY_GAME: 'memoryGame',
   FIND_IT_GAME: 'findItGame',
   LOGIC_SELECT: 'logicSelect',
+  SMART_MEMORY_GAME: 'smartMemoryGame',
   PARENT_DASHBOARD: 'parentDashboard',
 };
 
@@ -196,6 +199,8 @@ const App = () => {
       setCurrentScreen(SCREENS.SORTER_GAME);
     } else if (gameId === 'feedAnimal') {
       setCurrentScreen(SCREENS.FEED_ANIMAL_GAME);
+    } else if (gameId === 'smartMemory') {
+      setCurrentScreen(SCREENS.SMART_MEMORY_GAME);
     }
   };
 
@@ -215,6 +220,8 @@ const App = () => {
       setCurrentScreen(SCREENS.ENGLISH_PRACTICE);
     } else if (gameMode === 'logic') {
       setCurrentScreen(SCREENS.LOGIC_SELECT);
+    } else if (gameMode === 'smartMemory') {
+      setCurrentScreen(SCREENS.SMART_MEMORY_GAME);
     } else {
       setCurrentScreen(SCREENS.LEVEL_MAP);
     }
@@ -432,6 +439,19 @@ const App = () => {
             triggerConfetti={triggerConfetti}
           />
         );
+
+      case SCREENS.SMART_MEMORY_GAME: {
+        const smartMemoryBack = getSelectedZone() === 'littleExplorers'
+          ? handleBackToExplorersMenu
+          : handleBackToGameSelect;
+        return (
+          <SmartMemoryGame
+            themeId={selectedTheme}
+            onBack={smartMemoryBack}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+      }
 
       case SCREENS.LOGIC_SELECT:
         return (

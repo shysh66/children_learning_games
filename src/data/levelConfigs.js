@@ -376,6 +376,13 @@ export const gameModes = {
     description: 'השוואה וסדרות',
     isPracticeZone: true, // Routes to LogicSelectScreen
   },
+  smartMemory: {
+    id: 'smartMemory',
+    name: 'זיכרון חכם',
+    icon: '🧩',
+    description: 'מצא את הזוגות!',
+    isPracticeZone: true, // Routes to SmartMemoryGame
+  },
   compare: {
     id: 'compare',
     name: 'התנין הרעב',
