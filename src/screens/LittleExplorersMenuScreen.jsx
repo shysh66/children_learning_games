@@ -16,6 +16,13 @@ const GAMES = [
     icon: '🍽️',
     color: 'from-green-400 to-emerald-500',
   },
+  {
+    id: 'smartMemory',
+    name: 'זיכרון חכם',
+    description: 'מצא זוגות של תמונות זהות!',
+    icon: '🧩',
+    color: 'from-purple-400 to-indigo-500',
+  },
 ];
 
 const LittleExplorersMenuScreen = ({ themeId, onBack, onSelectGame }) => {
