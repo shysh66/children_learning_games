@@ -17,6 +17,13 @@ const GAMES = [
     color: 'from-green-400 to-emerald-500',
   },
   {
+    id: 'juniorMath',
+    name: 'חשבון לקטנטנים',
+    description: 'ספירה, חיבור וחיסור לגילאי 4-5!',
+    icon: '🖐️',
+    color: 'from-blue-400 to-cyan-500',
+  },
+  {
     id: 'smartMemory',
     name: 'זיכרון חכם',
     description: 'מצא זוגות של תמונות זהות!',
