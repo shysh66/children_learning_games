@@ -30,6 +30,13 @@ const GAMES = [
     icon: '🧩',
     color: 'from-purple-400 to-indigo-500',
   },
+  {
+    id: 'firstWord',
+    name: 'המילה הראשונה שלי',
+    description: 'זהה מילים בעברית עם ניקוד!',
+    icon: '📖',
+    color: 'from-rose-400 to-orange-500',
+  },
 ];
 
 const LittleExplorersMenuScreen = ({ themeId, onBack, onSelectGame }) => {

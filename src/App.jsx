@@ -23,6 +23,7 @@ import {
   SorterGame,
   FeedTheAnimalGame,
   SmartMemoryGame,
+  FirstWordGame,
 } from './screens';
 
 // Components
@@ -43,7 +44,7 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '5.3.0';
+const APP_VERSION = '5.4.0';
 const LAST_UPDATE = '10.02.2026';
 
 // Screen names for navigation
@@ -64,6 +65,7 @@ const SCREENS = {
   FIND_IT_GAME: 'findItGame',
   LOGIC_SELECT: 'logicSelect',
   SMART_MEMORY_GAME: 'smartMemoryGame',
+  FIRST_WORD_GAME: 'firstWordGame',
   PARENT_DASHBOARD: 'parentDashboard',
 };
 
@@ -204,6 +206,8 @@ const App = () => {
       setCurrentScreen(SCREENS.LEVEL_MAP);
     } else if (gameId === 'smartMemory') {
       setCurrentScreen(SCREENS.SMART_MEMORY_GAME);
+    } else if (gameId === 'firstWord') {
+      setCurrentScreen(SCREENS.FIRST_WORD_GAME);
     }
   };
 
@@ -361,6 +365,15 @@ const App = () => {
       case SCREENS.FEED_ANIMAL_GAME:
         return (
           <FeedTheAnimalGame
+            themeId={selectedTheme}
+            onBack={handleBackToExplorersMenu}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.FIRST_WORD_GAME:
+        return (
+          <FirstWordGame
             themeId={selectedTheme}
             onBack={handleBackToExplorersMenu}
             triggerConfetti={triggerConfetti}

@@ -19,3 +19,4 @@ export { default as LittleExplorersMenuScreen } from './LittleExplorersMenuScree
 export { default as SorterGame } from './SorterGame';
 export { default as FeedTheAnimalGame } from './FeedTheAnimalGame';
 export { default as SmartMemoryGame } from './SmartMemoryGame';
+export { default as FirstWordGame } from './FirstWordGame';
