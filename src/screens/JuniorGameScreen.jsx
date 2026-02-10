@@ -1,23 +1,24 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { getTheme } from '../data/themes';
 import { gameModes, QUESTIONS_PER_LEVEL } from '../data/levelConfigs';
 import { generateLevelQuestions } from '../utils/gameLogic';
 import { calculateAnswerXP } from '../data/ranks';
+import { playOopsSound } from '../utils/sounds';
 import { ProgressBar, FloatingXP } from '../components';
 
-// Junior answer button with visual dots
+// Junior answer button with visual dots and elimination support
 const JuniorAnswerButton = ({
   answer,
   onClick,
-  isSelected,
   isCorrect,
   showFeedback,
-  shakeWrong,
   theme,
+  eliminated,
+  hintMode,
 }) => {
   const showCorrectFeedback = showFeedback && isCorrect;
-  const showWrongFeedback = showFeedback && isSelected && !isCorrect;
+  const isPulsing = hintMode && isCorrect && !showFeedback;
 
   // Generate dots for visual counting aid
   const renderDots = () => {
@@ -27,7 +28,11 @@ const JuniorAnswerButton = ({
       dots.push(
         <span
           key={i}
-          className="inline-block w-2 h-2 bg-white/80 rounded-full"
+          className={`inline-block rounded-full transition-all duration-300 ${
+            hintMode
+              ? 'w-3 h-3 bg-white'
+              : 'w-2 h-2 bg-white/80'
+          }`}
         />
       );
     }
@@ -38,48 +43,38 @@ const JuniorAnswerButton = ({
     if (showCorrectFeedback) {
       return 'bg-green-500 scale-110 ring-8 ring-green-300';
     }
-    if (showWrongFeedback) {
-      return `bg-red-500 ${shakeWrong ? 'animate-shake' : ''}`;
+    if (eliminated) {
+      return 'bg-gray-500 opacity-50 grayscale cursor-not-allowed';
+    }
+    if (isPulsing) {
+      return `${theme.cardBg} animate-hint-pulse`;
     }
     return `${theme.cardBg} hover:scale-105`;
   };
 
   return (
-    <>
-      <button
-        onClick={onClick}
-        disabled={showFeedback}
-        className={`
-          flex flex-col items-center justify-center gap-2 py-6 px-4 rounded-3xl transition-all duration-300 transform
-          ${getButtonStyles()}
-          ${showFeedback ? 'cursor-not-allowed' : 'cursor-pointer hover:shadow-2xl'}
-          text-white min-h-[120px]
-        `}
-      >
-        {/* Number */}
-        <span className="text-5xl font-black">{answer}</span>
-        {/* Visual dots */}
-        <div className="flex flex-wrap justify-center gap-1 max-w-[80px]">
-          {renderDots()}
-        </div>
-      </button>
-
-      <style>{`
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-10px); }
-          75% { transform: translateX(10px); }
-        }
-        .animate-shake {
-          animation: shake 0.3s ease-in-out;
-        }
-      `}</style>
-    </>
+    <button
+      onClick={onClick}
+      disabled={showFeedback || eliminated}
+      className={`
+        flex flex-col items-center justify-center gap-2 py-6 px-4 rounded-3xl transition-all duration-300 transform
+        ${getButtonStyles()}
+        ${showFeedback || eliminated ? 'cursor-not-allowed' : 'cursor-pointer hover:shadow-2xl'}
+        text-white min-h-[120px]
+      `}
+    >
+      {/* Number */}
+      <span className="text-5xl font-black">{answer}</span>
+      {/* Visual dots */}
+      <div className="flex flex-wrap justify-center gap-1 max-w-[80px]">
+        {renderDots()}
+      </div>
+    </button>
   );
 };
 
-// Junior visual question display
-const JuniorVisualQuestion = ({ question, theme }) => {
+// Junior visual question display with hint animation support
+const JuniorVisualQuestion = ({ question, theme, hintMode }) => {
   if (!question || !theme) return null;
 
   const { type, num1, num2, visual, useGrid } = question;
@@ -88,6 +83,21 @@ const JuniorVisualQuestion = ({ question, theme }) => {
   const containerClass = useGrid
     ? 'flex flex-wrap justify-center gap-2 max-w-md mx-auto'
     : 'flex flex-wrap justify-center gap-3';
+
+  // Icon animation class: bounce normally, jump one-by-one in hint mode
+  const getIconClass = (idx) => {
+    if (hintMode) {
+      return 'text-5xl animate-hint-jump';
+    }
+    return 'text-5xl animate-bounce';
+  };
+
+  const getIconStyle = (idx) => {
+    if (hintMode) {
+      return { animationDelay: `${idx * 0.5}s` };
+    }
+    return { animationDelay: `${idx * 0.1}s` };
+  };
 
   // Render counting question (just show items)
   const renderCountingVisual = () => {
@@ -98,8 +108,8 @@ const JuniorVisualQuestion = ({ question, theme }) => {
           {[...Array(num1)].map((_, idx) => (
             <span
               key={idx}
-              className="text-5xl animate-bounce"
-              style={{ animationDelay: `${idx * 0.1}s` }}
+              className={getIconClass(idx)}
+              style={getIconStyle(idx)}
             >
               {theme.visualIcon}
             </span>
@@ -120,8 +130,8 @@ const JuniorVisualQuestion = ({ question, theme }) => {
               {[...Array(visual.group1)].map((_, idx) => (
                 <span
                   key={`g1-${idx}`}
-                  className="text-4xl animate-bounce"
-                  style={{ animationDelay: `${idx * 0.1}s` }}
+                  className={getIconClass(idx)}
+                  style={getIconStyle(idx)}
                 >
                   {theme.visualIcon}
                 </span>
@@ -138,8 +148,8 @@ const JuniorVisualQuestion = ({ question, theme }) => {
               {[...Array(visual.group2)].map((_, idx) => (
                 <span
                   key={`g2-${idx}`}
-                  className="text-4xl animate-bounce"
-                  style={{ animationDelay: `${(visual.group1 + idx) * 0.1}s` }}
+                  className={getIconClass(visual.group1 + idx)}
+                  style={getIconStyle(visual.group1 + idx)}
                 >
                   {theme.visualIcon}
                 </span>
@@ -169,8 +179,8 @@ const JuniorVisualQuestion = ({ question, theme }) => {
               return (
                 <span
                   key={idx}
-                  className={`text-4xl relative ${isCrossed ? 'opacity-50' : ''}`}
-                  style={{ animationDelay: `${idx * 0.05}s` }}
+                  className={`relative ${isCrossed ? 'opacity-50' : ''} ${getIconClass(idx)}`}
+                  style={getIconStyle(idx)}
                 >
                   {theme.visualIcon}
                   {isCrossed && (
@@ -222,11 +232,15 @@ const JuniorGameScreen = ({
   const [questionIndex, setQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [earnedXP, setEarnedXP] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);
-  const [shakeWrong, setShakeWrong] = useState(false);
   const [showFloatingXP, setShowFloatingXP] = useState(false);
   const [currentXPGain, setCurrentXPGain] = useState(0);
+
+  // Gentle Assistance state (elimination + hint mode)
+  const [eliminatedAnswers, setEliminatedAnswers] = useState([]);
+  const [mistakeCount, setMistakeCount] = useState(0);
+  const [hintMode, setHintMode] = useState(false);
+  const hintTimerRef = useRef(null);
 
   // Calculate XP per correct answer based on level
   const xpPerAnswer = calculateAnswerXP(level - 1);
@@ -238,9 +252,34 @@ const JuniorGameScreen = ({
     setQuestionIndex(0);
     setScore(0);
     setEarnedXP(0);
-    setSelectedAnswer(null);
+
     setShowFeedback(false);
+    setEliminatedAnswers([]);
+    setMistakeCount(0);
+    setHintMode(false);
   }, [gameMode, level]);
+
+  // 10-second inactivity timer for hint mode
+  useEffect(() => {
+    // Clear previous timer
+    if (hintTimerRef.current) {
+      clearTimeout(hintTimerRef.current);
+      hintTimerRef.current = null;
+    }
+
+    // Only start timer if we have a question and not already showing feedback or hint
+    if (questions.length > 0 && !showFeedback && !hintMode) {
+      hintTimerRef.current = setTimeout(() => {
+        setHintMode(true);
+      }, 10000);
+    }
+
+    return () => {
+      if (hintTimerRef.current) {
+        clearTimeout(hintTimerRef.current);
+      }
+    };
+  }, [questionIndex, questions.length, showFeedback, hintMode]);
 
   // Get current question from pre-generated list
   const currentQuestion = questions[questionIndex];
@@ -250,39 +289,61 @@ const JuniorGameScreen = ({
     setShowFloatingXP(false);
   }, []);
 
+  // Advance to next question or complete level
+  const advanceQuestion = useCallback((isCorrect, currentScore, currentXP) => {
+    if (questionIndex + 1 < QUESTIONS_PER_LEVEL) {
+      setQuestionIndex((prev) => prev + 1);
+  
+      setShowFeedback(false);
+      setEliminatedAnswers([]);
+      setMistakeCount(0);
+      setHintMode(false);
+    } else {
+      // Game complete
+      onComplete(currentScore, currentXP);
+    }
+  }, [questionIndex, onComplete]);
+
   // Handle answer selection
   const handleAnswer = (answer) => {
-    if (showFeedback) return;
-
-    setSelectedAnswer(answer);
-    setShowFeedback(true);
+    if (showFeedback || eliminatedAnswers.includes(answer)) return;
 
     const isCorrect = answer === currentQuestion.correct;
 
     if (isCorrect) {
-      setScore((prev) => prev + 1);
-      setEarnedXP((prev) => prev + xpPerAnswer);
+      // Clear hint timer on correct answer
+      if (hintTimerRef.current) {
+        clearTimeout(hintTimerRef.current);
+        hintTimerRef.current = null;
+      }
+
+      setShowFeedback(true);
+
+      const newScore = score + 1;
+      const newXP = earnedXP + xpPerAnswer;
+      setScore(newScore);
+      setEarnedXP(newXP);
       setCurrentXPGain(xpPerAnswer);
       setShowFloatingXP(true);
       triggerConfetti?.('normal');
-    } else {
-      setShakeWrong(true);
-      setTimeout(() => setShakeWrong(false), 500);
-    }
 
-    // Move to next question or complete
-    setTimeout(() => {
-      if (questionIndex + 1 < QUESTIONS_PER_LEVEL) {
-        setQuestionIndex((prev) => prev + 1);
-        setSelectedAnswer(null);
-        setShowFeedback(false);
-      } else {
-        // Game complete - pass both score and earned XP
-        const finalScore = isCorrect ? score + 1 : score;
-        const finalXP = isCorrect ? earnedXP + xpPerAnswer : earnedXP;
-        onComplete(finalScore, finalXP);
+      // Move to next question after delay
+      setTimeout(() => {
+        advanceQuestion(true, newScore, newXP);
+      }, 1500);
+    } else {
+      // Wrong answer: play oops sound, eliminate this button
+      playOopsSound();
+      setEliminatedAnswers((prev) => [...prev, answer]);
+
+      const newMistakeCount = mistakeCount + 1;
+      setMistakeCount(newMistakeCount);
+
+      // Activate hint mode after 2 mistakes
+      if (newMistakeCount >= 2 && !hintMode) {
+        setHintMode(true);
       }
-    }, 1500);
+    }
   };
 
   if (!currentQuestion || questions.length === 0) {
@@ -337,7 +398,7 @@ const JuniorGameScreen = ({
 
         {/* Question Card */}
         <div className={`${theme.cardBg} rounded-3xl p-6 sm:p-10 mb-6 mt-6`}>
-          <JuniorVisualQuestion question={currentQuestion} theme={theme} />
+          <JuniorVisualQuestion question={currentQuestion} theme={theme} hintMode={hintMode} />
         </div>
 
         {/* Answer buttons - 2x2 grid with visual dots */}
@@ -347,11 +408,11 @@ const JuniorGameScreen = ({
               key={idx}
               answer={answer}
               onClick={() => handleAnswer(answer)}
-              isSelected={selectedAnswer === answer}
               isCorrect={answer === currentQuestion.correct}
               showFeedback={showFeedback}
-              shakeWrong={shakeWrong}
               theme={theme}
+              eliminated={eliminatedAnswers.includes(answer)}
+              hintMode={hintMode}
             />
           ))}
         </div>
@@ -363,6 +424,24 @@ const JuniorGameScreen = ({
           </span>
         </div>
       </div>
+
+      {/* Animations */}
+      <style>{`
+        @keyframes hint-pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+        }
+        .animate-hint-pulse {
+          animation: hint-pulse 1s ease-in-out infinite;
+        }
+        @keyframes hint-jump {
+          0%, 100% { transform: scale(1) translateY(0); }
+          50% { transform: scale(1.2) translateY(-8px); }
+        }
+        .animate-hint-jump {
+          animation: hint-jump 1s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 };
