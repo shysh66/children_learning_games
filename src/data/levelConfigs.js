@@ -337,6 +337,7 @@ export const gameModes = {
     description: 'לגילאי 4-5',
     levels: juniorLevels,
     totalLevels: 8,
+    hidden: true, // Moved to Little Explorers zone
   },
   multiply: {
     id: 'multiply',

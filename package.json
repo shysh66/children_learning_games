@@ -1,6 +1,6 @@
 {
   "name": "children-math-game",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "משחקי חשבון לילדים - Math games for kids",
   "private": true,
   "dependencies": {

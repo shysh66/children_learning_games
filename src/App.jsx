@@ -43,8 +43,8 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '5.2.0';
-const LAST_UPDATE = '10.2.2026';
+const APP_VERSION = '5.2.1';
+const LAST_UPDATE = '10.02.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -199,6 +199,9 @@ const App = () => {
       setCurrentScreen(SCREENS.SORTER_GAME);
     } else if (gameId === 'feedAnimal') {
       setCurrentScreen(SCREENS.FEED_ANIMAL_GAME);
+    } else if (gameId === 'juniorMath') {
+      setSelectedGameMode('junior');
+      setCurrentScreen(SCREENS.LEVEL_MAP);
     } else if (gameId === 'smartMemory') {
       setCurrentScreen(SCREENS.SMART_MEMORY_GAME);
     }
@@ -368,7 +371,9 @@ const App = () => {
         const levelMapBackHandler =
           selectedGameMode === 'compare' || selectedGameMode === 'sequence'
             ? handleBackToLogicSelect
-            : handleBackToGameSelect;
+            : selectedGameMode === 'junior' && getSelectedZone() === 'littleExplorers'
+              ? handleBackToExplorersMenu
+              : handleBackToGameSelect;
         return (
           <LevelMapScreen
             themeId={selectedTheme}
