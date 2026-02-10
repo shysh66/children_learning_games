@@ -45,6 +45,41 @@ export const playCheerSound = () => {
   }
 };
 
+// Play a gentle "oops" sound for wrong answers (low pitch, soft)
+export const playOopsSound = () => {
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+
+    // Two gentle descending notes - soft and non-punishing
+    const notes = [
+      { freq: 330, start: 0, duration: 0.15 },      // E4
+      { freq: 262, start: 0.12, duration: 0.2 },     // C4 (lower)
+    ];
+
+    notes.forEach(({ freq, start, duration }) => {
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(freq, now + start);
+
+      // Gentle attack and quick fade
+      gainNode.gain.setValueAtTime(0, now + start);
+      gainNode.gain.linearRampToValueAtTime(0.15, now + start + 0.03);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, now + start + duration);
+
+      oscillator.start(now + start);
+      oscillator.stop(now + start + duration + 0.1);
+    });
+  } catch (e) {
+    // Silently fail if audio is not supported
+  }
+};
+
 // Play a bigger celebration sound (for winning)
 export const playCelebrationSound = () => {
   try {
