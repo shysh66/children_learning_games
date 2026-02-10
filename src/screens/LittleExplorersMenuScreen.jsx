@@ -9,6 +9,13 @@ const GAMES = [
     icon: '🗂️',
     color: 'from-orange-400 to-pink-500',
   },
+  {
+    id: 'feedAnimal',
+    name: 'זמן אוכל',
+    description: 'האכל את החיות וספור כמה אכלו!',
+    icon: '🍽️',
+    color: 'from-green-400 to-emerald-500',
+  },
 ];
 
 const LittleExplorersMenuScreen = ({ themeId, onBack, onSelectGame }) => {
@@ -44,11 +51,13 @@ const LittleExplorersMenuScreen = ({ themeId, onBack, onSelectGame }) => {
           ))}
 
           {/* Coming soon placeholder for future games */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center border-4 border-dashed border-white/20">
-            <div className="text-6xl mb-4 opacity-50">🚧</div>
-            <h2 className="text-2xl font-bold text-white/50 mb-2">בקרוב!</h2>
-            <p className="text-lg text-white/40">משחקים נוספים בדרך...</p>
-          </div>
+          {GAMES.length % 2 !== 0 && (
+            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center border-4 border-dashed border-white/20">
+              <div className="text-6xl mb-4 opacity-50">🚧</div>
+              <h2 className="text-2xl font-bold text-white/50 mb-2">בקרוב!</h2>
+              <p className="text-lg text-white/40">משחקים נוספים בדרך...</p>
+            </div>
+          )}
         </div>
 
         {/* Back button */}
