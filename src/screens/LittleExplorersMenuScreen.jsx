@@ -37,6 +37,27 @@ const GAMES = [
     icon: '📖',
     color: 'from-rose-400 to-orange-500',
   },
+  {
+    id: 'patternSequence',
+    name: 'מה בא אחר כך?',
+    description: 'השלם את הרצף!',
+    icon: '🔢',
+    color: 'from-cyan-400 to-blue-500',
+  },
+  {
+    id: 'oddOneOut',
+    name: 'מי יוצא דופן?',
+    description: 'מצא מי לא שייך לקבוצה!',
+    icon: '🔎',
+    color: 'from-amber-400 to-red-500',
+  },
+  {
+    id: 'opposites',
+    name: 'עולם ההפכים',
+    description: 'מצא את ההפך!',
+    icon: '🔄',
+    color: 'from-teal-400 to-emerald-500',
+  },
 ];
 
 const LittleExplorersMenuScreen = ({ themeId, onBack, onSelectGame }) => {

@@ -21,3 +21,6 @@ export { default as FeedTheAnimalGame } from './FeedTheAnimalGame';
 export { default as SmartMemoryGame } from './SmartMemoryGame';
 export { default as FirstWordGame } from './FirstWordGame';
 export { default as PolygonDetectiveGame } from './PolygonDetectiveGame';
+export { default as PatternSequenceGame } from './PatternSequenceGame';
+export { default as OddOneOutGame } from './OddOneOutGame';
+export { default as OppositesGame } from './OppositesGame';

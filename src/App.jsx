@@ -25,6 +25,9 @@ import {
   SmartMemoryGame,
   FirstWordGame,
   PolygonDetectiveGame,
+  PatternSequenceGame,
+  OddOneOutGame,
+  OppositesGame,
 } from './screens';
 
 // Components
@@ -45,7 +48,7 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '5.6.0';
+const APP_VERSION = '5.7.0';
 const LAST_UPDATE = '11.02.2026';
 
 // Screen names for navigation
@@ -68,6 +71,9 @@ const SCREENS = {
   SMART_MEMORY_GAME: 'smartMemoryGame',
   FIRST_WORD_GAME: 'firstWordGame',
   POLYGON_DETECTIVE_GAME: 'polygonDetectiveGame',
+  PATTERN_SEQUENCE_GAME: 'patternSequenceGame',
+  ODD_ONE_OUT_GAME: 'oddOneOutGame',
+  OPPOSITES_GAME: 'oppositesGame',
   PARENT_DASHBOARD: 'parentDashboard',
 };
 
@@ -210,6 +216,12 @@ const App = () => {
       setCurrentScreen(SCREENS.SMART_MEMORY_GAME);
     } else if (gameId === 'firstWord') {
       setCurrentScreen(SCREENS.FIRST_WORD_GAME);
+    } else if (gameId === 'patternSequence') {
+      setCurrentScreen(SCREENS.PATTERN_SEQUENCE_GAME);
+    } else if (gameId === 'oddOneOut') {
+      setCurrentScreen(SCREENS.ODD_ONE_OUT_GAME);
+    } else if (gameId === 'opposites') {
+      setCurrentScreen(SCREENS.OPPOSITES_GAME);
     }
   };
 
@@ -378,6 +390,33 @@ const App = () => {
       case SCREENS.FIRST_WORD_GAME:
         return (
           <FirstWordGame
+            themeId={selectedTheme}
+            onBack={handleBackToExplorersMenu}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.PATTERN_SEQUENCE_GAME:
+        return (
+          <PatternSequenceGame
+            themeId={selectedTheme}
+            onBack={handleBackToExplorersMenu}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.ODD_ONE_OUT_GAME:
+        return (
+          <OddOneOutGame
+            themeId={selectedTheme}
+            onBack={handleBackToExplorersMenu}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.OPPOSITES_GAME:
+        return (
+          <OppositesGame
             themeId={selectedTheme}
             onBack={handleBackToExplorersMenu}
             triggerConfetti={triggerConfetti}
