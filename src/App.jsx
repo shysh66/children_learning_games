@@ -24,6 +24,7 @@ import {
   FeedTheAnimalGame,
   SmartMemoryGame,
   FirstWordGame,
+  PolygonDetectiveGame,
 } from './screens';
 
 // Components
@@ -44,8 +45,8 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '5.4.0';
-const LAST_UPDATE = '10.02.2026';
+const APP_VERSION = '5.6.0';
+const LAST_UPDATE = '11.02.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -66,6 +67,7 @@ const SCREENS = {
   LOGIC_SELECT: 'logicSelect',
   SMART_MEMORY_GAME: 'smartMemoryGame',
   FIRST_WORD_GAME: 'firstWordGame',
+  POLYGON_DETECTIVE_GAME: 'polygonDetectiveGame',
   PARENT_DASHBOARD: 'parentDashboard',
 };
 
@@ -229,6 +231,8 @@ const App = () => {
       setCurrentScreen(SCREENS.LOGIC_SELECT);
     } else if (gameMode === 'smartMemory') {
       setCurrentScreen(SCREENS.SMART_MEMORY_GAME);
+    } else if (gameMode === 'polygonDetective') {
+      setCurrentScreen(SCREENS.POLYGON_DETECTIVE_GAME);
     } else {
       setCurrentScreen(SCREENS.LEVEL_MAP);
     }
@@ -376,6 +380,15 @@ const App = () => {
           <FirstWordGame
             themeId={selectedTheme}
             onBack={handleBackToExplorersMenu}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.POLYGON_DETECTIVE_GAME:
+        return (
+          <PolygonDetectiveGame
+            themeId={selectedTheme}
+            onBack={handleBackToGameSelect}
             triggerConfetti={triggerConfetti}
           />
         );

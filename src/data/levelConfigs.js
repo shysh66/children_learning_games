@@ -384,6 +384,13 @@ export const gameModes = {
     description: 'מצא את הזוגות!',
     isPracticeZone: true, // Routes to SmartMemoryGame
   },
+  polygonDetective: {
+    id: 'polygonDetective',
+    name: 'בלש המצולעים',
+    icon: '🔍',
+    description: 'גיאומטריה וצורות',
+    isPracticeZone: true, // Self-contained game with internal levels
+  },
   compare: {
     id: 'compare',
     name: 'התנין הרעב',
