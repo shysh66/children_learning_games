@@ -24,3 +24,5 @@ export { default as PolygonDetectiveGame } from './PolygonDetectiveGame';
 export { default as PatternSequenceGame } from './PatternSequenceGame';
 export { default as OddOneOutGame } from './OddOneOutGame';
 export { default as OppositesGame } from './OppositesGame';
+export { default as ReadingDetectiveGame } from './ReadingDetectiveGame';
+export { default as RobotLabGame } from './RobotLabGame';

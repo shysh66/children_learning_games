@@ -28,6 +28,8 @@ import {
   PatternSequenceGame,
   OddOneOutGame,
   OppositesGame,
+  ReadingDetectiveGame,
+  RobotLabGame,
 } from './screens';
 
 // Components
@@ -48,8 +50,8 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '5.7.0';
-const LAST_UPDATE = '11.02.2026';
+const APP_VERSION = '5.8.0';
+const LAST_UPDATE = '12.02.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -74,6 +76,8 @@ const SCREENS = {
   PATTERN_SEQUENCE_GAME: 'patternSequenceGame',
   ODD_ONE_OUT_GAME: 'oddOneOutGame',
   OPPOSITES_GAME: 'oppositesGame',
+  READING_DETECTIVE_GAME: 'readingDetectiveGame',
+  ROBOT_LAB_GAME: 'robotLabGame',
   PARENT_DASHBOARD: 'parentDashboard',
 };
 
@@ -245,6 +249,10 @@ const App = () => {
       setCurrentScreen(SCREENS.SMART_MEMORY_GAME);
     } else if (gameMode === 'polygonDetective') {
       setCurrentScreen(SCREENS.POLYGON_DETECTIVE_GAME);
+    } else if (gameMode === 'readingDetective') {
+      setCurrentScreen(SCREENS.READING_DETECTIVE_GAME);
+    } else if (gameMode === 'robotLab') {
+      setCurrentScreen(SCREENS.ROBOT_LAB_GAME);
     } else {
       setCurrentScreen(SCREENS.LEVEL_MAP);
     }
@@ -426,6 +434,24 @@ const App = () => {
       case SCREENS.POLYGON_DETECTIVE_GAME:
         return (
           <PolygonDetectiveGame
+            themeId={selectedTheme}
+            onBack={handleBackToGameSelect}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.READING_DETECTIVE_GAME:
+        return (
+          <ReadingDetectiveGame
+            themeId={selectedTheme}
+            onBack={handleBackToGameSelect}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.ROBOT_LAB_GAME:
+        return (
+          <RobotLabGame
             themeId={selectedTheme}
             onBack={handleBackToGameSelect}
             triggerConfetti={triggerConfetti}
