@@ -391,6 +391,20 @@ export const gameModes = {
     description: 'גיאומטריה וצורות',
     isPracticeZone: true, // Self-contained game with internal levels
   },
+  readingDetective: {
+    id: 'readingDetective',
+    name: 'בלש הקריאה',
+    icon: '📖',
+    description: 'הבנת הנקרא והרפתקאות קריאה',
+    isPracticeZone: true,
+  },
+  robotLab: {
+    id: 'robotLab',
+    name: 'הרובוט שלי',
+    icon: '🤖',
+    description: 'אוריינות AI וחשיבה ביקורתית',
+    isPracticeZone: true,
+  },
   compare: {
     id: 'compare',
     name: 'התנין הרעב',
