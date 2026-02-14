@@ -26,3 +26,4 @@ export { default as OddOneOutGame } from './OddOneOutGame';
 export { default as OppositesGame } from './OppositesGame';
 export { default as ReadingDetectiveGame } from './ReadingDetectiveGame';
 export { default as RobotLabGame } from './RobotLabGame';
+export { default as StickerAlbum } from './StickerAlbum';

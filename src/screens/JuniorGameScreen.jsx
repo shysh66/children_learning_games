@@ -5,7 +5,8 @@ import { gameModes, QUESTIONS_PER_LEVEL } from '../data/levelConfigs';
 import { generateLevelQuestions } from '../utils/gameLogic';
 import { calculateAnswerXP } from '../data/ranks';
 import { playOopsSound } from '../utils/sounds';
-import { ProgressBar, FloatingXP } from '../components';
+import { grantStar } from '../utils/storage';
+import { ProgressBar, FloatingXP, StarEarnedModal } from '../components';
 
 // Junior answer button with visual dots and elimination support
 const JuniorAnswerButton = ({
@@ -241,6 +242,8 @@ const JuniorGameScreen = ({
   const [mistakeCount, setMistakeCount] = useState(0);
   const [hintMode, setHintMode] = useState(false);
   const hintTimerRef = useRef(null);
+  const [showStarModal, setShowStarModal] = useState(false);
+  const [earnedStarTotal, setEarnedStarTotal] = useState(0);
 
   // Calculate XP per correct answer based on level
   const xpPerAnswer = calculateAnswerXP(level - 1);
@@ -293,16 +296,22 @@ const JuniorGameScreen = ({
   const advanceQuestion = useCallback((isCorrect, currentScore, currentXP) => {
     if (questionIndex + 1 < QUESTIONS_PER_LEVEL) {
       setQuestionIndex((prev) => prev + 1);
-  
+
       setShowFeedback(false);
       setEliminatedAnswers([]);
       setMistakeCount(0);
       setHintMode(false);
     } else {
-      // Game complete
+      // Game complete — grant a star for sticker album
+      const gameId = `junior-level-${level}`;
+      const starResult = grantStar(gameId);
+      if (starResult.earned) {
+        setEarnedStarTotal(starResult.totalStars);
+        setShowStarModal(true);
+      }
       onComplete(currentScore, currentXP);
     }
-  }, [questionIndex, onComplete]);
+  }, [questionIndex, onComplete, level]);
 
   // Handle answer selection
   const handleAnswer = (answer) => {
@@ -424,6 +433,13 @@ const JuniorGameScreen = ({
           </span>
         </div>
       </div>
+
+      {/* Star Earned Modal */}
+      <StarEarnedModal
+        isOpen={showStarModal}
+        onClose={() => setShowStarModal(false)}
+        totalStars={earnedStarTotal}
+      />
 
       {/* Animations */}
       <style>{`

@@ -37,6 +37,10 @@ const getDefaultProfileProgress = () => ({
   },
   selectedTheme: null,
   totalXP: 0, // Global XP for ranking system
+  // Sticker Album system (Little Explorers)
+  stickerAlbumStars: 0, // Currency to buy stickers
+  stickers: [], // List of owned sticker IDs
+  completedGameIds: [], // Game IDs already finished (no farming)
   stats: {
     categoryStats: {
       junior: { attempts: 0, correct: 0 },
@@ -222,6 +226,9 @@ export const loadProgress = () => {
     compare: { ...defaults.compare, ...profile.progress?.compare },
     sequence: { ...defaults.sequence, ...profile.progress?.sequence },
     totalXP: profile.progress?.totalXP || 0,
+    stickerAlbumStars: profile.progress?.stickerAlbumStars || 0,
+    stickers: profile.progress?.stickers || [],
+    completedGameIds: profile.progress?.completedGameIds || [],
     stats: {
       categoryStats: mergedCategoryStats,
       dailyXP: { ...profile.progress?.stats?.dailyXP },
@@ -403,4 +410,53 @@ export const getAllProfilesWithStats = () => {
       },
     };
   });
+};
+
+// ============ Sticker Album Functions ============
+
+// Grant a star for completing a game (one-time per gameId)
+// Returns { earned: boolean, totalStars: number }
+export const grantStar = (gameId) => {
+  const progress = loadProgress();
+  const completedGameIds = progress.completedGameIds || [];
+
+  // Already completed this game — no farming
+  if (completedGameIds.includes(gameId)) {
+    return { earned: false, totalStars: progress.stickerAlbumStars || 0 };
+  }
+
+  // New completion: grant a star
+  progress.completedGameIds = [...completedGameIds, gameId];
+  progress.stickerAlbumStars = (progress.stickerAlbumStars || 0) + 1;
+  saveProgress(progress);
+
+  return { earned: true, totalStars: progress.stickerAlbumStars };
+};
+
+// Get sticker album data for the active profile
+export const getAlbumData = () => {
+  const progress = loadProgress();
+  return {
+    stars: progress.stickerAlbumStars || 0,
+    stickers: progress.stickers || [],
+    completedGameIds: progress.completedGameIds || [],
+  };
+};
+
+// Purchase a sticker with a star
+// Returns { success: boolean, stickers: string[] }
+export const purchaseSticker = (stickerId) => {
+  const progress = loadProgress();
+  const stars = progress.stickerAlbumStars || 0;
+  const stickers = progress.stickers || [];
+
+  if (stars <= 0 || stickers.includes(stickerId)) {
+    return { success: false, stickers };
+  }
+
+  progress.stickerAlbumStars = stars - 1;
+  progress.stickers = [...stickers, stickerId];
+  saveProgress(progress);
+
+  return { success: true, stickers: progress.stickers };
 };

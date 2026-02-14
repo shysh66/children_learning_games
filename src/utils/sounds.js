@@ -117,3 +117,53 @@ export const playCelebrationSound = () => {
     console.log('Audio not supported:', e);
   }
 };
+
+// Play a special "Star Earned!" sound - sparkly ascending with shimmer
+export const playStarEarnedSound = () => {
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+
+    // Sparkly rising arpeggio with shimmer
+    const melody = [
+      { freq: 659.25, start: 0, duration: 0.12 },      // E5
+      { freq: 783.99, start: 0.1, duration: 0.12 },     // G5
+      { freq: 987.77, start: 0.2, duration: 0.12 },     // B5
+      { freq: 1318.5, start: 0.3, duration: 0.15 },     // E6
+      { freq: 1567.98, start: 0.4, duration: 0.4 },     // G6 (long shimmer)
+    ];
+
+    melody.forEach(({ freq, start, duration }) => {
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(freq, now + start);
+
+      gainNode.gain.setValueAtTime(0, now + start);
+      gainNode.gain.linearRampToValueAtTime(0.3, now + start + 0.02);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, now + start + duration);
+
+      oscillator.start(now + start);
+      oscillator.stop(now + start + duration + 0.1);
+    });
+
+    // Add shimmer overtone on the last note
+    const shimmer = ctx.createOscillator();
+    const shimmerGain = ctx.createGain();
+    shimmer.connect(shimmerGain);
+    shimmerGain.connect(ctx.destination);
+    shimmer.type = 'triangle';
+    shimmer.frequency.setValueAtTime(2637, now + 0.4);
+    shimmerGain.gain.setValueAtTime(0, now + 0.4);
+    shimmerGain.gain.linearRampToValueAtTime(0.1, now + 0.45);
+    shimmerGain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+    shimmer.start(now + 0.4);
+    shimmer.stop(now + 0.9);
+  } catch (e) {
+    // Silently fail if audio is not supported
+  }
+};
