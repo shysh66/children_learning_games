@@ -100,15 +100,15 @@ const ThemeSelectScreen = ({ onSelectTheme, onSwitchUser, version, lastUpdate })
         </div>
 
         {/* Theme cards */}
-        <div className="grid grid-cols-3 gap-3 sm:gap-6 mb-8">
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 sm:gap-4 mb-8">
           {Object.entries(themes).map(([key, theme]) => (
             <button
               key={key}
               onClick={() => onSelectTheme(key)}
-              className="group relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-8 transform transition-all duration-300 hover:scale-105 sm:hover:scale-110 hover:rotate-2 bg-white/20 backdrop-blur-md border-2 sm:border-4 border-white/30 hover:border-white/60"
+              className="group relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-6 transform transition-all duration-300 hover:scale-105 sm:hover:scale-110 hover:rotate-2 bg-white/20 backdrop-blur-md border-2 sm:border-4 border-white/30 hover:border-white/60"
             >
-              <div className="text-5xl sm:text-8xl mb-2 sm:mb-4 animate-pulse">{theme.icon}</div>
-              <div className="text-lg sm:text-3xl font-black text-white drop-shadow-lg">
+              <div className="text-5xl sm:text-7xl mb-2 sm:mb-4 animate-pulse">{theme.icon}</div>
+              <div className="text-base sm:text-xl font-black text-white drop-shadow-lg">
                 {theme.name}
               </div>
             </button>
