@@ -4,7 +4,7 @@ import { getTheme } from '../data/themes';
 import { gameModes, QUESTIONS_PER_LEVEL, calculateStars } from '../data/levelConfigs';
 import { getRankForTheme, getNextRankForTheme, getProgressToNextLevel, getGamesToNextLevel, calculateLevelBonusXP } from '../data/ranks';
 import { getMedalDisplay } from '../data/medals';
-import { updateLevelStars, addXP, getTotalXP, recordGameStats, completeGame, getUniqueGamesCount } from '../utils/storage';
+import { updateLevelStars, addXP, recordGameStats, completeGame, getUniqueGamesCount } from '../utils/storage';
 import { StarRating, Modal, Button } from '../components';
 
 // Win/Summary screen after completing a level
@@ -28,12 +28,10 @@ const WinScreen = ({
   // XP state
   const [showXPBreakdown, setShowXPBreakdown] = useState(false);
   const [showRankUp, setShowRankUp] = useState(false);
-  const [showPracticeMode, setShowPracticeMode] = useState(false);
   const [showMedalEarned, setShowMedalEarned] = useState(false);
   const [earnedMedal, setEarnedMedal] = useState(null);
   const [currentRank, setCurrentRank] = useState(null);
   const [totalGamesCount, setTotalGamesCount] = useState(0);
-  const [totalXPAfter, setTotalXPAfter] = useState(0);
   const [isNewGame, setIsNewGame] = useState(true);
 
   // Calculate bonus XP
@@ -49,7 +47,6 @@ const WinScreen = ({
 
     if (!gameResult.isNewGame) {
       // PRACTICE MODE - game was already completed
-      setShowPracticeMode(true);
 
       // Still save star progress (allows improving stars on replay)
       if (stars > 0) {
@@ -60,7 +57,6 @@ const WinScreen = ({
       const gamesCount = getUniqueGamesCount();
       setTotalGamesCount(gamesCount);
       setCurrentRank(getRankForTheme(themeId, gamesCount));
-      setTotalXPAfter(getTotalXP());
 
       setTimeout(() => setShowXPBreakdown(true), 500);
       return;
@@ -77,10 +73,7 @@ const WinScreen = ({
 
     // Add XP (still tracked as fun metric)
     if (totalEarnedXP > 0) {
-      const xpResult = addXP(totalEarnedXP);
-      setTotalXPAfter(xpResult.newXP);
-    } else {
-      setTotalXPAfter(getTotalXP());
+      addXP(totalEarnedXP);
     }
 
     // Update rank display

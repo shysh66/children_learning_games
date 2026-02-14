@@ -11,7 +11,7 @@ const ThemeSelectScreen = ({ onSelectTheme, onSwitchUser, version, lastUpdate })
   const [progress, setProgress] = useState(0);
   const [gamesToNext, setGamesToNext] = useState(0);
   const [profile, setProfile] = useState(null);
-  const [currentThemeId, setCurrentThemeId] = useState('space');
+  const [, setCurrentThemeId] = useState('space');
 
   // Load rank, profile on mount
   useEffect(() => {
