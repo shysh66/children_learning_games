@@ -1,29 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { themes } from '../data/themes';
-import { getTotalXP, getActiveProfile } from '../utils/storage';
-import { getRankByXP, getNextRank, getProgressToNextRank, getXPToNextRank } from '../data/ranks';
+import { getUniqueGamesCount, getActiveProfile, getSelectedTheme as getSavedTheme } from '../utils/storage';
+import { getRankForTheme, getNextRankForTheme, getProgressToNextLevel, getGamesToNextLevel } from '../data/ranks';
 
 // Theme selection screen - main menu after profile selection
 const ThemeSelectScreen = ({ onSelectTheme, onSwitchUser, version, lastUpdate }) => {
-  const [totalXP, setTotalXP] = useState(0);
+  const [uniqueGames, setUniqueGames] = useState(0);
   const [rank, setRank] = useState(null);
   const [nextRank, setNextRank] = useState(null);
   const [progress, setProgress] = useState(0);
-  const [xpToNext, setXPToNext] = useState(0);
+  const [gamesToNext, setGamesToNext] = useState(0);
   const [profile, setProfile] = useState(null);
+  const [currentThemeId, setCurrentThemeId] = useState('space');
 
-  // Load XP, rank, and profile on mount
+  // Load rank, profile on mount
   useEffect(() => {
     const activeProfile = getActiveProfile();
     setProfile(activeProfile);
 
-    const xp = getTotalXP();
-    setTotalXP(xp);
-    const currentRank = getRankByXP(xp);
+    const savedTheme = getSavedTheme() || 'space';
+    setCurrentThemeId(savedTheme);
+
+    const gamesCount = getUniqueGamesCount();
+    setUniqueGames(gamesCount);
+
+    const currentRank = getRankForTheme(savedTheme, gamesCount);
     setRank(currentRank);
-    setNextRank(getNextRank(currentRank));
-    setProgress(getProgressToNextRank(xp));
-    setXPToNext(getXPToNextRank(xp));
+    setNextRank(getNextRankForTheme(savedTheme, gamesCount));
+    setProgress(getProgressToNextLevel(gamesCount));
+    setGamesToNext(getGamesToNextLevel(gamesCount));
   }, []);
 
   return (
@@ -50,15 +55,15 @@ const ThemeSelectScreen = ({ onSelectTheme, onSwitchUser, version, lastUpdate })
           </div>
         )}
 
-        {/* Rank Display - Top Center */}
+        {/* Rank Display - Top Center (themed) */}
         {rank && (
           <div className="flex justify-center mb-6 sm:mb-8">
             <div className="bg-white/15 backdrop-blur-md rounded-2xl px-4 sm:px-6 py-3 sm:py-4 border-2 border-white/30">
               <div className="flex items-center gap-3 sm:gap-4">
                 <span className="text-4xl sm:text-5xl animate-pulse">{rank.icon}</span>
                 <div>
-                  <div className="text-xl sm:text-2xl font-black text-white">{rank.name}</div>
-                  <div className="text-sm sm:text-base text-white/80">{totalXP.toLocaleString()} XP</div>
+                  <div className="text-xl sm:text-2xl font-black text-white">{rank.title}</div>
+                  <div className="text-sm sm:text-base text-white/80">{uniqueGames} משחקים ייחודיים</div>
                 </div>
               </div>
 
@@ -66,12 +71,12 @@ const ThemeSelectScreen = ({ onSelectTheme, onSwitchUser, version, lastUpdate })
               {nextRank && (
                 <div className="mt-3">
                   <div className="flex justify-between text-sm text-white/70 mb-1">
-                    <span>לדרגה הבאה: {nextRank.icon} {nextRank.name}</span>
-                    <span>{xpToNext.toLocaleString()} XP</span>
+                    <span>לדרגה הבאה: {nextRank.icon} {nextRank.title}</span>
+                    <span>עוד {gamesToNext} משחקים</span>
                   </div>
                   <div className="w-full bg-white/20 rounded-full h-3 overflow-hidden">
                     <div
-                      className={`h-full bg-gradient-to-r ${nextRank.color} transition-all duration-500 rounded-full`}
+                      className="h-full bg-gradient-to-r from-indigo-400 to-purple-500 transition-all duration-500 rounded-full"
                       style={{ width: `${progress}%` }}
                     />
                   </div>

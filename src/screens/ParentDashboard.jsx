@@ -12,7 +12,8 @@ import {
   CartesianGrid,
 } from 'recharts';
 import { getAllProfilesWithStats } from '../utils/storage';
-import { getRankByXP } from '../data/ranks';
+import { getRankForTheme } from '../data/ranks';
+import { getMedalDisplay, SUBJECT_NAMES } from '../data/medals';
 
 // Category display config
 const CATEGORIES = {
@@ -136,7 +137,10 @@ const ParentDashboard = ({ onBack }) => {
     );
   }
 
-  const rank = selectedProfile ? getRankByXP(selectedProfile.totalXP) : null;
+  const uniqueGamesCount = (selectedProfile?.completedGameIds || []).length;
+  const themeId = selectedProfile?.selectedTheme || 'space';
+  const rank = selectedProfile ? getRankForTheme(themeId, uniqueGamesCount) : null;
+  const profileMedals = selectedProfile?.medals || {};
 
   return (
     <div
@@ -190,15 +194,40 @@ const ParentDashboard = ({ onBack }) => {
                     {rank && (
                       <>
                         <span className="text-xl">{rank.icon}</span>
-                        <span>{rank.name}</span>
+                        <span>{rank.title}</span>
                         <span>•</span>
                       </>
                     )}
-                    <span>{selectedProfile.totalXP.toLocaleString()} XP</span>
+                    <span>{uniqueGamesCount} משחקים ייחודיים</span>
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* Subject Medals */}
+            {Object.keys(profileMedals).length > 0 && (
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-6">
+                <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                  <span>🏅</span> מדליות לפי נושא
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {Object.entries(profileMedals).map(([subject, medalTier]) => {
+                    const medal = getMedalDisplay(medalTier);
+                    if (!medal) return null;
+                    return (
+                      <div
+                        key={subject}
+                        className="bg-white/5 border border-white/10 rounded-xl p-4 text-center"
+                      >
+                        <div className="text-3xl mb-1">{medal.icon}</div>
+                        <div className="text-sm text-white/50">{SUBJECT_NAMES[subject] || subject}</div>
+                        <div className="text-lg font-bold text-white">{medal.name}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Chart 1: Activity & Growth (Line Chart) */}
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-6">
