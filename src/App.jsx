@@ -30,6 +30,7 @@ import {
   OppositesGame,
   ReadingDetectiveGame,
   RobotLabGame,
+  StickerAlbum,
 } from './screens';
 
 // Components
@@ -50,8 +51,8 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '5.8.0';
-const LAST_UPDATE = '12.02.2026';
+const APP_VERSION = '5.9.0';
+const LAST_UPDATE = '14.02.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -78,6 +79,7 @@ const SCREENS = {
   OPPOSITES_GAME: 'oppositesGame',
   READING_DETECTIVE_GAME: 'readingDetectiveGame',
   ROBOT_LAB_GAME: 'robotLabGame',
+  STICKER_ALBUM: 'stickerAlbum',
   PARENT_DASHBOARD: 'parentDashboard',
 };
 
@@ -229,6 +231,10 @@ const App = () => {
     }
   };
 
+  const handleOpenStickerAlbum = () => {
+    setCurrentScreen(SCREENS.STICKER_ALBUM);
+  };
+
   const handleBackToExplorersMenu = () => {
     setCurrentScreen(SCREENS.LITTLE_EXPLORERS_MENU);
   };
@@ -374,6 +380,7 @@ const App = () => {
             themeId={selectedTheme}
             onBack={handleBackToZoneSelect}
             onSelectGame={handleSelectExplorerGame}
+            onOpenAlbum={handleOpenStickerAlbum}
           />
         );
 
@@ -428,6 +435,14 @@ const App = () => {
             themeId={selectedTheme}
             onBack={handleBackToExplorersMenu}
             triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.STICKER_ALBUM:
+        return (
+          <StickerAlbum
+            themeId={selectedTheme}
+            onBack={handleBackToExplorersMenu}
           />
         );
 

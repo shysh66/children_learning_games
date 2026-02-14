@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { getTheme } from '../data/themes';
-import { addXP, recordGameStats } from '../utils/storage';
+import { grantStar, recordGameStats } from '../utils/storage';
 import { playCheerSound } from '../utils/sounds';
+import { StarEarnedModal } from '../components';
 
 // ============ Level Data ============
 
@@ -227,6 +228,8 @@ const SorterGame = ({ themeId, onBack, triggerConfetti }) => {
   const [gameComplete, setGameComplete] = useState(false);
   const [feedback, setFeedback] = useState(null); // 'correct' | 'wrong' | null
   const [highlightContainer, setHighlightContainer] = useState(null);
+  const [showStarModal, setShowStarModal] = useState(false);
+  const [earnedStarTotal, setEarnedStarTotal] = useState(0);
 
   // Drag state (pointer events for touch + mouse)
   const [dragging, setDragging] = useState(false);
@@ -321,8 +324,12 @@ const SorterGame = ({ themeId, onBack, triggerConfetti }) => {
         if (roundIndex + 1 >= rounds.length) {
           // Level complete
           setGameComplete(true);
-          const xpEarned = currentLevel * 15;
-          addXP(xpEarned);
+          const gameId = `sorter-level-${currentLevel}`;
+          const starResult = grantStar(gameId);
+          if (starResult.earned) {
+            setEarnedStarTotal(starResult.totalStars);
+            setShowStarModal(true);
+          }
           recordGameStats('sorter', rounds.length, score + 1);
           triggerConfetti('big');
         } else {
@@ -407,7 +414,6 @@ const SorterGame = ({ themeId, onBack, triggerConfetti }) => {
 
   // ============ Game Complete Screen ============
   if (gameComplete) {
-    const xpEarned = currentLevel * 15;
     return (
       <div
         className={`min-h-screen ${theme.bg} flex items-center justify-center p-6 ${theme.font}`}
@@ -422,7 +428,6 @@ const SorterGame = ({ themeId, onBack, triggerConfetti }) => {
           <p className="text-xl text-white/70 mb-4">
             ציון: {score}/{rounds.length}
           </p>
-          <div className="text-3xl text-yellow-300 font-bold mb-8">+{xpEarned} XP</div>
 
           <div className="flex flex-wrap gap-4 justify-center">
             <button
@@ -453,6 +458,12 @@ const SorterGame = ({ themeId, onBack, triggerConfetti }) => {
             </button>
           </div>
         </div>
+
+        <StarEarnedModal
+          isOpen={showStarModal}
+          onClose={() => setShowStarModal(false)}
+          totalStars={earnedStarTotal}
+        />
       </div>
     );
   }

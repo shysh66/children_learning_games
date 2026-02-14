@@ -60,7 +60,7 @@ const GAMES = [
   },
 ];
 
-const LittleExplorersMenuScreen = ({ themeId, onBack, onSelectGame }) => {
+const LittleExplorersMenuScreen = ({ themeId, onBack, onSelectGame, onOpenAlbum }) => {
   const theme = getTheme(themeId);
 
   return (
@@ -68,7 +68,16 @@ const LittleExplorersMenuScreen = ({ themeId, onBack, onSelectGame }) => {
       className={`min-h-screen ${theme.bg} flex items-center justify-center p-8 ${theme.font}`}
       dir="rtl"
     >
-      <div className="max-w-4xl w-full">
+      <div className="max-w-4xl w-full relative">
+        {/* My Album button - top corner */}
+        <button
+          onClick={onOpenAlbum}
+          className="absolute top-0 left-0 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 rounded-2xl px-4 py-3 text-white font-bold transition-all duration-300 hover:scale-105 shadow-lg shadow-yellow-500/30 flex items-center gap-2"
+        >
+          <span className="text-2xl">📒</span>
+          <span className="text-lg">האלבום שלי</span>
+        </button>
+
         {/* Header */}
         <div className="text-center mb-10">
           <div className="text-8xl mb-4 animate-bounce">🧸</div>
