@@ -1,7 +1,12 @@
 // LocalStorage utilities for persisting game progress
-// Handles profiles, unlocked levels, stars earned, and XP tracking
+// Handles profiles, unlocked levels, stars earned, XP tracking,
+// and v6.0.0 subject stats / rank system
+
+import { getAllSubjectMedals, getSubjectMedal, SUBJECT_TOTAL_GAMES, checkMedalUpgrade } from '../data/medals';
+import { getUserLevel } from '../data/ranks';
 
 const STORAGE_KEY = 'mathGameProgress';
+export const CURRENT_VERSION = '6.0.0';
 
 // Available avatars for profile creation
 export const AVATARS = ['🦁', '🦄', '🦖', '🚀', '🤖', '🐱', '🐶', '👑', '⚽', '🦋'];
@@ -9,11 +14,22 @@ export const AVATARS = ['🦁', '🦄', '🦖', '🚀', '🤖', '🐱', '🐶', 
 // Generate unique ID for profiles
 const generateId = () => `profile_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
+// Default subject stats structure
+const getDefaultSubjectStats = () => ({
+  multiply: { completedGameIds: [], totalCorrect: 0, totalAttempts: 0 },
+  divide: { completedGameIds: [], totalCorrect: 0, totalAttempts: 0 },
+  addsub: { completedGameIds: [], totalCorrect: 0, totalAttempts: 0 },
+  junior: { completedGameIds: [], totalCorrect: 0, totalAttempts: 0 },
+  compare: { completedGameIds: [], totalCorrect: 0, totalAttempts: 0 },
+  sequence: { completedGameIds: [], totalCorrect: 0, totalAttempts: 0 },
+});
+
 // Default progress structure for a single profile
 const getDefaultProfileProgress = () => ({
+  version: CURRENT_VERSION,
   junior: {
     unlockedLevel: 1,
-    stars: {}, // { levelId: starsEarned }
+    stars: {},
   },
   multiply: {
     unlockedLevel: 1,
@@ -36,11 +52,15 @@ const getDefaultProfileProgress = () => ({
     stars: {},
   },
   selectedTheme: null,
-  totalXP: 0, // Global XP for ranking system
+  totalXP: 0,
   // Sticker Album system (Little Explorers)
-  stickerAlbumStars: 0, // Currency to buy stickers
-  stickers: [], // List of owned sticker IDs
-  completedGameIds: [], // Game IDs already finished (no farming)
+  stickerAlbumStars: 0,
+  stickers: [],
+  completedGameIds: [],
+  // v6.0.0: Per-subject stats for medal system
+  subjectStats: getDefaultSubjectStats(),
+  // v6.0.0: Stored medals per subject
+  medals: {},
   stats: {
     categoryStats: {
       junior: { attempts: 0, correct: 0 },
@@ -89,6 +109,70 @@ const migrateOldData = (oldData) => {
     profiles: [defaultProfile],
     activeProfileId: defaultProfile.id,
   };
+};
+
+// ============ v6.0.0 Migration ============
+
+// Check if a profile needs v6 migration
+export const needsV6Migration = (profile) => {
+  if (!profile) return false;
+  return profile.progress?.version !== CURRENT_VERSION;
+};
+
+// Migrate a profile to v6.0.0
+// Keeps: name, avatar, selectedTheme, createdAt
+// Resets: xp, completedGameIds, medals, subjectStats
+// Preserves: level progression (stars & unlocked levels) and sticker album
+const migrateProfileToV6 = (profile) => {
+  const defaults = getDefaultProfileProgress();
+  return {
+    ...profile,
+    progress: {
+      ...defaults,
+      // Keep existing level progression (stars and unlocked levels)
+      junior: profile.progress?.junior || defaults.junior,
+      multiply: profile.progress?.multiply || defaults.multiply,
+      divide: profile.progress?.divide || defaults.divide,
+      addsub: profile.progress?.addsub || defaults.addsub,
+      compare: profile.progress?.compare || defaults.compare,
+      sequence: profile.progress?.sequence || defaults.sequence,
+      // Keep user preferences
+      selectedTheme: profile.progress?.selectedTheme || null,
+      selectedZone: profile.progress?.selectedZone || null,
+      // Keep sticker album
+      stickerAlbumStars: profile.progress?.stickerAlbumStars || 0,
+      stickers: profile.progress?.stickers || [],
+      // RESET for v6.0.0
+      version: CURRENT_VERSION,
+      totalXP: 0,
+      completedGameIds: [],
+      subjectStats: getDefaultSubjectStats(),
+      medals: {},
+      stats: defaults.stats,
+    },
+  };
+};
+
+// Check and migrate all profiles. Returns true if any migration occurred.
+export const checkAndMigrateProfiles = () => {
+  const data = loadRawData();
+  let migrated = false;
+
+  if (data.profiles) {
+    data.profiles = data.profiles.map((profile) => {
+      if (needsV6Migration(profile)) {
+        migrated = true;
+        return migrateProfileToV6(profile);
+      }
+      return profile;
+    });
+  }
+
+  if (migrated) {
+    saveRawData(data);
+  }
+
+  return migrated;
 };
 
 // Load raw data from localStorage
@@ -216,9 +300,21 @@ export const loadProgress = () => {
     };
   }
 
+  // Deep merge subject stats
+  const defaultSubjectStats = getDefaultSubjectStats();
+  const savedSubjectStats = profile.progress?.subjectStats || {};
+  const mergedSubjectStats = {};
+  for (const key of Object.keys(defaultSubjectStats)) {
+    mergedSubjectStats[key] = {
+      ...defaultSubjectStats[key],
+      ...savedSubjectStats[key],
+    };
+  }
+
   return {
     ...defaults,
     ...profile.progress,
+    version: profile.progress?.version || CURRENT_VERSION,
     junior: { ...defaults.junior, ...profile.progress?.junior },
     multiply: { ...defaults.multiply, ...profile.progress?.multiply },
     divide: { ...defaults.divide, ...profile.progress?.divide },
@@ -229,6 +325,8 @@ export const loadProgress = () => {
     stickerAlbumStars: profile.progress?.stickerAlbumStars || 0,
     stickers: profile.progress?.stickers || [],
     completedGameIds: profile.progress?.completedGameIds || [],
+    subjectStats: mergedSubjectStats,
+    medals: profile.progress?.medals || {},
     stats: {
       categoryStats: mergedCategoryStats,
       dailyXP: { ...profile.progress?.stats?.dailyXP },
@@ -404,12 +502,103 @@ export const getAllProfilesWithStats = () => {
       name: profile.name,
       avatar: profile.avatar,
       totalXP: profile.progress?.totalXP || 0,
+      completedGameIds: profile.progress?.completedGameIds || [],
+      subjectStats: profile.progress?.subjectStats || getDefaultSubjectStats(),
+      medals: profile.progress?.medals || {},
+      selectedTheme: profile.progress?.selectedTheme || null,
       stats: {
         categoryStats: mergedCategoryStats,
         dailyXP: savedStats.dailyXP || {},
       },
     };
   });
+};
+
+// ============ v6.0.0 Game Completion (Anti-Farming) ============
+
+// Check if a specific game has been completed before
+export const isGameCompleted = (gameId) => {
+  const progress = loadProgress();
+  return (progress.completedGameIds || []).includes(gameId);
+};
+
+// Get total unique games completed
+export const getUniqueGamesCount = () => {
+  const progress = loadProgress();
+  return (progress.completedGameIds || []).length;
+};
+
+// Complete a game (one-time count rule)
+// Returns: { isNewGame, totalUniqueGames, previousLevel, newLevel, medalUpgrade, subjectMedal }
+export const completeGame = (gameMode, level, score, totalQuestions) => {
+  const progress = loadProgress();
+  const gameId = `${gameMode}-level-${level}`;
+  const completedGameIds = progress.completedGameIds || [];
+
+  // Anti-farming: check if already completed
+  if (completedGameIds.includes(gameId)) {
+    return {
+      isNewGame: false,
+      totalUniqueGames: completedGameIds.length,
+      previousLevel: getUserLevel(completedGameIds.length),
+      newLevel: getUserLevel(completedGameIds.length),
+      medalUpgrade: null,
+      subjectMedal: progress.medals?.[gameMode] || null,
+    };
+  }
+
+  // NEW game completion
+  const previousCount = completedGameIds.length;
+  const previousLevel = getUserLevel(previousCount);
+
+  // Add to global completed list
+  progress.completedGameIds = [...completedGameIds, gameId];
+
+  // Update per-subject stats
+  if (!progress.subjectStats) progress.subjectStats = getDefaultSubjectStats();
+  if (!progress.subjectStats[gameMode]) {
+    progress.subjectStats[gameMode] = { completedGameIds: [], totalCorrect: 0, totalAttempts: 0 };
+  }
+  progress.subjectStats[gameMode].completedGameIds = [
+    ...(progress.subjectStats[gameMode].completedGameIds || []),
+    gameId,
+  ];
+  progress.subjectStats[gameMode].totalCorrect += score;
+  progress.subjectStats[gameMode].totalAttempts += totalQuestions;
+
+  // Calculate new level
+  const newCount = progress.completedGameIds.length;
+  const newLevel = getUserLevel(newCount);
+
+  // Calculate medal for this subject
+  const oldMedal = progress.medals?.[gameMode] || null;
+  const totalAvailable = SUBJECT_TOTAL_GAMES[gameMode] || 0;
+  const newMedal = getSubjectMedal(progress.subjectStats[gameMode], totalAvailable);
+
+  // Store updated medal
+  if (!progress.medals) progress.medals = {};
+  if (newMedal) {
+    progress.medals[gameMode] = newMedal;
+  }
+
+  const medalUpgrade = checkMedalUpgrade(oldMedal, newMedal);
+
+  saveProgress(progress);
+
+  return {
+    isNewGame: true,
+    totalUniqueGames: newCount,
+    previousLevel,
+    newLevel,
+    medalUpgrade,
+    subjectMedal: newMedal,
+  };
+};
+
+// Get all medals for the active profile
+export const getProfileMedals = () => {
+  const progress = loadProgress();
+  return getAllSubjectMedals(progress.subjectStats || {});
 };
 
 // ============ Sticker Album Functions ============

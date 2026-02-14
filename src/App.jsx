@@ -35,6 +35,8 @@ import {
 
 // Components
 import ParentGateModal from './components/ParentGateModal';
+import Modal from './components/Modal';
+import Button from './components/Button';
 
 // Data
 import { getTheme } from './data/themes';
@@ -47,11 +49,12 @@ import {
   logoutProfile,
   saveSelectedZone,
   getSelectedZone,
+  checkAndMigrateProfiles,
 } from './utils/storage';
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '5.10.0';
+const APP_VERSION = '6.0.0';
 const LAST_UPDATE = '14.02.2026';
 
 // Screen names for navigation
@@ -96,6 +99,17 @@ const App = () => {
   const [lastScore, setLastScore] = useState(0);
   const [lastEarnedXP, setLastEarnedXP] = useState(0);
   const [showParentGate, setShowParentGate] = useState(false);
+
+  // v6.0.0 Migration modal state
+  const [showMigrationModal, setShowMigrationModal] = useState(false);
+
+  // Run v6.0.0 migration check on mount
+  useEffect(() => {
+    const migrated = checkAndMigrateProfiles();
+    if (migrated) {
+      setShowMigrationModal(true);
+    }
+  }, []);
 
   // Load saved theme for active profile on mount or profile change
   useEffect(() => {
@@ -601,6 +615,25 @@ const App = () => {
         onClose={() => setShowParentGate(false)}
         onSuccess={handleParentGateSuccess}
       />
+
+      {/* v6.0.0 Migration Modal */}
+      <Modal isOpen={showMigrationModal} onClose={() => setShowMigrationModal(false)}>
+        <div className="text-9xl mb-6 animate-pulse">🚀</div>
+        <h1 className="text-4xl sm:text-5xl font-black text-white mb-4">מערכת חדשה!</h1>
+        <p className="text-xl sm:text-2xl text-white/90 mb-6 leading-relaxed">
+          מערכת הדרגות השתדרגה! הניקוד אופס כדי להתחיל את האתגר החדש.
+        </p>
+        <p className="text-lg text-white/70 mb-8">
+          עכשיו ההתקדמות שלך נמדדת לפי משחקים ייחודיים שהשלמת. כל משחק חדש מקדם אותך בדרגה!
+        </p>
+        <Button
+          onClick={() => setShowMigrationModal(false)}
+          variant="primary"
+          size="xlarge"
+        >
+          יאללה, בוא נתחיל! 🎮
+        </Button>
+      </Modal>
     </>
   );
 };
