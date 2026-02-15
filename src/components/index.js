@@ -9,3 +9,4 @@ export { default as AnswerButton } from './AnswerButton';
 export { default as FloatingXP } from './FloatingXP';
 export { default as RankDisplay, RankBadge } from './RankDisplay';
 export { default as StarEarnedModal } from './StarEarnedModal';
+export { default as Footer } from './Footer';
