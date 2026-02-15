@@ -244,6 +244,17 @@ const SorterGame = ({ themeId, onBack, triggerConfetti }) => {
     // Shuffle and pick ROUNDS_PER_LEVEL rounds
     const shuffled = [...level.rounds].sort(() => Math.random() - 0.5);
     const selected = shuffled.slice(0, ROUNDS_PER_LEVEL);
+    // Avoid consecutive rounds with the same item
+    for (let i = 1; i < selected.length; i++) {
+      if (selected[i].item.emoji === selected[i - 1].item.emoji) {
+        for (let j = i + 1; j < selected.length; j++) {
+          if (selected[j].item.emoji !== selected[i - 1].item.emoji) {
+            [selected[i], selected[j]] = [selected[j], selected[i]];
+            break;
+          }
+        }
+      }
+    }
     setRounds(selected);
     setRoundIndex(0);
     setScore(0);

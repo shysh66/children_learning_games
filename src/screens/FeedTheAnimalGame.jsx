@@ -91,8 +91,14 @@ const playCrunchSound = () => {
 
 function generateRounds(level) {
   const rounds = [];
+  let lastAnimalIndex = -1;
   for (let i = 0; i < level.rounds; i++) {
-    const animal = ANIMALS[Math.floor(Math.random() * ANIMALS.length)];
+    let animalIndex;
+    do {
+      animalIndex = Math.floor(Math.random() * ANIMALS.length);
+    } while (animalIndex === lastAnimalIndex && ANIMALS.length > 1);
+    lastAnimalIndex = animalIndex;
+    const animal = ANIMALS[animalIndex];
     const target = level.minTarget + Math.floor(Math.random() * (level.maxTarget - level.minTarget + 1));
     rounds.push({ animal, target });
   }

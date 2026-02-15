@@ -55,7 +55,7 @@ export const themes = {
   },
   knight: {
     id: 'knight',
-    name: 'האביר האמיץ',
+    name: 'אבירים',
     icon: '🛡️',
     bg: 'bg-gradient-to-br from-slate-700 to-slate-900',
     primary: 'bg-slate-800 hover:bg-slate-700',
@@ -74,7 +74,7 @@ export const themes = {
   },
   princess: {
     id: 'princess',
-    name: 'הנסיכה הקסומה',
+    name: 'נסיכה',
     icon: '👑',
     bg: 'bg-gradient-to-br from-pink-100 to-purple-200',
     primary: 'bg-pink-500 hover:bg-pink-400',

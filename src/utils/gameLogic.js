@@ -574,6 +574,19 @@ export const generateLevelQuestions = (gameMode, levelId, count = 8) => {
     questions.push(question);
   }
 
+  // Post-process: avoid consecutive questions with the same correct answer
+  for (let i = 1; i < questions.length; i++) {
+    if (questions[i].correct === questions[i - 1].correct) {
+      // Find a later question with a different correct answer and swap
+      for (let j = i + 1; j < questions.length; j++) {
+        if (questions[j].correct !== questions[i - 1].correct) {
+          [questions[i], questions[j]] = [questions[j], questions[i]];
+          break;
+        }
+      }
+    }
+  }
+
   return questions;
 };
 
