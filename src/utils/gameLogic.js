@@ -45,6 +45,96 @@ const generateWrongAnswers = (correct, count = 3, minValue = 0, maxOffset = 5) =
   return Array.from(answers);
 };
 
+// Generate smart distractors based on common math mistakes
+const generateSmartDistractors = (num1, num2, operation) => {
+  const distractors = new Set();
+  let correct;
+
+  // Calculate correct answer
+  switch (operation) {
+    case 'add':
+    case 'junior_add':
+      correct = num1 + num2;
+      break;
+    case 'subtract':
+    case 'junior_subtract':
+      correct = num1 - num2;
+      break;
+    case 'multiply':
+      correct = num1 * num2;
+      break;
+    case 'divide':
+      correct = Math.floor(num1 / num2);
+      break;
+    default:
+      correct = num1 + num2;
+  }
+
+  const addDistractor = (value) => {
+    if (value !== correct && value >= 0 && Number.isFinite(value)) {
+      distractors.add(value);
+    }
+  };
+
+  // Strategy 1: Operation Confusion
+  if (operation === 'multiply') {
+    addDistractor(num1 + num2); // confused with addition
+    addDistractor(Math.abs(num1 - num2)); // confused with subtraction
+  } else if (operation === 'add' || operation === 'junior_add') {
+    addDistractor(num1 * num2); // confused with multiplication
+  } else if (operation === 'subtract' || operation === 'junior_subtract') {
+    addDistractor(num1 + num2); // confused with addition
+  } else if (operation === 'divide') {
+    addDistractor(num1 - num2); // confused with subtraction
+    addDistractor(num1 * num2); // confused with multiplication
+  }
+
+  // Strategy 2: Near Misses (Neighbors)
+  if (operation === 'multiply') {
+    addDistractor(num1 * (num2 - 1)); // neighbor below
+    addDistractor(num1 * (num2 + 1)); // neighbor above
+    addDistractor((num1 - 1) * num2); // neighbor below (other factor)
+    addDistractor((num1 + 1) * num2); // neighbor above (other factor)
+  } else if (operation === 'divide') {
+    addDistractor(correct - 1);
+    addDistractor(correct + 1);
+    addDistractor(correct + 2);
+  } else {
+    // Addition/Subtraction near misses
+    addDistractor(correct + 1);
+    addDistractor(correct - 1);
+    addDistractor(correct + 10);
+    addDistractor(correct - 10);
+  }
+
+  // Strategy 3: Visual/Digit Confusion
+  if (correct >= 10 && correct <= 99) {
+    const reversed = parseInt(String(correct).split('').reverse().join(''), 10);
+    addDistractor(reversed);
+  }
+
+  // Strategy 4: Fallback - close range random numbers
+  const range = Math.max(5, Math.ceil(correct * 0.2));
+  let attempts = 0;
+  while (distractors.size < 5 && attempts < 50) {
+    const offset = randomInt(-range, range);
+    const fallback = correct + offset;
+    addDistractor(fallback);
+    attempts++;
+  }
+
+  // Final fallback: sequential numbers if still not enough
+  let seq = 1;
+  while (distractors.size < 5) {
+    addDistractor(correct + seq);
+    addDistractor(correct - seq);
+    seq++;
+  }
+
+  // Return exactly 5 distractors
+  return Array.from(distractors).slice(0, 5);
+};
+
 // Generate Junior Math question based on level
 export const generateJuniorQuestion = (levelId) => {
   const config = juniorLevels[levelId];
@@ -210,12 +300,13 @@ export const generateAddSubQuestion = (levelId) => {
     }
   } while (attempts < maxAttempts);
 
-  // Generate wrong answers
-  const wrongAnswers = generateWrongAnswers(correct, 3, 0, 10);
+  // Generate smart distractors (5 wrong answers for 6 total options)
+  const type = isAddition ? 'add' : 'subtract';
+  const wrongAnswers = generateSmartDistractors(num1, num2, type);
   const allAnswers = shuffleArray([correct, ...wrongAnswers]);
 
   return {
-    type: isAddition ? 'add' : 'subtract',
+    type,
     num1,
     num2,
     correct,
@@ -250,8 +341,8 @@ export const generateMultiplicationQuestion = (levelId) => {
 
   const correct = num1 * num2;
 
-  // Generate wrong answers
-  const wrongAnswers = generateWrongAnswers(correct, 3, 1, 10);
+  // Generate smart distractors (5 wrong answers for 6 total options)
+  const wrongAnswers = generateSmartDistractors(num1, num2, 'multiply');
   const allAnswers = shuffleArray([correct, ...wrongAnswers]);
 
   // Determine if visual should be shown (limit for performance)
@@ -293,8 +384,8 @@ export const generateDivisionQuestion = (levelId) => {
 
   const correct = quotient;
 
-  // Generate wrong answers
-  const wrongAnswers = generateWrongAnswers(correct, 3, 1, 5);
+  // Generate smart distractors (5 wrong answers for 6 total options)
+  const wrongAnswers = generateSmartDistractors(dividend, divisor, 'divide');
   const allAnswers = shuffleArray([correct, ...wrongAnswers]);
 
   // Show visual if dividend is small enough (20 or less)
@@ -414,8 +505,8 @@ export const generateSequenceQuestion = (levelId) => {
 
   const correct = sequence[missingIdx];
 
-  // Generate wrong answers close to correct
-  const wrongAnswers = generateWrongAnswers(correct, 3, 0, jump * 2 || 5);
+  // Generate wrong answers close to correct (5 wrong answers for 6 total options)
+  const wrongAnswers = generateWrongAnswers(correct, 5, 0, jump * 2 || 5);
   const allAnswers = shuffleArray([correct, ...wrongAnswers]);
 
   return {

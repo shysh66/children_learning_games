@@ -141,8 +141,8 @@ const GameScreen = ({
           <VisualQuestion question={currentQuestion} theme={theme} />
         </div>
 
-        {/* Answer buttons */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        {/* Answer buttons - 6 options in responsive grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
           {currentQuestion.answers.map((answer, idx) => (
             <AnswerButton
               key={idx}
