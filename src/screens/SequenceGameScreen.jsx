@@ -192,8 +192,8 @@ const SequenceGameScreen = ({
           )}
         </div>
 
-        {/* Answer buttons */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6 max-w-md mx-auto">
+        {/* Answer buttons - 6 options in responsive grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-6 max-w-2xl mx-auto">
           {currentQuestion.answers.map((answer, idx) => {
             const isCorrect = showFeedback && answer === currentQuestion.correct;
             const isWrong = showFeedback && answer === selectedAnswer && answer !== currentQuestion.correct;
