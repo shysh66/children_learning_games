@@ -37,6 +37,7 @@ import {
 import ParentGateModal from './components/ParentGateModal';
 import Modal from './components/Modal';
 import Button from './components/Button';
+import Footer from './components/Footer';
 
 // Data
 import { getTheme } from './data/themes';
@@ -54,7 +55,7 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '6.1.2';
+const APP_VERSION = '6.2.0';
 const LAST_UPDATE = '15.02.2026';
 
 // Screen names for navigation
@@ -608,8 +609,11 @@ const App = () => {
   };
 
   return (
-    <>
-      {renderScreen()}
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-1">
+        {renderScreen()}
+      </div>
+      <Footer version={APP_VERSION} />
       <ParentGateModal
         isOpen={showParentGate}
         onClose={() => setShowParentGate(false)}
@@ -634,7 +638,7 @@ const App = () => {
           יאללה, בוא נתחיל! 🎮
         </Button>
       </Modal>
-    </>
+    </div>
   );
 };
 
