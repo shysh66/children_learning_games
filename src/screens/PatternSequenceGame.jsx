@@ -109,7 +109,15 @@ function generateRound() {
 }
 
 function generateRounds(count) {
-  return Array.from({ length: count }, () => generateRound());
+  const rounds = [];
+  for (let i = 0; i < count; i++) {
+    let round;
+    do {
+      round = generateRound();
+    } while (i > 0 && round.answer.id === rounds[i - 1].answer.id);
+    rounds.push(round);
+  }
+  return rounds;
 }
 
 const ROUNDS_PER_GAME = 8;

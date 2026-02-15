@@ -69,16 +69,18 @@ const ThemeSelectScreen = ({ onSelectTheme, onSwitchUser, version, lastUpdate })
 
               {/* Progress to next rank */}
               {nextRank && (
-                <div className="mt-3">
-                  <div className="flex justify-between text-sm text-white/70 mb-1">
-                    <span>לדרגה הבאה: {nextRank.icon} {nextRank.title}</span>
-                    <span>עוד {gamesToNext} משחקים</span>
+                <div className="mt-3 pt-3 border-t border-white/20">
+                  <div className="text-sm text-white/70 mb-1">
+                    לדרגה הבאה: {nextRank.icon} {nextRank.title}
                   </div>
                   <div className="w-full bg-white/20 rounded-full h-3 overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-indigo-400 to-purple-500 transition-all duration-500 rounded-full"
                       style={{ width: `${progress}%` }}
                     />
+                  </div>
+                  <div className="text-center mt-2 text-white/70 text-sm">
+                    עוד {gamesToNext} משחקים לדרגה הבאה
                   </div>
                 </div>
               )}

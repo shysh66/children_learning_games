@@ -53,12 +53,9 @@ const RankDisplay = ({ themeId, uniqueGamesCount, showProgress = true, compact =
 
       {/* Progress to next rank */}
       {showProgress && nextRank && (
-        <div className="mt-4">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-white/70 text-sm">לדרגה הבאה:</span>
-            <span className="text-white font-bold flex items-center gap-1">
-              {nextRank.icon} {nextRank.title}
-            </span>
+        <div className="mt-4 pt-4 border-t border-white/20">
+          <div className="text-white/70 text-sm mb-2">
+            לדרגה הבאה: <span className="text-white font-bold">{nextRank.icon} {nextRank.title}</span>
           </div>
 
           {/* Progress bar */}
@@ -70,7 +67,7 @@ const RankDisplay = ({ themeId, uniqueGamesCount, showProgress = true, compact =
           </div>
 
           <div className="text-center mt-2 text-white/70 text-sm">
-            עוד {gamesToNext} משחקים
+            עוד {gamesToNext} משחקים לדרגה הבאה
           </div>
         </div>
       )}
