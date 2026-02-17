@@ -13,8 +13,8 @@
     "recharts": "^3.7.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "REACT_APP_PUBLIC_POSTHOG_KEY=$VITE_PUBLIC_POSTHOG_KEY REACT_APP_PUBLIC_POSTHOG_HOST=$VITE_PUBLIC_POSTHOG_HOST react-scripts start",
+    "build": "REACT_APP_PUBLIC_POSTHOG_KEY=$VITE_PUBLIC_POSTHOG_KEY REACT_APP_PUBLIC_POSTHOG_HOST=$VITE_PUBLIC_POSTHOG_HOST react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
