@@ -5,12 +5,23 @@ import './index.css';
 import App from './App';
 import { Analytics } from '@vercel/analytics/react';
 
-// Initialize PostHog analytics before rendering
-if (process.env.REACT_APP_PUBLIC_POSTHOG_KEY) {
-  posthog.init(process.env.REACT_APP_PUBLIC_POSTHOG_KEY, {
-    api_host: process.env.REACT_APP_PUBLIC_POSTHOG_HOST,
+// PostHog initialization with debug logging
+const PH_KEY = process.env.REACT_APP_PUBLIC_POSTHOG_KEY;
+const PH_HOST = process.env.REACT_APP_PUBLIC_POSTHOG_HOST;
+console.log('PostHog Debug:', {
+  keyExists: !!PH_KEY,
+  host: PH_HOST,
+  keyStart: PH_KEY ? PH_KEY.substring(0, 4) + '...' : 'MISSING',
+});
+
+if (PH_KEY) {
+  posthog.init(PH_KEY, {
+    api_host: PH_HOST,
     person_profiles: 'identified_only',
   });
+  window.posthog = posthog;
+} else {
+  console.warn('PostHog: No API key found. Set REACT_APP_PUBLIC_POSTHOG_KEY in your .env file.');
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
