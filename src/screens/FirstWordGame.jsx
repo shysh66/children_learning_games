@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { getTheme } from '../data/themes';
 import { addXP, recordGameStats } from '../utils/storage';
 import { playOopsSound } from '../utils/sounds';
+import useGameAnalytics from '../hooks/useGameAnalytics';
 
 // ============ Vocabulary Data ============
 
@@ -99,6 +100,7 @@ const AnswerOption = ({ icon, onClick, eliminated, showCorrect }) => {
 
 const FirstWordGame = ({ themeId, onBack, triggerConfetti }) => {
   const theme = getTheme(themeId);
+  const { trackLevelComplete } = useGameAnalytics('My First Word');
 
   // Game state
   const [rounds, setRounds] = useState([]);
@@ -142,6 +144,7 @@ const FirstWordGame = ({ themeId, onBack, triggerConfetti }) => {
       setShowCorrect(true);
       setScore((prev) => prev + 1);
       triggerConfetti?.('normal');
+      trackLevelComplete(roundIndex + 1, score + 1, true);
 
       setTimeout(() => {
         if (roundIndex + 1 >= rounds.length) {
