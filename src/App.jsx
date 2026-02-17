@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import confetti from 'canvas-confetti';
+import posthog from 'posthog-js';
 
 // Screens
 import {
@@ -47,6 +48,7 @@ import {
   saveTheme,
   getSelectedTheme,
   hasActiveProfile,
+  getActiveProfile,
   logoutProfile,
   saveSelectedZone,
   getSelectedZone,
@@ -55,8 +57,8 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '6.2.0';
-const LAST_UPDATE = '15.02.2026';
+const APP_VERSION = '6.4.0';
+const LAST_UPDATE = '16.02.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -119,6 +121,17 @@ const App = () => {
       if (savedTheme) {
         setSelectedTheme(savedTheme);
       }
+    }
+  }, [currentScreen]);
+
+  // Identify user in PostHog when profile changes
+  useEffect(() => {
+    const profile = getActiveProfile();
+    if (profile) {
+      posthog.identify(profile.id, {
+        name: profile.name,
+        avatar: profile.avatar,
+      });
     }
   }, [currentScreen]);
 

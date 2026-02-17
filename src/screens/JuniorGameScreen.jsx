@@ -7,6 +7,7 @@ import { calculateAnswerXP } from '../data/ranks';
 import { playOopsSound } from '../utils/sounds';
 import { grantStar } from '../utils/storage';
 import { ProgressBar, FloatingXP, StarEarnedModal } from '../components';
+import useGameAnalytics from '../hooks/useGameAnalytics';
 
 // Junior answer button with visual dots and elimination support
 const JuniorAnswerButton = ({
@@ -227,6 +228,7 @@ const JuniorGameScreen = ({
 }) => {
   const theme = getTheme(themeId);
   const mode = gameModes[gameMode];
+  const { trackLevelComplete } = useGameAnalytics('Junior Math');
 
   // Game state
   const [questions, setQuestions] = useState([]);
@@ -309,6 +311,7 @@ const JuniorGameScreen = ({
         setEarnedStarTotal(starResult.totalStars);
         setShowStarModal(true);
       }
+      trackLevelComplete(level, currentScore, currentScore >= QUESTIONS_PER_LEVEL / 2);
       onComplete(currentScore, currentXP);
     }
   }, [questionIndex, onComplete, level]);
