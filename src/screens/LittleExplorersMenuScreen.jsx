@@ -60,7 +60,7 @@ const GAMES = [
   },
 ];
 
-const LittleExplorersMenuScreen = ({ themeId, onBack, onSelectGame, onOpenAlbum }) => {
+const LittleExplorersMenuScreen = ({ themeId, onBack, onSelectGame, onOpenAlbum, onChangeZone }) => {
   const theme = getTheme(themeId);
 
   return (
@@ -82,7 +82,7 @@ const LittleExplorersMenuScreen = ({ themeId, onBack, onSelectGame, onOpenAlbum 
         <div className="text-center mb-10">
           <div className="text-8xl mb-4 animate-bounce">🧸</div>
           <h1 className="text-5xl sm:text-6xl font-black text-white mb-4 drop-shadow-2xl">
-            החוקרים הקטנים
+            החוקרים הצעירים
           </h1>
           <p className="text-2xl text-white/90">גילאי 4-5</p>
         </div>
@@ -111,13 +111,21 @@ const LittleExplorersMenuScreen = ({ themeId, onBack, onSelectGame, onOpenAlbum 
           )}
         </div>
 
-        {/* Back button */}
-        <button
-          onClick={onBack}
-          className="mx-auto block px-8 py-4 bg-white/20 hover:bg-white/30 rounded-2xl text-white text-xl font-bold transition-all"
-        >
-          ← חזרה לבחירת אזור
-        </button>
+        {/* Navigation buttons */}
+        <div className="flex justify-center gap-4">
+          <button
+            onClick={onChangeZone || onBack}
+            className="px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-2xl text-white text-xl font-bold transition-all hover:scale-105 shadow-lg"
+          >
+            החלף אזור 🔄
+          </button>
+          <button
+            onClick={onBack}
+            className="px-8 py-4 bg-white/20 hover:bg-white/30 rounded-2xl text-white text-xl font-bold transition-all"
+          >
+            ← חזרה
+          </button>
+        </div>
       </div>
     </div>
   );

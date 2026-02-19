@@ -70,10 +70,28 @@ const ShapeSVG = ({ shapeId, size = 120, color = '#818cf8' }) => {
           <polygon points={regularPolygonPoints(6, cx, cy, r)} {...commonProps} />
         </svg>
       );
+    case 'heptagon':
+      return (
+        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+          <polygon points={regularPolygonPoints(7, cx, cy, r)} {...commonProps} />
+        </svg>
+      );
     case 'octagon':
       return (
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
           <polygon points={regularPolygonPoints(8, cx, cy, r)} {...commonProps} />
+        </svg>
+      );
+    case 'nonagon':
+      return (
+        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+          <polygon points={regularPolygonPoints(9, cx, cy, r)} {...commonProps} />
+        </svg>
+      );
+    case 'decagon':
+      return (
+        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+          <polygon points={regularPolygonPoints(10, cx, cy, r)} {...commonProps} />
         </svg>
       );
     case 'rectangle': {
@@ -156,12 +174,33 @@ const SHAPES = {
     vertices: 6,
     explanation: 'למשושה יש 6 צלעות ו-6 קודקודים.',
   },
+  heptagon: {
+    id: 'heptagon',
+    name: 'משובע',
+    sides: 7,
+    vertices: 7,
+    explanation: 'למשובע יש 7 צלעות ו-7 קודקודים.',
+  },
   octagon: {
     id: 'octagon',
     name: 'מתומן',
     sides: 8,
     vertices: 8,
     explanation: 'למתומן יש 8 צלעות ו-8 קודקודים.',
+  },
+  nonagon: {
+    id: 'nonagon',
+    name: 'מתושע',
+    sides: 9,
+    vertices: 9,
+    explanation: 'למתושע יש 9 צלעות ו-9 קודקודים.',
+  },
+  decagon: {
+    id: 'decagon',
+    name: 'מעושר',
+    sides: 10,
+    vertices: 10,
+    explanation: 'למעושר יש 10 צלעות ו-10 קודקודים.',
   },
   rectangle: {
     id: 'rectangle',
@@ -202,8 +241,8 @@ const LEVELS = [
     description: 'כמה צלעות יש לצורה?',
     icon: '📐',
     questionType: 'sides',
-    shapes: ['triangle', 'square', 'pentagon', 'hexagon'],
-    rounds: 10,
+    shapes: ['triangle', 'square', 'pentagon', 'hexagon', 'heptagon'],
+    rounds: 5,
   },
   {
     id: 2,
@@ -211,8 +250,8 @@ const LEVELS = [
     description: 'כמה קודקודים (פינות) יש?',
     icon: '📍',
     questionType: 'vertices',
-    shapes: ['triangle', 'square', 'pentagon', 'hexagon'],
-    rounds: 10,
+    shapes: ['triangle', 'square', 'pentagon', 'hexagon', 'heptagon'],
+    rounds: 5,
   },
   {
     id: 3,
@@ -220,8 +259,8 @@ const LEVELS = [
     description: 'מה שם הצורה?',
     icon: '🏷️',
     questionType: 'name',
-    shapes: ['triangle', 'pentagon', 'hexagon', 'octagon'],
-    rounds: 10,
+    shapes: ['triangle', 'pentagon', 'hexagon', 'heptagon', 'octagon', 'nonagon', 'decagon'],
+    rounds: 5,
   },
   {
     id: 4,
@@ -230,7 +269,7 @@ const LEVELS = [
     icon: '🔷',
     questionType: 'name',
     shapes: ['square', 'rectangle', 'rhombus', 'trapezoid', 'parallelogram'],
-    rounds: 10,
+    rounds: 5,
   },
 ];
 
@@ -245,12 +284,18 @@ function shuffle(arr) {
   return a;
 }
 
-// Generate questions for a level
+// Generate questions for a level (anti-repetition: each shape used at most once)
 function generateQuestions(level) {
   const questions = [];
+  const usedShapes = [];
 
   for (let i = 0; i < level.rounds; i++) {
-    const shapeId = level.shapes[Math.floor(Math.random() * level.shapes.length)];
+    // Pick a shape NOT already used this round
+    const available = level.shapes.filter((s) => !usedShapes.includes(s));
+    const pool = available.length > 0 ? available : level.shapes;
+    const shapeId = pool[Math.floor(Math.random() * pool.length)];
+    usedShapes.push(shapeId);
+
     const shape = SHAPES[shapeId];
 
     let questionText, correctAnswer, wrongAnswers;
@@ -258,15 +303,14 @@ function generateQuestions(level) {
     if (level.questionType === 'sides') {
       questionText = 'כמה צלעות יש לצורה?';
       correctAnswer = String(shape.sides);
-      // Generate wrong numeric answers
-      const possibleWrong = [3, 4, 5, 6, 8]
+      const possibleWrong = [3, 4, 5, 6, 7, 8, 9, 10]
         .filter((n) => n !== shape.sides)
         .map(String);
       wrongAnswers = shuffle(possibleWrong).slice(0, 3);
     } else if (level.questionType === 'vertices') {
       questionText = 'כמה קודקודים (פינות) יש לצורה?';
       correctAnswer = String(shape.vertices);
-      const possibleWrong = [3, 4, 5, 6, 8]
+      const possibleWrong = [3, 4, 5, 6, 7, 8, 9, 10]
         .filter((n) => n !== shape.vertices)
         .map(String);
       wrongAnswers = shuffle(possibleWrong).slice(0, 3);
@@ -300,7 +344,10 @@ const SHAPE_COLORS = {
   square: '#818cf8',
   pentagon: '#22c55e',
   hexagon: '#eab308',
+  heptagon: '#8b5cf6',
   octagon: '#ec4899',
+  nonagon: '#0ea5e9',
+  decagon: '#d946ef',
   rectangle: '#06b6d4',
   rhombus: '#a855f7',
   trapezoid: '#f43f5e',

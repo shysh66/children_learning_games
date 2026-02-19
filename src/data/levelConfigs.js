@@ -346,6 +346,7 @@ export const gameModes = {
     description: 'תרגול כפל מהנה',
     levels: multiplyLevels,
     totalLevels: 5,
+    hidden: true, // Moved to Math Kingdom
   },
   divide: {
     id: 'divide',
@@ -354,6 +355,7 @@ export const gameModes = {
     description: 'תרגול חילוק',
     levels: divideLevels,
     totalLevels: 4,
+    hidden: true, // Moved to Math Kingdom
   },
   addsub: {
     id: 'addsub',
@@ -362,6 +364,14 @@ export const gameModes = {
     description: 'תרגול חיבור וחיסור',
     levels: addSubLevels,
     totalLevels: 8,
+    hidden: true, // Moved to Math Kingdom
+  },
+  mathKingdom: {
+    id: 'mathKingdom',
+    name: 'ממלכת החשבון',
+    icon: '👑',
+    description: 'כפל, חילוק, חיבור וחיסור',
+    isPracticeZone: true,
   },
   english: {
     id: 'english',
