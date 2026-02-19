@@ -31,11 +31,11 @@ const GAMES = [
     color: 'from-purple-400 to-indigo-500',
   },
   {
-    id: 'firstWord',
-    name: 'המילה הראשונה שלי',
-    description: 'זהה מילים בעברית עם ניקוד!',
-    icon: '📖',
-    color: 'from-rose-400 to-orange-500',
+    id: 'letterKingdom',
+    name: 'ממלכת האותיות והמילים',
+    description: 'משחקי שפה, אותיות ומילים!',
+    icon: '🏰',
+    color: 'from-violet-400 to-purple-500',
   },
   {
     id: 'patternSequence',

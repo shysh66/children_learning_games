@@ -32,7 +32,12 @@ import {
   ReadingDetectiveGame,
   RobotLabGame,
   StickerAlbum,
+  BalloonPartyGame,
+  FirstLetterMatchGame,
 } from './screens';
+
+// Zone components
+import LetterKingdom from './components/zones/LetterKingdom';
 
 // Components
 import ParentGateModal from './components/ParentGateModal';
@@ -57,7 +62,7 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '6.4.0';
+const APP_VERSION = '6.5.0';
 const LAST_UPDATE = '17.02.2026';
 
 // Screen names for navigation
@@ -79,6 +84,9 @@ const SCREENS = {
   LOGIC_SELECT: 'logicSelect',
   SMART_MEMORY_GAME: 'smartMemoryGame',
   FIRST_WORD_GAME: 'firstWordGame',
+  LETTER_KINGDOM: 'letterKingdom',
+  BALLOON_PARTY_GAME: 'balloonPartyGame',
+  FIRST_LETTER_GAME: 'firstLetterGame',
   POLYGON_DETECTIVE_GAME: 'polygonDetectiveGame',
   PATTERN_SEQUENCE_GAME: 'patternSequenceGame',
   ODD_ONE_OUT_GAME: 'oddOneOutGame',
@@ -248,8 +256,8 @@ const App = () => {
       setCurrentScreen(SCREENS.LEVEL_MAP);
     } else if (gameId === 'smartMemory') {
       setCurrentScreen(SCREENS.SMART_MEMORY_GAME);
-    } else if (gameId === 'firstWord') {
-      setCurrentScreen(SCREENS.FIRST_WORD_GAME);
+    } else if (gameId === 'letterKingdom') {
+      setCurrentScreen(SCREENS.LETTER_KINGDOM);
     } else if (gameId === 'patternSequence') {
       setCurrentScreen(SCREENS.PATTERN_SEQUENCE_GAME);
     } else if (gameId === 'oddOneOut') {
@@ -265,6 +273,20 @@ const App = () => {
 
   const handleBackToExplorersMenu = () => {
     setCurrentScreen(SCREENS.LITTLE_EXPLORERS_MENU);
+  };
+
+  const handleBackToLetterKingdom = () => {
+    setCurrentScreen(SCREENS.LETTER_KINGDOM);
+  };
+
+  const handleSelectLetterKingdomGame = (gameId) => {
+    if (gameId === 'firstWord') {
+      setCurrentScreen(SCREENS.FIRST_WORD_GAME);
+    } else if (gameId === 'balloonParty') {
+      setCurrentScreen(SCREENS.BALLOON_PARTY_GAME);
+    } else if (gameId === 'firstLetter') {
+      setCurrentScreen(SCREENS.FIRST_LETTER_GAME);
+    }
   };
 
   const handleBackToZoneSelect = () => {
@@ -430,11 +452,38 @@ const App = () => {
           />
         );
 
+      case SCREENS.LETTER_KINGDOM:
+        return (
+          <LetterKingdom
+            themeId={selectedTheme}
+            onBack={handleBackToExplorersMenu}
+            onSelectGame={handleSelectLetterKingdomGame}
+          />
+        );
+
       case SCREENS.FIRST_WORD_GAME:
         return (
           <FirstWordGame
             themeId={selectedTheme}
-            onBack={handleBackToExplorersMenu}
+            onBack={handleBackToLetterKingdom}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.BALLOON_PARTY_GAME:
+        return (
+          <BalloonPartyGame
+            themeId={selectedTheme}
+            onBack={handleBackToLetterKingdom}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.FIRST_LETTER_GAME:
+        return (
+          <FirstLetterMatchGame
+            themeId={selectedTheme}
+            onBack={handleBackToLetterKingdom}
             triggerConfetti={triggerConfetti}
           />
         );
