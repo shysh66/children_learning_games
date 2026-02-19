@@ -24,7 +24,6 @@ jobs:
         # Fails the build if high/critical issues exist in production dependencies
         run: npm audit --omit=dev --audit-level=high
 
-      - name: Full Audit (Informational)
-        # Reports all vulnerabilities including dev dependencies, but does not fail the build
-        continue-on-error: true
-        run: npm audit --audit-level=high
+      - name: Check Dev Dependencies for Critical Vulnerabilities
+        # Fails the build if critical issues exist in dev dependencies (e.g., supply chain attacks)
+        run: npm audit --audit-level=critical
