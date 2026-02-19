@@ -5,7 +5,7 @@ const ZONES = [
   {
     id: 'littleExplorers',
     icon: '🧸',
-    title: 'החוקרים הקטנים',
+    title: 'החוקרים הצעירים',
     subtitle: 'גילאי 4-5',
     gradient: 'from-amber-400 via-orange-400 to-pink-400',
     hoverGlow: 'hover:shadow-orange-400/40',

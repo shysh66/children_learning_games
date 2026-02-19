@@ -38,6 +38,7 @@ import {
 
 // Zone components
 import LetterKingdom from './components/zones/LetterKingdom';
+import MathKingdom from './components/zones/MathKingdom';
 
 // Components
 import ParentGateModal from './components/ParentGateModal';
@@ -54,6 +55,7 @@ import {
   getSelectedTheme,
   hasActiveProfile,
   getActiveProfile,
+  hasProfiles,
   logoutProfile,
   saveSelectedZone,
   getSelectedZone,
@@ -62,8 +64,8 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '6.5.0';
-const LAST_UPDATE = '17.02.2026';
+const APP_VERSION = '6.6.0';
+const LAST_UPDATE = '19.02.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -94,14 +96,20 @@ const SCREENS = {
   READING_DETECTIVE_GAME: 'readingDetectiveGame',
   ROBOT_LAB_GAME: 'robotLabGame',
   STICKER_ALBUM: 'stickerAlbum',
+  MATH_KINGDOM: 'mathKingdom',
   PARENT_DASHBOARD: 'parentDashboard',
 };
 
+// Determine the initial screen based on profile state
+const getInitialScreen = () => {
+  const profile = getActiveProfile();
+  if (profile && profile.name) return SCREENS.THEME_SELECT;
+  return SCREENS.PROFILE_CREATE;
+};
+
 const App = () => {
-  // Navigation state - start with profile select if no active profile
-  const [currentScreen, setCurrentScreen] = useState(
-    hasActiveProfile() ? SCREENS.THEME_SELECT : SCREENS.PROFILE_SELECT
-  );
+  // Navigation state - force profile creation if no valid profile
+  const [currentScreen, setCurrentScreen] = useState(getInitialScreen);
 
   // Game context state
   const [selectedTheme, setSelectedTheme] = useState(null);
@@ -110,6 +118,7 @@ const App = () => {
   const [lastScore, setLastScore] = useState(0);
   const [lastEarnedXP, setLastEarnedXP] = useState(0);
   const [showParentGate, setShowParentGate] = useState(false);
+  const [inMathKingdom, setInMathKingdom] = useState(false);
 
   // v6.0.0 Migration modal state
   const [showMigrationModal, setShowMigrationModal] = useState(false);
@@ -234,7 +243,13 @@ const App = () => {
   const handleSelectTheme = (themeId) => {
     setSelectedTheme(themeId);
     saveTheme(themeId);
-    setCurrentScreen(SCREENS.ZONE_SELECT);
+    // Auto-route to saved zone if one exists
+    const savedZone = getSelectedZone();
+    if (savedZone) {
+      handleSelectZone(savedZone);
+    } else {
+      setCurrentScreen(SCREENS.ZONE_SELECT);
+    }
   };
 
   const handleSelectZone = (zoneId) => {
@@ -244,6 +259,11 @@ const App = () => {
     } else {
       setCurrentScreen(SCREENS.LITTLE_EXPLORERS_MENU);
     }
+  };
+
+  const handleChangeZone = () => {
+    saveSelectedZone(null);
+    setCurrentScreen(SCREENS.ZONE_SELECT);
   };
 
   const handleSelectExplorerGame = (gameId) => {
@@ -309,6 +329,8 @@ const App = () => {
       setCurrentScreen(SCREENS.READING_DETECTIVE_GAME);
     } else if (gameMode === 'robotLab') {
       setCurrentScreen(SCREENS.ROBOT_LAB_GAME);
+    } else if (gameMode === 'mathKingdom') {
+      setCurrentScreen(SCREENS.MATH_KINGDOM);
     } else {
       setCurrentScreen(SCREENS.LEVEL_MAP);
     }
@@ -362,7 +384,20 @@ const App = () => {
 
   const handleBackToGameSelect = () => {
     setSelectedGameMode(null);
+    setInMathKingdom(false);
     setCurrentScreen(SCREENS.GAME_SELECT);
+  };
+
+  const handleSelectMathKingdomGame = (gameMode) => {
+    setInMathKingdom(true);
+    setSelectedGameMode(gameMode);
+    setCurrentScreen(SCREENS.LEVEL_MAP);
+  };
+
+  const handleBackToMathKingdom = () => {
+    setInMathKingdom(false);
+    setSelectedGameMode(null);
+    setCurrentScreen(SCREENS.MATH_KINGDOM);
   };
 
   const handleBackToThemeSelect = () => {
@@ -390,6 +425,7 @@ const App = () => {
           <ProfileCreateScreen
             onProfileCreated={handleProfileCreated}
             onBack={handleBackToProfileSelect}
+            canGoBack={hasProfiles()}
           />
         );
 
@@ -421,6 +457,7 @@ const App = () => {
             themeId={selectedTheme}
             onSelectGame={handleSelectGame}
             onBack={handleBackToZoneSelect}
+            onChangeZone={handleChangeZone}
           />
         );
 
@@ -431,6 +468,7 @@ const App = () => {
             onBack={handleBackToZoneSelect}
             onSelectGame={handleSelectExplorerGame}
             onOpenAlbum={handleOpenStickerAlbum}
+            onChangeZone={handleChangeZone}
           />
         );
 
@@ -523,6 +561,15 @@ const App = () => {
           />
         );
 
+      case SCREENS.MATH_KINGDOM:
+        return (
+          <MathKingdom
+            themeId={selectedTheme}
+            onBack={handleBackToGameSelect}
+            onSelectGame={handleSelectMathKingdomGame}
+          />
+        );
+
       case SCREENS.POLYGON_DETECTIVE_GAME:
         return (
           <PolygonDetectiveGame
@@ -556,7 +603,9 @@ const App = () => {
             ? handleBackToLogicSelect
             : selectedGameMode === 'junior' && getSelectedZone() === 'littleExplorers'
               ? handleBackToExplorersMenu
-              : handleBackToGameSelect;
+              : inMathKingdom
+                ? handleBackToMathKingdom
+                : handleBackToGameSelect;
         return (
           <LevelMapScreen
             themeId={selectedTheme}

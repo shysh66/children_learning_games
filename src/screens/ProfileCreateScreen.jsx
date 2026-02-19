@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { AVATARS, createProfile } from '../utils/storage';
 
 // Profile creation screen - Enter name and choose avatar
-const ProfileCreateScreen = ({ onProfileCreated, onBack }) => {
+const ProfileCreateScreen = ({ onProfileCreated, onBack, canGoBack = true }) => {
   const [name, setName] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState(AVATARS[0]);
   const [step, setStep] = useState(1); // 1 = name, 2 = avatar
@@ -25,14 +25,16 @@ const ProfileCreateScreen = ({ onProfileCreated, onBack }) => {
       dir="rtl"
     >
       <div className="max-w-2xl w-full">
-        {/* Back button */}
-        <button
-          onClick={onBack}
-          className="mb-8 flex items-center gap-2 text-white/70 hover:text-white transition-colors text-lg"
-        >
-          <span>→</span>
-          <span>חזרה</span>
-        </button>
+        {/* Back button - hidden when forced profile creation */}
+        {canGoBack && (
+          <button
+            onClick={onBack}
+            className="mb-8 flex items-center gap-2 text-white/70 hover:text-white transition-colors text-lg"
+          >
+            <span>→</span>
+            <span>חזרה</span>
+          </button>
+        )}
 
         {step === 1 ? (
           /* Step 1: Enter Name */

@@ -3,7 +3,7 @@ import { gameModes } from '../data/levelConfigs';
 import { getTheme } from '../data/themes';
 
 // Game mode selection screen
-const GameSelectScreen = ({ themeId, onSelectGame, onBack }) => {
+const GameSelectScreen = ({ themeId, onSelectGame, onBack, onChangeZone }) => {
   const theme = getTheme(themeId);
 
   return (
@@ -36,13 +36,21 @@ const GameSelectScreen = ({ themeId, onSelectGame, onBack }) => {
           ))}
         </div>
 
-        {/* Back button */}
-        <button
-          onClick={onBack}
-          className="mx-auto block px-8 py-4 bg-white/20 hover:bg-white/30 rounded-2xl text-white text-xl font-bold transition-all"
-        >
-          ← חזרה לבחירת אזור
-        </button>
+        {/* Navigation buttons */}
+        <div className="flex justify-center gap-4">
+          <button
+            onClick={onChangeZone || onBack}
+            className="px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-2xl text-white text-xl font-bold transition-all hover:scale-105 shadow-lg"
+          >
+            החלף אזור 🔄
+          </button>
+          <button
+            onClick={onBack}
+            className="px-8 py-4 bg-white/20 hover:bg-white/30 rounded-2xl text-white text-xl font-bold transition-all"
+          >
+            ← חזרה
+          </button>
+        </div>
       </div>
     </div>
   );
