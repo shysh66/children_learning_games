@@ -44,6 +44,11 @@ const LAST_UPDATE = 'DD.MM.YYYY'; // עדכן תאריך
 
 ---
 
+## 📚 Game Catalog Maintenance
+Whenever you create, move, rename, or delete a mini-game component, you **MUST** automatically update the `GAMES_CATALOG.md` file to reflect the current state of the application.
+
+---
+
 ## ✅ צ'קליסט לפני commit
 - [ ] עודכן APP_VERSION ב-App.jsx
 - [ ] עודכן LAST_UPDATE ב-App.jsx
