@@ -1,34 +1,13 @@
 import React from 'react';
 import { getTheme } from '../data/themes';
 
-const GAMES = [
+const KINGDOMS = [
   {
-    id: 'sorter',
-    name: 'המסדר הקטן',
-    description: 'סדר פריטים לפי צבע, צורה או חיה!',
-    icon: '🗂️',
-    color: 'from-orange-400 to-pink-500',
-  },
-  {
-    id: 'feedAnimal',
-    name: 'זמן אוכל',
-    description: 'האכל את החיות וספור כמה אכלו!',
-    icon: '🍽️',
-    color: 'from-green-400 to-emerald-500',
-  },
-  {
-    id: 'juniorMath',
-    name: 'חשבון לקטנטנים',
-    description: 'ספירה, חיבור וחיסור לגילאי 4-5!',
-    icon: '🖐️',
+    id: 'numberKingdom',
+    name: 'ממלכת המספרים',
+    description: 'ספירה, חשבון ומשחקי מספרים!',
+    icon: '🔢',
     color: 'from-blue-400 to-cyan-500',
-  },
-  {
-    id: 'smartMemory',
-    name: 'זיכרון חכם',
-    description: 'מצא זוגות של תמונות זהות!',
-    icon: '🧩',
-    color: 'from-purple-400 to-indigo-500',
   },
   {
     id: 'letterKingdom',
@@ -38,25 +17,11 @@ const GAMES = [
     color: 'from-violet-400 to-purple-500',
   },
   {
-    id: 'patternSequence',
-    name: 'מה בא אחר כך?',
-    description: 'השלם את הרצף!',
-    icon: '🔢',
-    color: 'from-cyan-400 to-blue-500',
-  },
-  {
-    id: 'oddOneOut',
-    name: 'מי יוצא דופן?',
-    description: 'מצא מי לא שייך לקבוצה!',
-    icon: '🔎',
-    color: 'from-amber-400 to-red-500',
-  },
-  {
-    id: 'opposites',
-    name: 'עולם ההפכים',
-    description: 'מצא את ההפך!',
-    icon: '🔄',
-    color: 'from-teal-400 to-emerald-500',
+    id: 'logicKingdom',
+    name: 'ממלכת החשיבה',
+    description: 'חשיבה, זיכרון ומיון!',
+    icon: '🧠',
+    color: 'from-orange-400 to-pink-500',
   },
 ];
 
@@ -87,28 +52,19 @@ const LittleExplorersMenuScreen = ({ themeId, onBack, onSelectGame, onOpenAlbum,
           <p className="text-2xl text-white/90">גילאי 4-5</p>
         </div>
 
-        {/* Games Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-          {GAMES.map((game) => (
+        {/* Kingdoms Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+          {KINGDOMS.map((kingdom) => (
             <button
-              key={game.id}
-              onClick={() => onSelectGame(game.id)}
-              className={`${theme.cardBg} rounded-3xl p-8 text-center transition-all duration-300 hover:scale-105 hover:shadow-2xl group`}
+              key={kingdom.id}
+              onClick={() => onSelectGame(kingdom.id)}
+              className={`${theme.cardBg} rounded-3xl p-10 text-center transition-all duration-300 hover:scale-105 hover:shadow-2xl group active:scale-95`}
             >
-              <div className="text-6xl mb-4 group-hover:animate-bounce">{game.icon}</div>
-              <h2 className="text-3xl font-bold text-white mb-2">{game.name}</h2>
-              <p className="text-lg text-white/70">{game.description}</p>
+              <div className="text-7xl mb-5 group-hover:animate-bounce">{kingdom.icon}</div>
+              <h2 className="text-3xl font-bold text-white mb-3 leading-snug">{kingdom.name}</h2>
+              <p className="text-lg text-white/70">{kingdom.description}</p>
             </button>
           ))}
-
-          {/* Coming soon placeholder for future games */}
-          {GAMES.length % 2 !== 0 && (
-            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center border-4 border-dashed border-white/20">
-              <div className="text-6xl mb-4 opacity-50">🚧</div>
-              <h2 className="text-2xl font-bold text-white/50 mb-2">בקרוב!</h2>
-              <p className="text-lg text-white/40">משחקים נוספים בדרך...</p>
-            </div>
-          )}
         </div>
 
         {/* Navigation buttons */}
