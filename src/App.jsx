@@ -38,6 +38,8 @@ import {
 
 // Zone components
 import LetterKingdom from './components/zones/LetterKingdom';
+import NumberKingdom from './components/zones/NumberKingdom';
+import LogicKingdom from './components/zones/LogicKingdom';
 import MathKingdom from './components/zones/MathKingdom';
 
 // Components
@@ -64,8 +66,8 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '6.6.0';
-const LAST_UPDATE = '19.02.2026';
+const APP_VERSION = '6.7.0';
+const LAST_UPDATE = '20.02.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -96,6 +98,8 @@ const SCREENS = {
   READING_DETECTIVE_GAME: 'readingDetectiveGame',
   ROBOT_LAB_GAME: 'robotLabGame',
   STICKER_ALBUM: 'stickerAlbum',
+  NUMBER_KINGDOM: 'numberKingdom',
+  LOGIC_KINGDOM: 'logicKingdom',
   MATH_KINGDOM: 'mathKingdom',
   PARENT_DASHBOARD: 'parentDashboard',
 };
@@ -266,18 +270,30 @@ const App = () => {
     setCurrentScreen(SCREENS.ZONE_SELECT);
   };
 
-  const handleSelectExplorerGame = (gameId) => {
-    if (gameId === 'sorter') {
-      setCurrentScreen(SCREENS.SORTER_GAME);
-    } else if (gameId === 'feedAnimal') {
-      setCurrentScreen(SCREENS.FEED_ANIMAL_GAME);
-    } else if (gameId === 'juniorMath') {
+  const handleSelectExplorerKingdom = (kingdomId) => {
+    if (kingdomId === 'numberKingdom') {
+      setCurrentScreen(SCREENS.NUMBER_KINGDOM);
+    } else if (kingdomId === 'letterKingdom') {
+      setCurrentScreen(SCREENS.LETTER_KINGDOM);
+    } else if (kingdomId === 'logicKingdom') {
+      setCurrentScreen(SCREENS.LOGIC_KINGDOM);
+    }
+  };
+
+  const handleSelectNumberKingdomGame = (gameId) => {
+    if (gameId === 'juniorMath') {
       setSelectedGameMode('junior');
       setCurrentScreen(SCREENS.LEVEL_MAP);
+    } else if (gameId === 'feedAnimal') {
+      setCurrentScreen(SCREENS.FEED_ANIMAL_GAME);
+    }
+  };
+
+  const handleSelectLogicKingdomGame = (gameId) => {
+    if (gameId === 'sorter') {
+      setCurrentScreen(SCREENS.SORTER_GAME);
     } else if (gameId === 'smartMemory') {
       setCurrentScreen(SCREENS.SMART_MEMORY_GAME);
-    } else if (gameId === 'letterKingdom') {
-      setCurrentScreen(SCREENS.LETTER_KINGDOM);
     } else if (gameId === 'patternSequence') {
       setCurrentScreen(SCREENS.PATTERN_SEQUENCE_GAME);
     } else if (gameId === 'oddOneOut') {
@@ -297,6 +313,14 @@ const App = () => {
 
   const handleBackToLetterKingdom = () => {
     setCurrentScreen(SCREENS.LETTER_KINGDOM);
+  };
+
+  const handleBackToNumberKingdom = () => {
+    setCurrentScreen(SCREENS.NUMBER_KINGDOM);
+  };
+
+  const handleBackToLogicKingdom = () => {
+    setCurrentScreen(SCREENS.LOGIC_KINGDOM);
   };
 
   const handleSelectLetterKingdomGame = (gameId) => {
@@ -466,7 +490,7 @@ const App = () => {
           <LittleExplorersMenuScreen
             themeId={selectedTheme}
             onBack={handleBackToZoneSelect}
-            onSelectGame={handleSelectExplorerGame}
+            onSelectGame={handleSelectExplorerKingdom}
             onOpenAlbum={handleOpenStickerAlbum}
             onChangeZone={handleChangeZone}
           />
@@ -476,7 +500,7 @@ const App = () => {
         return (
           <SorterGame
             themeId={selectedTheme}
-            onBack={handleBackToExplorersMenu}
+            onBack={handleBackToLogicKingdom}
             triggerConfetti={triggerConfetti}
           />
         );
@@ -485,7 +509,7 @@ const App = () => {
         return (
           <FeedTheAnimalGame
             themeId={selectedTheme}
-            onBack={handleBackToExplorersMenu}
+            onBack={handleBackToNumberKingdom}
             triggerConfetti={triggerConfetti}
           />
         );
@@ -496,6 +520,24 @@ const App = () => {
             themeId={selectedTheme}
             onBack={handleBackToExplorersMenu}
             onSelectGame={handleSelectLetterKingdomGame}
+          />
+        );
+
+      case SCREENS.NUMBER_KINGDOM:
+        return (
+          <NumberKingdom
+            themeId={selectedTheme}
+            onBack={handleBackToExplorersMenu}
+            onSelectGame={handleSelectNumberKingdomGame}
+          />
+        );
+
+      case SCREENS.LOGIC_KINGDOM:
+        return (
+          <LogicKingdom
+            themeId={selectedTheme}
+            onBack={handleBackToExplorersMenu}
+            onSelectGame={handleSelectLogicKingdomGame}
           />
         );
 
@@ -530,7 +572,7 @@ const App = () => {
         return (
           <PatternSequenceGame
             themeId={selectedTheme}
-            onBack={handleBackToExplorersMenu}
+            onBack={handleBackToLogicKingdom}
             triggerConfetti={triggerConfetti}
           />
         );
@@ -539,7 +581,7 @@ const App = () => {
         return (
           <OddOneOutGame
             themeId={selectedTheme}
-            onBack={handleBackToExplorersMenu}
+            onBack={handleBackToLogicKingdom}
             triggerConfetti={triggerConfetti}
           />
         );
@@ -548,7 +590,7 @@ const App = () => {
         return (
           <OppositesGame
             themeId={selectedTheme}
-            onBack={handleBackToExplorersMenu}
+            onBack={handleBackToLogicKingdom}
             triggerConfetti={triggerConfetti}
           />
         );
@@ -602,7 +644,7 @@ const App = () => {
           selectedGameMode === 'compare' || selectedGameMode === 'sequence'
             ? handleBackToLogicSelect
             : selectedGameMode === 'junior' && getSelectedZone() === 'littleExplorers'
-              ? handleBackToExplorersMenu
+              ? handleBackToNumberKingdom
               : inMathKingdom
                 ? handleBackToMathKingdom
                 : handleBackToGameSelect;
@@ -679,7 +721,7 @@ const App = () => {
 
       case SCREENS.SMART_MEMORY_GAME: {
         const smartMemoryBack = getSelectedZone() === 'littleExplorers'
-          ? handleBackToExplorersMenu
+          ? handleBackToLogicKingdom
           : handleBackToGameSelect;
         return (
           <SmartMemoryGame
