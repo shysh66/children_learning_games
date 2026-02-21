@@ -11,8 +11,8 @@ test('happy path - profile creation to kingdoms hub', async ({ page }) => {
   // Step 2: Avatar selection - default avatar is pre-selected, click start
   await page.getByRole('button', { name: 'בואו נתחיל! 🚀' }).click();
 
-  // Step 3: Theme selection - click first theme card
-  await page.locator('button').first().click();
+  // Step 3: Theme selection - click "חלל" (Space) theme card
+  await page.getByText('חלל').click();
 
   // Step 4: Zone selection - click "החוקרים הצעירים" (Young Explorers)
   await page.getByText('החוקרים הצעירים').click();
