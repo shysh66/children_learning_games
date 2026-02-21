@@ -140,15 +140,23 @@ function shuffle(arr) {
 }
 
 function generateRounds() {
-  const rounds = [];
-  let lastElement = null;
+  // Shuffle all elements and pick ROUNDS_PER_GAME
+  const shuffled = shuffle(ELEMENTS);
+  const selected = shuffled.slice(0, ROUNDS_PER_GAME);
 
-  for (let i = 0; i < ROUNDS_PER_GAME; i++) {
-    // Pick a random element (avoid consecutive same element)
-    let available = ELEMENTS.filter((e) => e.emoji !== lastElement);
-    const element = available[Math.floor(Math.random() * available.length)];
-    lastElement = element.emoji;
+  // Ensure no consecutive repeats (swap approach — no closures in loops)
+  for (let i = 1; i < selected.length; i++) {
+    if (selected[i].emoji === selected[i - 1].emoji) {
+      for (let j = i + 1; j < selected.length; j++) {
+        if (selected[j].emoji !== selected[i - 1].emoji) {
+          [selected[i], selected[j]] = [selected[j], selected[i]];
+          break;
+        }
+      }
+    }
+  }
 
+  return selected.map((element) => {
     // Pick target direction
     const targetDir = DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)];
 
@@ -166,16 +174,14 @@ function generateRounds() {
     // Build question text
     const question = `איזה ${element.name} ${element.verb} ${targetDir.label}?`;
 
-    rounds.push({
+    return {
       element,
       targetDir,
       options,
       correctIndex,
       question,
-    });
-  }
-
-  return rounds;
+    };
+  });
 }
 
 // ============ Main Component ============
