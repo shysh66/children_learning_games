@@ -12,7 +12,7 @@ test('happy path - profile creation to kingdoms hub', async ({ page }) => {
   await page.getByRole('button', { name: 'בואו נתחיל! 🚀' }).click();
 
   // Step 3: Theme selection - click "חלל" (Space) theme card
-  await page.getByText('חלל').click();
+  await page.getByRole('button', { name: '🚀 חלל' }).click();
 
   // Step 4: Zone selection - click "החוקרים הצעירים" (Young Explorers)
   await page.getByText('החוקרים הצעירים').click();
