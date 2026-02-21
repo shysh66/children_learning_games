@@ -29,3 +29,5 @@ export { default as RobotLabGame } from './RobotLabGame';
 export { default as StickerAlbum } from './StickerAlbum';
 export { default as BalloonPartyGame } from './BalloonPartyGame';
 export { default as FirstLetterMatchGame } from './FirstLetterMatchGame';
+export { default as ShadowDetective } from './ShadowDetective';
+export { default as DirectionCatcher } from './DirectionCatcher';

@@ -34,6 +34,8 @@ import {
   StickerAlbum,
   BalloonPartyGame,
   FirstLetterMatchGame,
+  ShadowDetective,
+  DirectionCatcher,
 } from './screens';
 
 // Zone components
@@ -66,8 +68,8 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '6.7.0';
-const LAST_UPDATE = '20.02.2026';
+const APP_VERSION = '6.8.0';
+const LAST_UPDATE = '21.02.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -101,6 +103,8 @@ const SCREENS = {
   NUMBER_KINGDOM: 'numberKingdom',
   LOGIC_KINGDOM: 'logicKingdom',
   MATH_KINGDOM: 'mathKingdom',
+  SHADOW_DETECTIVE_GAME: 'shadowDetectiveGame',
+  DIRECTION_CATCHER_GAME: 'directionCatcherGame',
   PARENT_DASHBOARD: 'parentDashboard',
 };
 
@@ -300,6 +304,10 @@ const App = () => {
       setCurrentScreen(SCREENS.ODD_ONE_OUT_GAME);
     } else if (gameId === 'opposites') {
       setCurrentScreen(SCREENS.OPPOSITES_GAME);
+    } else if (gameId === 'shadowDetective') {
+      setCurrentScreen(SCREENS.SHADOW_DETECTIVE_GAME);
+    } else if (gameId === 'directionCatcher') {
+      setCurrentScreen(SCREENS.DIRECTION_CATCHER_GAME);
     }
   };
 
@@ -589,6 +597,24 @@ const App = () => {
       case SCREENS.OPPOSITES_GAME:
         return (
           <OppositesGame
+            themeId={selectedTheme}
+            onBack={handleBackToLogicKingdom}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.SHADOW_DETECTIVE_GAME:
+        return (
+          <ShadowDetective
+            themeId={selectedTheme}
+            onBack={handleBackToLogicKingdom}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.DIRECTION_CATCHER_GAME:
+        return (
+          <DirectionCatcher
             themeId={selectedTheme}
             onBack={handleBackToLogicKingdom}
             triggerConfetti={triggerConfetti}

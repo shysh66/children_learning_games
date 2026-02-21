@@ -37,6 +37,20 @@ const GAMES = [
     icon: '🔄',
     color: 'from-teal-400 to-emerald-500',
   },
+  {
+    id: 'shadowDetective',
+    name: 'בלש הצלליות',
+    description: 'מצא את הצללית הנכונה!',
+    icon: '🕵️',
+    color: 'from-gray-600 to-slate-800',
+  },
+  {
+    id: 'directionCatcher',
+    name: 'תופסים כיוון',
+    description: 'מצא מי פונה לכיוון הנכון!',
+    icon: '🧭',
+    color: 'from-sky-400 to-indigo-500',
+  },
 ];
 
 const LogicKingdom = ({ themeId, onBack, onSelectGame }) => {
