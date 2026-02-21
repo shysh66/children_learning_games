@@ -78,32 +78,13 @@ const CompareGameScreen = ({
     }, 1500);
   };
 
-  // Render the alligator mouth pointing to the bigger side
-  const renderAlligator = (symbol) => {
-    const isCorrect = showFeedback && symbol === currentQuestion.correct;
-    const isWrong = showFeedback && symbol === selectedAnswer && symbol !== currentQuestion.correct;
-
-    return (
-      <button
-        key={symbol}
-        onClick={() => handleAnswer(symbol)}
-        className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl text-3xl sm:text-4xl font-black transition-all duration-300 ${
-          isCorrect
-            ? 'bg-green-500 text-white scale-110'
-            : isWrong
-            ? 'bg-red-500 text-white'
-            : selectedAnswer === symbol && showFeedback
-            ? 'bg-gray-500 text-white'
-            : 'bg-white/20 text-white hover:bg-white/40 hover:scale-110'
-        } ${isWrong && shakeWrong ? 'animate-shake' : ''}`}
-        style={{
-          animation: isWrong && shakeWrong ? 'shake 0.5s ease-in-out' : undefined,
-        }}
-      >
-        {symbol === '<' ? '🐊' : symbol === '>' ? '🐊' : '='}
-        <div className="text-lg sm:text-xl mt-1">{symbol}</div>
-      </button>
-    );
+  // Handle clicking a number card - the child picks which number is bigger
+  const handleNumberClick = (side) => {
+    if (showFeedback) return;
+    // Clicking left number means "left is bigger" => '>'
+    // Clicking right number means "right is bigger" => '<'
+    const answer = side === 'left' ? '>' : '<';
+    handleAnswer(answer);
   };
 
   if (!currentQuestion || questions.length === 0) {
@@ -151,39 +132,97 @@ const CompareGameScreen = ({
         {/* Comparison Card */}
         <div className={`${theme.cardBg} rounded-3xl p-6 sm:p-10 mt-6 sm:mt-8 mb-6`}>
           <div className="text-center mb-4">
-            <span className="text-xl text-white/70">מי גדול יותר? 🐊</span>
+            <span className="text-xl text-white/70">לחצו על המספר הגדול! 🐊</span>
           </div>
 
-          {/* Side A vs Side B */}
+          {/* Side A vs Side B - clickable number cards */}
           <div className="flex items-center justify-center gap-4 sm:gap-8">
-            {/* Left Side */}
+            {/* Left Side - clickable */}
             <div className="flex-1 text-center">
-              <div className="bg-white/15 rounded-2xl p-4 sm:p-6 border-2 border-white/20">
+              <button
+                onClick={() => handleNumberClick('left')}
+                disabled={showFeedback}
+                className={`w-full rounded-2xl p-4 sm:p-6 border-2 transition-all duration-300 ${
+                  showFeedback && selectedAnswer === '>' && currentQuestion.correct === '>'
+                    ? 'bg-green-500/40 border-green-400 scale-105'
+                    : showFeedback && selectedAnswer === '>' && currentQuestion.correct !== '>'
+                    ? 'bg-red-500/40 border-red-400'
+                    : showFeedback && currentQuestion.correct === '>'
+                    ? 'bg-green-500/20 border-green-400/50'
+                    : 'bg-white/15 border-white/20 hover:bg-white/30 hover:scale-105 hover:border-yellow-400 cursor-pointer'
+                } ${showFeedback && selectedAnswer === '>' && currentQuestion.correct !== '>' && shakeWrong ? 'animate-shake' : ''}`}
+                style={{
+                  animation: showFeedback && selectedAnswer === '>' && currentQuestion.correct !== '>' && shakeWrong ? 'shake 0.5s ease-in-out' : undefined,
+                }}
+              >
                 <span className="text-3xl sm:text-5xl font-black text-white">
                   {currentQuestion.leftDisplay}
                 </span>
-              </div>
+              </button>
             </div>
 
             {/* Alligator / Answer Zone */}
             <div className="flex-shrink-0">
-              <div className="text-6xl sm:text-7xl text-yellow-300 font-black">
+              <div className="text-5xl sm:text-6xl text-yellow-300 font-black">
                 {showFeedback ? (
-                  <span>{currentQuestion.correct === '<' ? '🐊' : currentQuestion.correct === '>' ? '🐊' : '='}</span>
+                  currentQuestion.correct === '=' ? (
+                    <span>=</span>
+                  ) : currentQuestion.correct === '>' ? (
+                    <span style={{ display: 'inline-block', transform: 'scaleX(-1)' }}>🐊</span>
+                  ) : (
+                    <span>🐊</span>
+                  )
                 ) : (
                   <span className="text-white/30">?</span>
                 )}
               </div>
             </div>
 
-            {/* Right Side */}
+            {/* Right Side - clickable */}
             <div className="flex-1 text-center">
-              <div className="bg-white/15 rounded-2xl p-4 sm:p-6 border-2 border-white/20">
+              <button
+                onClick={() => handleNumberClick('right')}
+                disabled={showFeedback}
+                className={`w-full rounded-2xl p-4 sm:p-6 border-2 transition-all duration-300 ${
+                  showFeedback && selectedAnswer === '<' && currentQuestion.correct === '<'
+                    ? 'bg-green-500/40 border-green-400 scale-105'
+                    : showFeedback && selectedAnswer === '<' && currentQuestion.correct !== '<'
+                    ? 'bg-red-500/40 border-red-400'
+                    : showFeedback && currentQuestion.correct === '<'
+                    ? 'bg-green-500/20 border-green-400/50'
+                    : 'bg-white/15 border-white/20 hover:bg-white/30 hover:scale-105 hover:border-yellow-400 cursor-pointer'
+                } ${showFeedback && selectedAnswer === '<' && currentQuestion.correct !== '<' && shakeWrong ? 'animate-shake' : ''}`}
+                style={{
+                  animation: showFeedback && selectedAnswer === '<' && currentQuestion.correct !== '<' && shakeWrong ? 'shake 0.5s ease-in-out' : undefined,
+                }}
+              >
                 <span className="text-3xl sm:text-5xl font-black text-white">
                   {currentQuestion.rightDisplay}
                 </span>
-              </div>
+              </button>
             </div>
+          </div>
+
+          {/* Equal button - for when both numbers are the same */}
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={() => handleAnswer('=')}
+              disabled={showFeedback}
+              className={`px-8 py-3 sm:px-10 sm:py-4 rounded-2xl text-2xl sm:text-3xl font-black transition-all duration-300 ${
+                showFeedback && selectedAnswer === '=' && currentQuestion.correct === '='
+                  ? 'bg-green-500 text-white scale-110'
+                  : showFeedback && selectedAnswer === '=' && currentQuestion.correct !== '='
+                  ? 'bg-red-500 text-white'
+                  : showFeedback && currentQuestion.correct === '='
+                  ? 'bg-green-500/30 text-green-300'
+                  : 'bg-white/20 text-white hover:bg-white/40 hover:scale-105'
+              } ${showFeedback && selectedAnswer === '=' && currentQuestion.correct !== '=' && shakeWrong ? 'animate-shake' : ''}`}
+              style={{
+                animation: showFeedback && selectedAnswer === '=' && currentQuestion.correct !== '=' && shakeWrong ? 'shake 0.5s ease-in-out' : undefined,
+              }}
+            >
+              = שווים!
+            </button>
           </div>
 
           {/* Hint text */}
@@ -196,18 +235,6 @@ const CompareGameScreen = ({
               </span>
             </div>
           )}
-        </div>
-
-        {/* Answer buttons: < = > */}
-        <div className="flex justify-center gap-4 sm:gap-6 mb-6">
-          {['<', '=', '>'].map((symbol) => renderAlligator(symbol))}
-        </div>
-
-        {/* Legend */}
-        <div className="flex justify-center gap-6 text-white/60 text-sm">
-          <span>{'<'} קטן מ</span>
-          <span>= שווה</span>
-          <span>{'>'} גדול מ</span>
         </div>
 
         {/* Score */}

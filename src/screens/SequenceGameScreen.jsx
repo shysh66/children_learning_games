@@ -128,12 +128,12 @@ const SequenceGameScreen = ({
             <span className="text-xl text-white/70">השלם את הסדרה! 🚂</span>
           </div>
 
-          {/* Train wagons */}
-          <div className="flex items-center justify-center gap-1 sm:gap-2">
-            {/* Locomotive */}
+          {/* Train wagons - ltr so locomotive leads on the left */}
+          <div className="flex items-center justify-center gap-1 sm:gap-2" dir="ltr">
+            {/* Locomotive at the head (left side, pulling the train) */}
             <div className="text-4xl sm:text-5xl">🚂</div>
 
-            {/* Wagons */}
+            {/* Wagons trailing behind the locomotive */}
             {sequence.map((num, idx) => {
               const isMissing = idx === missingIndex;
               const showAnswer = isMissing && showFeedback;
