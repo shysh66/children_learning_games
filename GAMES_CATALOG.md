@@ -17,6 +17,8 @@ A complete map of all games in the app, organized by Zone and Sub-Zone.
 | `PatternSequenceGame.jsx` | מה בא אחר כך? | Identifying and completing visual patterns of colored shapes. |
 | `OddOneOutGame.jsx` | מי יוצא דופן? | Finding the item that does not belong to the group. |
 | `OppositesGame.jsx` | עולם ההפכים | Matching a concept to its opposite (e.g., day/night, big/small). |
+| `ShadowDetective.jsx` | בלש הצלליות | Visual discrimination — matching a colorful target to its correct shadow silhouette. |
+| `DirectionCatcher.jsx` | תופסים כיוון | Directionality — identifying which element faces the correct direction (left, right, up, down). |
 
 ### Sub-Zone: Kingdom of Letters / ממלכת האותיות והמילים
 
