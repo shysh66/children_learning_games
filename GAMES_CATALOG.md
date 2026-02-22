@@ -32,16 +32,9 @@ A complete map of all games in the app, organized by Zone and Sub-Zone.
 
 ## Zone 2: Class Champions / אלופי הכיתה (Ages 6+)
 
-### Direct Games
+The Class Champions zone is organized into 4 Hubs:
 
-| Component | Hebrew Name | Skill |
-|-----------|-------------|-------|
-| `SmartMemoryGame.jsx` | זיכרון חכם | Finding matching pairs of cards (images, shapes, or equations). |
-| `PolygonDetectiveGame.jsx` | בלש המצולעים | Identifying geometric shapes and their properties. |
-| `ReadingDetectiveGame.jsx` | בלש הקריאה | Reading comprehension — answering questions about short texts. |
-| `RobotLabGame.jsx` | הרובוט שלי | AI literacy and critical thinking through prompt-building exercises. |
-
-### Sub-Zone: Kingdom of Math / ממלכת החשבון
+### Hub 1: Kingdom of Math / ממלכת החשבון 👑
 
 | Component | Hebrew Name | Skill |
 |-----------|-------------|-------|
@@ -49,16 +42,25 @@ A complete map of all games in the app, organized by Zone and Sub-Zone.
 | `GameScreen.jsx` (mode: `divide`) | חילוק | Practicing division with integer results. |
 | `GameScreen.jsx` (mode: `addsub`) | חיבור וחיסור | Addition and subtraction with numbers up to 150. |
 
-### Sub-Zone: English Practice / חדר כושר לאנגלית
+### Hub 2: Detectives HQ / מפקדת הבלשים 🕵️‍♂️
 
 | Component | Hebrew Name | Skill |
 |-----------|-------------|-------|
+| `PolygonDetectiveGame.jsx` | בלש המצולעים | Identifying geometric shapes and their properties. |
+| `CompareGameScreen.jsx` | התנין הרעב | Comparing numbers and expressions using greater-than / less-than. |
+| `SequenceGameScreen.jsx` | רכבת המספרים | Completing a number sequence by finding the missing value. |
+| `SmartMemoryGame.jsx` | זיכרון חכם | Finding matching pairs of cards (images, shapes, or equations). |
+
+### Hub 3: Reading World / עולם הקריאה 📖
+
+| Component | Hebrew Name | Skill |
+|-----------|-------------|-------|
+| `ReadingDetectiveGame.jsx` | בלש הקריאה | Reading comprehension — answering questions about short texts. |
 | `AudioMemoryGame.jsx` | משחק הזיכרון | Matching pairs of English word images while listening to pronunciation. |
 | `FindItFastGame.jsx` | מצא את התמונה | Listening to an English word and selecting the correct image. |
 
-### Sub-Zone: Logic & Thinking / חשיבה ולוגיקה
+### Hub 4: Nature Lab / מעבדת הטבע 🔬
 
 | Component | Hebrew Name | Skill |
 |-----------|-------------|-------|
-| `CompareGameScreen.jsx` | התנין הרעב | Comparing numbers and expressions using greater-than / less-than. |
-| `SequenceGameScreen.jsx` | רכבת המספרים | Completing a number sequence by finding the missing value. |
+| `RobotLabGame.jsx` | הרובוט שלי | AI literacy and critical thinking through prompt-building exercises. |

@@ -43,6 +43,9 @@ import LetterKingdom from './components/zones/LetterKingdom';
 import NumberKingdom from './components/zones/NumberKingdom';
 import LogicKingdom from './components/zones/LogicKingdom';
 import MathKingdom from './components/zones/MathKingdom';
+import DetectiveHQ from './components/zones/DetectiveHQ';
+import ReadingWorld from './components/zones/ReadingWorld';
+import NatureLab from './components/zones/NatureLab';
 
 // Components
 import ParentGateModal from './components/ParentGateModal';
@@ -68,8 +71,8 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '6.9.1';
-const LAST_UPDATE = '21.02.2026';
+const APP_VERSION = '6.10.0';
+const LAST_UPDATE = '22.02.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -103,6 +106,9 @@ const SCREENS = {
   NUMBER_KINGDOM: 'numberKingdom',
   LOGIC_KINGDOM: 'logicKingdom',
   MATH_KINGDOM: 'mathKingdom',
+  DETECTIVE_HQ: 'detectiveHQ',
+  READING_WORLD: 'readingWorld',
+  NATURE_LAB: 'natureLab',
   SHADOW_DETECTIVE_GAME: 'shadowDetectiveGame',
   DIRECTION_CATCHER_GAME: 'directionCatcherGame',
   PARENT_DASHBOARD: 'parentDashboard',
@@ -345,27 +351,59 @@ const App = () => {
     setCurrentScreen(SCREENS.ZONE_SELECT);
   };
 
-  const handleSelectGame = (gameMode) => {
-    setSelectedGameMode(gameMode);
-
-    // Route practice zones to their custom screens
-    if (gameMode === 'english') {
-      setCurrentScreen(SCREENS.ENGLISH_PRACTICE);
-    } else if (gameMode === 'logic') {
-      setCurrentScreen(SCREENS.LOGIC_SELECT);
-    } else if (gameMode === 'smartMemory') {
-      setCurrentScreen(SCREENS.SMART_MEMORY_GAME);
-    } else if (gameMode === 'polygonDetective') {
-      setCurrentScreen(SCREENS.POLYGON_DETECTIVE_GAME);
-    } else if (gameMode === 'readingDetective') {
-      setCurrentScreen(SCREENS.READING_DETECTIVE_GAME);
-    } else if (gameMode === 'robotLab') {
-      setCurrentScreen(SCREENS.ROBOT_LAB_GAME);
-    } else if (gameMode === 'mathKingdom') {
+  const handleSelectGame = (hubId) => {
+    // Route to hub screens from the Class Champions menu
+    if (hubId === 'mathKingdom') {
       setCurrentScreen(SCREENS.MATH_KINGDOM);
-    } else {
-      setCurrentScreen(SCREENS.LEVEL_MAP);
+    } else if (hubId === 'detectiveHQ') {
+      setCurrentScreen(SCREENS.DETECTIVE_HQ);
+    } else if (hubId === 'readingWorld') {
+      setCurrentScreen(SCREENS.READING_WORLD);
+    } else if (hubId === 'natureLab') {
+      setCurrentScreen(SCREENS.NATURE_LAB);
     }
+  };
+
+  const handleSelectDetectiveHQGame = (gameId) => {
+    setSelectedGameMode(gameId);
+    if (gameId === 'polygonDetective') {
+      setCurrentScreen(SCREENS.POLYGON_DETECTIVE_GAME);
+    } else if (gameId === 'logic') {
+      setCurrentScreen(SCREENS.LOGIC_SELECT);
+    } else if (gameId === 'smartMemory') {
+      setCurrentScreen(SCREENS.SMART_MEMORY_GAME);
+    }
+  };
+
+  const handleSelectReadingWorldGame = (gameId) => {
+    setSelectedGameMode(gameId);
+    if (gameId === 'readingDetective') {
+      setCurrentScreen(SCREENS.READING_DETECTIVE_GAME);
+    } else if (gameId === 'english') {
+      setCurrentScreen(SCREENS.ENGLISH_PRACTICE);
+    }
+  };
+
+  const handleSelectNatureLabGame = (gameId) => {
+    setSelectedGameMode(gameId);
+    if (gameId === 'robotLab') {
+      setCurrentScreen(SCREENS.ROBOT_LAB_GAME);
+    }
+  };
+
+  const handleBackToDetectiveHQ = () => {
+    setSelectedGameMode(null);
+    setCurrentScreen(SCREENS.DETECTIVE_HQ);
+  };
+
+  const handleBackToReadingWorld = () => {
+    setSelectedGameMode(null);
+    setCurrentScreen(SCREENS.READING_WORLD);
+  };
+
+  const handleBackToNatureLab = () => {
+    setSelectedGameMode(null);
+    setCurrentScreen(SCREENS.NATURE_LAB);
   };
 
   const handleSelectPracticeGame = (practiceGameId) => {
@@ -638,11 +676,38 @@ const App = () => {
           />
         );
 
+      case SCREENS.DETECTIVE_HQ:
+        return (
+          <DetectiveHQ
+            themeId={selectedTheme}
+            onBack={handleBackToGameSelect}
+            onSelectGame={handleSelectDetectiveHQGame}
+          />
+        );
+
+      case SCREENS.READING_WORLD:
+        return (
+          <ReadingWorld
+            themeId={selectedTheme}
+            onBack={handleBackToGameSelect}
+            onSelectGame={handleSelectReadingWorldGame}
+          />
+        );
+
+      case SCREENS.NATURE_LAB:
+        return (
+          <NatureLab
+            themeId={selectedTheme}
+            onBack={handleBackToGameSelect}
+            onSelectGame={handleSelectNatureLabGame}
+          />
+        );
+
       case SCREENS.POLYGON_DETECTIVE_GAME:
         return (
           <PolygonDetectiveGame
             themeId={selectedTheme}
-            onBack={handleBackToGameSelect}
+            onBack={handleBackToDetectiveHQ}
             triggerConfetti={triggerConfetti}
           />
         );
@@ -651,7 +716,7 @@ const App = () => {
         return (
           <ReadingDetectiveGame
             themeId={selectedTheme}
-            onBack={handleBackToGameSelect}
+            onBack={handleBackToReadingWorld}
             triggerConfetti={triggerConfetti}
           />
         );
@@ -660,7 +725,7 @@ const App = () => {
         return (
           <RobotLabGame
             themeId={selectedTheme}
-            onBack={handleBackToGameSelect}
+            onBack={handleBackToNatureLab}
             triggerConfetti={triggerConfetti}
           />
         );
@@ -723,7 +788,7 @@ const App = () => {
           <EnglishPracticeScreen
             themeId={selectedTheme}
             onSelectGame={handleSelectPracticeGame}
-            onBack={handleBackToGameSelect}
+            onBack={handleBackToReadingWorld}
           />
         );
 
@@ -748,7 +813,7 @@ const App = () => {
       case SCREENS.SMART_MEMORY_GAME: {
         const smartMemoryBack = getSelectedZone() === 'littleExplorers'
           ? handleBackToLogicKingdom
-          : handleBackToGameSelect;
+          : handleBackToDetectiveHQ;
         return (
           <SmartMemoryGame
             themeId={selectedTheme}
@@ -763,7 +828,7 @@ const App = () => {
           <LogicSelectScreen
             themeId={selectedTheme}
             onSelectGame={handleSelectLogicGame}
-            onBack={handleBackToGameSelect}
+            onBack={handleBackToDetectiveHQ}
           />
         );
 
