@@ -8,6 +8,12 @@ const GAMES = [
     description: 'אוריינות AI וחשיבה ביקורתית',
     icon: '🤖',
   },
+  {
+    id: 'wildPlantPatrol',
+    name: 'סיירת צמחי הבר',
+    description: 'זיהוי צמחי בר בטבע',
+    icon: '🌿',
+  },
 ];
 
 const NatureLab = ({ themeId, onBack, onSelectGame }) => {
@@ -33,7 +39,7 @@ const NatureLab = ({ themeId, onBack, onSelectGame }) => {
         </div>
 
         {/* Games Grid */}
-        <div className="grid grid-cols-1 gap-6 mb-10 max-w-sm mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
           {GAMES.map((game) => (
             <button
               key={game.id}
