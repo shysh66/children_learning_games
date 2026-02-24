@@ -34,13 +34,17 @@ const ITEMS = [
   { id: 'orange-circle', label: 'עיגול כתום', color: '#f97316', shape: 'circle' },
 ];
 
-const ShapeIcon = ({ item, size = 48 }) => {
+const ShapeIcon = ({ item, size = 48, className }) => {
   const half = size / 2;
   const r = size * 0.38;
 
+  const svgProps = className
+    ? { viewBox: `0 0 ${size} ${size}`, className }
+    : { width: size, height: size };
+
   if (item.shape === 'circle') {
     return (
-      <svg width={size} height={size}>
+      <svg {...svgProps}>
         <circle cx={half} cy={half} r={r} fill={item.color} />
       </svg>
     );
@@ -48,14 +52,14 @@ const ShapeIcon = ({ item, size = 48 }) => {
   if (item.shape === 'triangle') {
     const pts = `${half},${half - r} ${half + r},${half + r * 0.7} ${half - r},${half + r * 0.7}`;
     return (
-      <svg width={size} height={size}>
+      <svg {...svgProps}>
         <polygon points={pts} fill={item.color} />
       </svg>
     );
   }
   // square
   return (
-    <svg width={size} height={size}>
+    <svg {...svgProps}>
       <rect x={half - r} y={half - r} width={r * 2} height={r * 2} rx={3} fill={item.color} />
     </svg>
   );
@@ -239,18 +243,18 @@ const PatternSequenceGame = ({ themeId, onBack, triggerConfetti }) => {
       <div className="text-3xl font-bold text-white mb-6">מה בא אחר כך? 🤔</div>
 
       {/* Sequence display */}
-      <div className={`${theme.cardBg} rounded-3xl p-6 sm:p-8 mb-8 flex items-center justify-center gap-3 sm:gap-4 flex-wrap`}>
+      <div className={`${theme.cardBg} rounded-3xl p-3 sm:p-6 md:p-8 mb-8 flex items-center justify-center gap-1.5 sm:gap-3 md:gap-4 flex-wrap`}>
         {round.sequence.map((item, idx) => (
-          <div key={idx} className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-white/20 rounded-2xl">
-            <ShapeIcon item={item} size={44} />
+          <div key={idx} className="flex items-center justify-center w-10 h-10 sm:w-14 sm:h-14 bg-white/20 rounded-xl sm:rounded-2xl">
+            <ShapeIcon item={item} size={48} className="w-7 h-7 sm:w-11 sm:h-11" />
           </div>
         ))}
         {/* The question mark slot */}
-        <div className={`flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border-4 border-dashed border-yellow-400 ${showCorrect ? 'bg-green-400/30 border-green-400' : 'bg-white/10'}`}>
+        <div className={`flex items-center justify-center w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl border-2 sm:border-4 border-dashed border-yellow-400 ${showCorrect ? 'bg-green-400/30 border-green-400' : 'bg-white/10'}`}>
           {showCorrect ? (
-            <ShapeIcon item={round.answer} size={44} />
+            <ShapeIcon item={round.answer} size={48} className="w-7 h-7 sm:w-11 sm:h-11" />
           ) : (
-            <span className="text-3xl text-yellow-400 font-black">?</span>
+            <span className="text-xl sm:text-3xl text-yellow-400 font-black">?</span>
           )}
         </div>
       </div>

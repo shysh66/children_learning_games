@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { getTheme } from '../data/themes';
 import { addXP, recordGameStats } from '../utils/storage';
+import { playOopsSound } from '../utils/sounds';
 import useGameAnalytics from '../hooks/useGameAnalytics';
 
 // ============ Hebrew Alphabet Data ============
@@ -194,7 +195,9 @@ const BalloonPartyGame = ({ themeId, onBack, triggerConfetti }) => {
         }
       }, 1500);
     } else {
-      // Wrong — pop the wrong balloon
+      // Wrong — speak the clicked letter name, then play error sound
+      speak(item.name);
+      setTimeout(() => playOopsSound(), 500);
       setPoppedLetters((prev) => [...prev, item.letter]);
     }
   };
