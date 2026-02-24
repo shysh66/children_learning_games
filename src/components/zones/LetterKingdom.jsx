@@ -19,7 +19,7 @@ const GAMES = [
   {
     id: 'firstLetter',
     name: 'במה זה מתחיל?',
-    description: 'מה האות הראשונה של התמונה?',
+    description: 'מהי האות הראשונה במילה?',
     icon: '🍎',
     color: 'from-emerald-400 to-green-500',
   },

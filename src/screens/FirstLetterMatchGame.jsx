@@ -116,7 +116,7 @@ const FirstLetterMatchGame = ({ themeId, onBack, triggerConfetti }) => {
     if (rounds.length > 0 && roundIndex < rounds.length && !showResult) {
       const word = rounds[roundIndex].word;
       const timer = setTimeout(() => {
-        speak(`במה מתחיל${word.name.endsWith('ה') ? 'ה' : ''} ${word.name}?`);
+        speak(`במה מתחילה המילה ${word.name}?`);
       }, 500);
       return () => clearTimeout(timer);
     }
@@ -240,7 +240,7 @@ const FirstLetterMatchGame = ({ themeId, onBack, triggerConfetti }) => {
 
       {/* Image card */}
       <button
-        onClick={() => speak(`במה מתחיל${round.word.name.endsWith('ה') ? 'ה' : ''} ${round.word.name}?`)}
+        onClick={() => speak(`במה מתחילה המילה ${round.word.name}?`)}
         className={`${theme.cardBg} rounded-3xl px-12 py-8 mb-6 text-center hover:scale-105 transition-all duration-300 cursor-pointer`}
       >
         <div className="text-9xl mb-4 leading-none">{round.word.icon}</div>
@@ -253,7 +253,7 @@ const FirstLetterMatchGame = ({ themeId, onBack, triggerConfetti }) => {
 
       {/* Question text */}
       <p className="text-2xl sm:text-3xl font-bold text-white mb-8 text-center">
-        במה מתחיל{round.word.name.endsWith('ה') ? 'ה' : ''}{' '}
+        במה מתחילה המילה{' '}
         <span className="text-yellow-300">{round.word.name}</span>?
       </p>
 
