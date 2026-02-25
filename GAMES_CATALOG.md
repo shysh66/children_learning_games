@@ -58,6 +58,7 @@ The Class Champions zone is organized into 4 Hubs:
 | `ReadingDetectiveGame.jsx` | בלש הקריאה | Reading comprehension — answering questions about short texts. |
 | `AudioMemoryGame.jsx` | משחק הזיכרון | Matching pairs of English word images while listening to pronunciation. |
 | `FindItFastGame.jsx` | מצא את התמונה | Listening to an English word and selecting the correct image. |
+| `SentenceMachineGame.jsx` | מכונת המשפטים | Building Hebrew sentences with Nikud (vowel marks) — 6 progressive levels covering word completion, grammar matching (masculine/feminine, singular/plural), and sentence construction with distractors. Tap-only mechanics. |
 
 ### Hub 4: Nature Lab / מעבדת הטבע 🔬
 

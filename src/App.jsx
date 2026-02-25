@@ -36,6 +36,7 @@ import {
   FirstLetterMatchGame,
   ShadowDetective,
   DirectionCatcher,
+  SentenceMachineGame,
 } from './screens';
 
 // Zone components
@@ -71,8 +72,8 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '6.10.0';
-const LAST_UPDATE = '22.02.2026';
+const APP_VERSION = '6.11.0';
+const LAST_UPDATE = '24.02.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -111,6 +112,7 @@ const SCREENS = {
   NATURE_LAB: 'natureLab',
   SHADOW_DETECTIVE_GAME: 'shadowDetectiveGame',
   DIRECTION_CATCHER_GAME: 'directionCatcherGame',
+  SENTENCE_MACHINE_GAME: 'sentenceMachineGame',
   PARENT_DASHBOARD: 'parentDashboard',
 };
 
@@ -381,6 +383,8 @@ const App = () => {
       setCurrentScreen(SCREENS.READING_DETECTIVE_GAME);
     } else if (gameId === 'english') {
       setCurrentScreen(SCREENS.ENGLISH_PRACTICE);
+    } else if (gameId === 'sentenceMachine') {
+      setCurrentScreen(SCREENS.SENTENCE_MACHINE_GAME);
     }
   };
 
@@ -715,6 +719,15 @@ const App = () => {
       case SCREENS.READING_DETECTIVE_GAME:
         return (
           <ReadingDetectiveGame
+            themeId={selectedTheme}
+            onBack={handleBackToReadingWorld}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.SENTENCE_MACHINE_GAME:
+        return (
+          <SentenceMachineGame
             themeId={selectedTheme}
             onBack={handleBackToReadingWorld}
             triggerConfetti={triggerConfetti}
