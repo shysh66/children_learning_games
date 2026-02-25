@@ -65,4 +65,3 @@ The Class Champions zone is organized into 4 Hubs:
 | Component | Hebrew Name | Skill |
 |-----------|-------------|-------|
 | `RobotLabGame.jsx` | הרובוט שלי | AI literacy and critical thinking through prompt-building exercises. |
-| `WildPlantPatrolGame.jsx` | סיירת צמחי הבר | Wild plant identification — 3 progressive levels from distinguishing 2 distinct plants, to 3-plant identification, to recognition by leaf type or color family. Tap-only mechanics with scaffolded error handling (faded plants). |

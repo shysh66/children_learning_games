@@ -36,7 +36,6 @@ import {
   FirstLetterMatchGame,
   ShadowDetective,
   DirectionCatcher,
-  WildPlantPatrolGame,
   SentenceMachineGame,
 } from './screens';
 
@@ -113,7 +112,6 @@ const SCREENS = {
   NATURE_LAB: 'natureLab',
   SHADOW_DETECTIVE_GAME: 'shadowDetectiveGame',
   DIRECTION_CATCHER_GAME: 'directionCatcherGame',
-  WILD_PLANT_PATROL_GAME: 'wildPlantPatrolGame',
   SENTENCE_MACHINE_GAME: 'sentenceMachineGame',
   PARENT_DASHBOARD: 'parentDashboard',
 };
@@ -394,8 +392,6 @@ const App = () => {
     setSelectedGameMode(gameId);
     if (gameId === 'robotLab') {
       setCurrentScreen(SCREENS.ROBOT_LAB_GAME);
-    } else if (gameId === 'wildPlantPatrol') {
-      setCurrentScreen(SCREENS.WILD_PLANT_PATROL_GAME);
     }
   };
 
@@ -725,15 +721,6 @@ const App = () => {
           <ReadingDetectiveGame
             themeId={selectedTheme}
             onBack={handleBackToReadingWorld}
-            triggerConfetti={triggerConfetti}
-          />
-        );
-
-      case SCREENS.WILD_PLANT_PATROL_GAME:
-        return (
-          <WildPlantPatrolGame
-            themeId={selectedTheme}
-            onBack={handleBackToNatureLab}
             triggerConfetti={triggerConfetti}
           />
         );
