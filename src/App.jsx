@@ -36,6 +36,7 @@ import {
   FirstLetterMatchGame,
   ShadowDetective,
   DirectionCatcher,
+  AuditoryMatchGame,
 } from './screens';
 
 // Zone components
@@ -111,6 +112,7 @@ const SCREENS = {
   NATURE_LAB: 'natureLab',
   SHADOW_DETECTIVE_GAME: 'shadowDetectiveGame',
   DIRECTION_CATCHER_GAME: 'directionCatcherGame',
+  AUDITORY_MATCH_GAME: 'auditoryMatchGame',
   PARENT_DASHBOARD: 'parentDashboard',
 };
 
@@ -411,6 +413,8 @@ const App = () => {
       setCurrentScreen(SCREENS.MEMORY_GAME);
     } else if (practiceGameId === 'findit') {
       setCurrentScreen(SCREENS.FIND_IT_GAME);
+    } else if (practiceGameId === 'auditoryMatch') {
+      setCurrentScreen(SCREENS.AUDITORY_MATCH_GAME);
     }
   };
 
@@ -804,6 +808,15 @@ const App = () => {
       case SCREENS.FIND_IT_GAME:
         return (
           <FindItFastGame
+            themeId={selectedTheme}
+            onBack={handleBackToEnglishPractice}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.AUDITORY_MATCH_GAME:
+        return (
+          <AuditoryMatchGame
             themeId={selectedTheme}
             onBack={handleBackToEnglishPractice}
             triggerConfetti={triggerConfetti}

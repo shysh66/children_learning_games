@@ -22,6 +22,14 @@ const EnglishPracticeScreen = ({ themeId, onSelectGame, onBack }) => {
       description: 'הקשב ומצא את התמונה הנכונה',
       color: 'from-blue-500 to-cyan-500',
     },
+    {
+      id: 'auditoryMatch',
+      name: 'התאם לשמע',
+      englishName: 'Auditory Match',
+      icon: '👂',
+      description: 'הקשב למילה ובחר את התמונה הנכונה',
+      color: 'from-green-500 to-emerald-500',
+    },
   ];
 
   return (
