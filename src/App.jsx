@@ -72,7 +72,7 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '6.11.0';
+const APP_VERSION = '6.12.0';
 const LAST_UPDATE = '26.02.2026';
 
 // Screen names for navigation
