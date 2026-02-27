@@ -36,6 +36,7 @@ import {
   FirstLetterMatchGame,
   ShadowDetective,
   DirectionCatcher,
+  AuditoryMatchGame,
   SentenceMachineGame,
 } from './screens';
 
@@ -72,8 +73,8 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '6.11.0';
-const LAST_UPDATE = '24.02.2026';
+const APP_VERSION = '6.12.0';
+const LAST_UPDATE = '26.02.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -112,6 +113,7 @@ const SCREENS = {
   NATURE_LAB: 'natureLab',
   SHADOW_DETECTIVE_GAME: 'shadowDetectiveGame',
   DIRECTION_CATCHER_GAME: 'directionCatcherGame',
+  AUDITORY_MATCH_GAME: 'auditoryMatchGame',
   SENTENCE_MACHINE_GAME: 'sentenceMachineGame',
   PARENT_DASHBOARD: 'parentDashboard',
 };
@@ -415,6 +417,8 @@ const App = () => {
       setCurrentScreen(SCREENS.MEMORY_GAME);
     } else if (practiceGameId === 'findit') {
       setCurrentScreen(SCREENS.FIND_IT_GAME);
+    } else if (practiceGameId === 'auditoryMatch') {
+      setCurrentScreen(SCREENS.AUDITORY_MATCH_GAME);
     }
   };
 
@@ -817,6 +821,15 @@ const App = () => {
       case SCREENS.FIND_IT_GAME:
         return (
           <FindItFastGame
+            themeId={selectedTheme}
+            onBack={handleBackToEnglishPractice}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.AUDITORY_MATCH_GAME:
+        return (
+          <AuditoryMatchGame
             themeId={selectedTheme}
             onBack={handleBackToEnglishPractice}
             triggerConfetti={triggerConfetti}
