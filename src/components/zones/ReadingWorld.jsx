@@ -14,6 +14,12 @@ const GAMES = [
     description: 'לימוד מילים באנגלית',
     icon: '🔤',
   },
+  {
+    id: 'sentenceMachine',
+    name: 'מכונת המשפטים',
+    description: 'בניית משפטים מנוקדים',
+    icon: '📝',
+  },
 ];
 
 const ReadingWorld = ({ themeId, onBack, onSelectGame }) => {
@@ -39,7 +45,7 @@ const ReadingWorld = ({ themeId, onBack, onSelectGame }) => {
         </div>
 
         {/* Games Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
           {GAMES.map((game) => (
             <button
               key={game.id}

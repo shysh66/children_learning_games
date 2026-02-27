@@ -37,6 +37,7 @@ import {
   ShadowDetective,
   DirectionCatcher,
   AuditoryMatchGame,
+  SentenceMachineGame,
 } from './screens';
 
 // Zone components
@@ -113,6 +114,7 @@ const SCREENS = {
   SHADOW_DETECTIVE_GAME: 'shadowDetectiveGame',
   DIRECTION_CATCHER_GAME: 'directionCatcherGame',
   AUDITORY_MATCH_GAME: 'auditoryMatchGame',
+  SENTENCE_MACHINE_GAME: 'sentenceMachineGame',
   PARENT_DASHBOARD: 'parentDashboard',
 };
 
@@ -383,6 +385,8 @@ const App = () => {
       setCurrentScreen(SCREENS.READING_DETECTIVE_GAME);
     } else if (gameId === 'english') {
       setCurrentScreen(SCREENS.ENGLISH_PRACTICE);
+    } else if (gameId === 'sentenceMachine') {
+      setCurrentScreen(SCREENS.SENTENCE_MACHINE_GAME);
     }
   };
 
@@ -719,6 +723,15 @@ const App = () => {
       case SCREENS.READING_DETECTIVE_GAME:
         return (
           <ReadingDetectiveGame
+            themeId={selectedTheme}
+            onBack={handleBackToReadingWorld}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.SENTENCE_MACHINE_GAME:
+        return (
+          <SentenceMachineGame
             themeId={selectedTheme}
             onBack={handleBackToReadingWorld}
             triggerConfetti={triggerConfetti}
