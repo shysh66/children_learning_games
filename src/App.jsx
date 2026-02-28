@@ -73,7 +73,7 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '6.13.1';
+const APP_VERSION = '6.14.0';
 const LAST_UPDATE = '28.02.2026';
 
 // Screen names for navigation
@@ -833,6 +833,7 @@ const App = () => {
             themeId={selectedTheme}
             onBack={handleBackToEnglishPractice}
             triggerConfetti={triggerConfetti}
+            levelId={1}
           />
         );
 

@@ -1,0 +1,187 @@
+[
+  {
+    "level_id": 1,
+    "category": "animals",
+    "settings": {
+      "options_count": 2
+    },
+    "words": [
+      {
+        "id": "l1_dog",
+        "word": "Dog",
+        "image": "/assets/images/dog.png",
+        "audio": "/assets/audio/dog.mp3",
+        "distractors": ["/assets/images/red.png"]
+      },
+      {
+        "id": "l1_cat",
+        "word": "Cat",
+        "image": "/assets/images/cat.png",
+        "audio": "/assets/audio/cat.mp3",
+        "distractors": ["/assets/images/blue.png"]
+      },
+      {
+        "id": "l1_bird",
+        "word": "Bird",
+        "image": "/assets/images/bird.png",
+        "audio": "/assets/audio/bird.mp3",
+        "distractors": ["/assets/images/three.png"]
+      },
+      {
+        "id": "l1_cow",
+        "word": "Cow",
+        "image": "/assets/images/cow.png",
+        "audio": "/assets/audio/cow.mp3",
+        "distractors": ["/assets/images/two.png"]
+      }
+    ]
+  },
+  {
+    "level_id": 2,
+    "category": "colors",
+    "settings": {
+      "options_count": 2
+    },
+    "words": [
+      {
+        "id": "l2_red",
+        "word": "Red",
+        "image": "/assets/images/red.png",
+        "audio": "/assets/audio/red.mp3",
+        "distractors": ["/assets/images/dog.png"]
+      },
+      {
+        "id": "l2_blue",
+        "word": "Blue",
+        "image": "/assets/images/blue.png",
+        "audio": "/assets/audio/blue.mp3",
+        "distractors": ["/assets/images/one.png"]
+      },
+      {
+        "id": "l2_green",
+        "word": "Green",
+        "image": "/assets/images/green.png",
+        "audio": "/assets/audio/green.mp3",
+        "distractors": ["/assets/images/cow.png"]
+      },
+      {
+        "id": "l2_yellow",
+        "word": "Yellow",
+        "image": "/assets/images/yellow.png",
+        "audio": "/assets/audio/yellow.mp3",
+        "distractors": ["/assets/images/four.png"]
+      }
+    ]
+  },
+  {
+    "level_id": 3,
+    "category": "animals",
+    "settings": {
+      "options_count": 4
+    },
+    "words": [
+      {
+        "id": "l3_dog",
+        "word": "Dog",
+        "image": "/assets/images/dog.png",
+        "audio": "/assets/audio/dog.mp3",
+        "distractors": ["/assets/images/red.png", "/assets/images/two.png", "/assets/images/green.png"]
+      },
+      {
+        "id": "l3_cat",
+        "word": "Cat",
+        "image": "/assets/images/cat.png",
+        "audio": "/assets/audio/cat.mp3",
+        "distractors": ["/assets/images/blue.png", "/assets/images/four.png", "/assets/images/yellow.png"]
+      },
+      {
+        "id": "l3_bird",
+        "word": "Bird",
+        "image": "/assets/images/bird.png",
+        "audio": "/assets/audio/bird.mp3",
+        "distractors": ["/assets/images/one.png", "/assets/images/red.png", "/assets/images/three.png"]
+      },
+      {
+        "id": "l3_cow",
+        "word": "Cow",
+        "image": "/assets/images/cow.png",
+        "audio": "/assets/audio/cow.mp3",
+        "distractors": ["/assets/images/yellow.png", "/assets/images/two.png", "/assets/images/blue.png"]
+      }
+    ]
+  },
+  {
+    "level_id": 4,
+    "category": "numbers",
+    "settings": {
+      "options_count": 4
+    },
+    "words": [
+      {
+        "id": "l4_one",
+        "word": "One",
+        "image": "/assets/images/one.png",
+        "audio": "/assets/audio/one.mp3",
+        "distractors": ["/assets/images/dog.png", "/assets/images/red.png", "/assets/images/green.png"]
+      },
+      {
+        "id": "l4_two",
+        "word": "Two",
+        "image": "/assets/images/two.png",
+        "audio": "/assets/audio/two.mp3",
+        "distractors": ["/assets/images/cat.png", "/assets/images/blue.png", "/assets/images/yellow.png"]
+      },
+      {
+        "id": "l4_three",
+        "word": "Three",
+        "image": "/assets/images/three.png",
+        "audio": "/assets/audio/three.mp3",
+        "distractors": ["/assets/images/bird.png", "/assets/images/red.png", "/assets/images/blue.png"]
+      },
+      {
+        "id": "l4_four",
+        "word": "Four",
+        "image": "/assets/images/four.png",
+        "audio": "/assets/audio/four.mp3",
+        "distractors": ["/assets/images/cow.png", "/assets/images/green.png", "/assets/images/yellow.png"]
+      }
+    ]
+  },
+  {
+    "level_id": 5,
+    "category": "animals",
+    "settings": {
+      "options_count": 4
+    },
+    "words": [
+      {
+        "id": "l5_dog",
+        "word": "Dog",
+        "image": "/assets/images/dog.png",
+        "audio": "/assets/audio/dog.mp3",
+        "distractors": ["/assets/images/cat.png", "/assets/images/bird.png", "/assets/images/cow.png"]
+      },
+      {
+        "id": "l5_cat",
+        "word": "Cat",
+        "image": "/assets/images/cat.png",
+        "audio": "/assets/audio/cat.mp3",
+        "distractors": ["/assets/images/dog.png", "/assets/images/bird.png", "/assets/images/cow.png"]
+      },
+      {
+        "id": "l5_bird",
+        "word": "Bird",
+        "image": "/assets/images/bird.png",
+        "audio": "/assets/audio/bird.mp3",
+        "distractors": ["/assets/images/dog.png", "/assets/images/cat.png", "/assets/images/cow.png"]
+      },
+      {
+        "id": "l5_cow",
+        "word": "Cow",
+        "image": "/assets/images/cow.png",
+        "audio": "/assets/audio/cow.mp3",
+        "distractors": ["/assets/images/dog.png", "/assets/images/cat.png", "/assets/images/bird.png"]
+      }
+    ]
+  }
+]
