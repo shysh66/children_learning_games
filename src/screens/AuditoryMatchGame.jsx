@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getTheme } from '../data/themes';
 import { addXP, recordGameStats } from '../utils/storage';
 import { playCheerSound, playOopsSound } from '../utils/sounds';
+import { speakWord } from '../data/englishWords';
 
 // Mock data for Level 1 — Auditory Match Game
 const MOCK_DATA = [
@@ -9,28 +10,24 @@ const MOCK_DATA = [
     id: 'word_dog',
     word: 'Dog',
     image: '/assets/images/dog.png',
-    audio: '/assets/audio/dog.mp3',
     distractor_image: '/assets/images/cat.png',
   },
   {
     id: 'word_cat',
     word: 'Cat',
     image: '/assets/images/cat.png',
-    audio: '/assets/audio/cat.mp3',
     distractor_image: '/assets/images/bird.png',
   },
   {
     id: 'word_bird',
     word: 'Bird',
     image: '/assets/images/bird.png',
-    audio: '/assets/audio/bird.mp3',
     distractor_image: '/assets/images/cow.png',
   },
   {
     id: 'word_cow',
     word: 'Cow',
     image: '/assets/images/cow.png',
-    audio: '/assets/audio/cow.mp3',
     distractor_image: '/assets/images/dog.png',
   },
 ];
@@ -64,28 +61,13 @@ const AuditoryMatchGame = ({ themeId, onBack, triggerConfetti }) => {
   const [imgErrors, setImgErrors] = useState({});
   const [gameComplete, setGameComplete] = useState(false);
   const [score, setScore] = useState(0);
-  const audioRef = useRef(null);
-
   const currentItem = MOCK_DATA[currentIndex];
   const total = MOCK_DATA.length;
 
-  // Play the audio file for the current word
+  // Speak the current word using the Web Speech API
   const playAudio = useCallback(() => {
     if (!currentItem) return;
-    // Stop any previously playing audio
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
-    try {
-      const audio = new Audio(currentItem.audio);
-      audioRef.current = audio;
-      audio.play().catch(() => {
-        // Audio file not available — silently fail
-      });
-    } catch {
-      // Audio not supported
-    }
+    speakWord(currentItem.word);
   }, [currentItem]);
 
   // Shuffle the pair of images for the current turn
