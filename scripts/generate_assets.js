@@ -3,8 +3,9 @@
 /**
  * Asset Placeholder Generator
  *
- * Generates minimal placeholder .png and .mp3 files for all words
+ * Generates minimal placeholder .png files for all words
  * referenced in levels_config.json.
+ * Audio is handled by Web Speech Synthesis API (speakWord), so no .mp3 files needed.
  *
  * Usage: node scripts/generate_assets.js
  */
@@ -14,7 +15,6 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const IMAGES_DIR = path.join(ROOT, 'public', 'assets', 'images');
-const AUDIO_DIR = path.join(ROOT, 'public', 'assets', 'audio');
 
 // All words that need assets (extracted from levels_config.json)
 const WORDS = {
@@ -109,47 +109,21 @@ function adler32(buf) {
   return result;
 }
 
-/**
- * Creates a minimal valid MP3 file.
- * Single silent MPEG Audio Layer 3 frame (MPEG1, 128kbps, 44100Hz, stereo).
- */
-function createMp3() {
-  // MPEG1, Layer 3, 128kbps, 44100Hz, stereo — frame size = 417 bytes
-  const frameSize = 417;
-  const frame = Buffer.alloc(frameSize, 0);
-  // Frame header: 0xFFFB9004
-  // FF FB = sync + MPEG1, Layer3, no CRC
-  // 90 = 128kbps, 44100Hz
-  // 04 = stereo, no padding
-  frame[0] = 0xff;
-  frame[1] = 0xfb;
-  frame[2] = 0x90;
-  frame[3] = 0x04;
-  return frame;
-}
-
 // --- Main ---
 
 function main() {
   fs.mkdirSync(IMAGES_DIR, { recursive: true });
-  fs.mkdirSync(AUDIO_DIR, { recursive: true });
 
   let createdImages = 0;
-  let createdAudio = 0;
 
   for (const [word, color] of Object.entries(WORDS)) {
     const pngPath = path.join(IMAGES_DIR, `${word}.png`);
-    const mp3Path = path.join(AUDIO_DIR, `${word}.mp3`);
-
     fs.writeFileSync(pngPath, createPng(color.r, color.g, color.b));
     createdImages++;
-
-    fs.writeFileSync(mp3Path, createMp3());
-    createdAudio++;
   }
 
   console.log(`Generated ${createdImages} placeholder images in ${IMAGES_DIR}`);
-  console.log(`Generated ${createdAudio} placeholder audio files in ${AUDIO_DIR}`);
+  console.log('Audio is handled by Web Speech Synthesis API — no files needed.');
   console.log('Done!');
 }
 
