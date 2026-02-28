@@ -38,6 +38,7 @@ import {
   DirectionCatcher,
   AuditoryMatchGame,
   SentenceMachineGame,
+  ReadingMatchGame,
 } from './screens';
 
 // Zone components
@@ -73,7 +74,7 @@ import {
 import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
-const APP_VERSION = '6.13.1';
+const APP_VERSION = '6.15.0';
 const LAST_UPDATE = '28.02.2026';
 
 // Screen names for navigation
@@ -114,6 +115,7 @@ const SCREENS = {
   SHADOW_DETECTIVE_GAME: 'shadowDetectiveGame',
   DIRECTION_CATCHER_GAME: 'directionCatcherGame',
   AUDITORY_MATCH_GAME: 'auditoryMatchGame',
+  READING_MATCH_GAME: 'readingMatchGame',
   SENTENCE_MACHINE_GAME: 'sentenceMachineGame',
   PARENT_DASHBOARD: 'parentDashboard',
 };
@@ -419,6 +421,8 @@ const App = () => {
       setCurrentScreen(SCREENS.FIND_IT_GAME);
     } else if (practiceGameId === 'auditoryMatch') {
       setCurrentScreen(SCREENS.AUDITORY_MATCH_GAME);
+    } else if (practiceGameId === 'readingMatch') {
+      setCurrentScreen(SCREENS.READING_MATCH_GAME);
     }
   };
 
@@ -830,6 +834,16 @@ const App = () => {
       case SCREENS.AUDITORY_MATCH_GAME:
         return (
           <AuditoryMatchGame
+            themeId={selectedTheme}
+            onBack={handleBackToEnglishPractice}
+            triggerConfetti={triggerConfetti}
+          />
+        );
+
+      case SCREENS.READING_MATCH_GAME:
+        return (
+          <ReadingMatchGame
+            levelId="level_1"
             themeId={selectedTheme}
             onBack={handleBackToEnglishPractice}
             triggerConfetti={triggerConfetti}
