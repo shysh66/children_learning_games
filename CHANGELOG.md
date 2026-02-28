@@ -9,6 +9,19 @@
 
 ---
 
+## [6.13.0] - 28.02.2026
+
+### ✨ נוסף (Added)
+- **usePlayerProgress Hook** - הוק React חדש לניהול התקדמות שחקן במשחקי האנגלית
+  - שמירת מצב ב-localStorage עם מפתח ייחודי לכל שחקן (`english_progress_{playerName}`)
+  - תמיכה בשני אזורי משחק: `young_explorers` ו-`class_champions`
+  - `completeLevel(levelId, score)` - עדכון ציון (רק אם גבוה מהקיים) ופתיחת השלב הבא
+  - `markWordAsWeak(wordId)` - סימון מילים לתרגול נוסף (ללא כפילויות)
+  - `getProgress()` - החזרת מצב ההתקדמות לאזור המשחק הפעיל
+  - טיפול בסביבות ללא localStorage (מצב גלישה פרטית)
+
+---
+
 ## [6.12.0] - 26.02.2026
 
 ### ✨ נוסף (Added)
