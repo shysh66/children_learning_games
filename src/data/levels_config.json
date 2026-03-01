@@ -9,30 +9,26 @@
       {
         "id": "l1_dog",
         "word": "Dog",
-        "image": "/assets/images/dog.png",
-
-        "distractors": ["/assets/images/red.png"]
+        "emoji": "\ud83d\udc36",
+        "distractors": [{ "word": "Red", "emoji": "\ud83d\udd34" }]
       },
       {
         "id": "l1_cat",
         "word": "Cat",
-        "image": "/assets/images/cat.png",
-
-        "distractors": ["/assets/images/blue.png"]
+        "emoji": "\ud83d\udc31",
+        "distractors": [{ "word": "Blue", "emoji": "\ud83d\udd35" }]
       },
       {
         "id": "l1_bird",
         "word": "Bird",
-        "image": "/assets/images/bird.png",
-
-        "distractors": ["/assets/images/three.png"]
+        "emoji": "\ud83d\udc26",
+        "distractors": [{ "word": "Three", "emoji": "3\ufe0f\u20e3" }]
       },
       {
         "id": "l1_cow",
         "word": "Cow",
-        "image": "/assets/images/cow.png",
-
-        "distractors": ["/assets/images/two.png"]
+        "emoji": "\ud83d\udc04",
+        "distractors": [{ "word": "Two", "emoji": "2\ufe0f\u20e3" }]
       }
     ]
   },
@@ -46,30 +42,26 @@
       {
         "id": "l2_red",
         "word": "Red",
-        "image": "/assets/images/red.png",
-
-        "distractors": ["/assets/images/dog.png"]
+        "emoji": "\ud83d\udd34",
+        "distractors": [{ "word": "Dog", "emoji": "\ud83d\udc36" }]
       },
       {
         "id": "l2_blue",
         "word": "Blue",
-        "image": "/assets/images/blue.png",
-
-        "distractors": ["/assets/images/one.png"]
+        "emoji": "\ud83d\udd35",
+        "distractors": [{ "word": "One", "emoji": "1\ufe0f\u20e3" }]
       },
       {
         "id": "l2_green",
         "word": "Green",
-        "image": "/assets/images/green.png",
-
-        "distractors": ["/assets/images/cow.png"]
+        "emoji": "\ud83d\udfe2",
+        "distractors": [{ "word": "Cow", "emoji": "\ud83d\udc04" }]
       },
       {
         "id": "l2_yellow",
         "word": "Yellow",
-        "image": "/assets/images/yellow.png",
-
-        "distractors": ["/assets/images/four.png"]
+        "emoji": "\ud83d\udfe1",
+        "distractors": [{ "word": "Four", "emoji": "4\ufe0f\u20e3" }]
       }
     ]
   },
@@ -83,30 +75,42 @@
       {
         "id": "l3_dog",
         "word": "Dog",
-        "image": "/assets/images/dog.png",
-
-        "distractors": ["/assets/images/red.png", "/assets/images/two.png", "/assets/images/green.png"]
+        "emoji": "\ud83d\udc36",
+        "distractors": [
+          { "word": "Red", "emoji": "\ud83d\udd34" },
+          { "word": "Two", "emoji": "2\ufe0f\u20e3" },
+          { "word": "Green", "emoji": "\ud83d\udfe2" }
+        ]
       },
       {
         "id": "l3_cat",
         "word": "Cat",
-        "image": "/assets/images/cat.png",
-
-        "distractors": ["/assets/images/blue.png", "/assets/images/four.png", "/assets/images/yellow.png"]
+        "emoji": "\ud83d\udc31",
+        "distractors": [
+          { "word": "Blue", "emoji": "\ud83d\udd35" },
+          { "word": "Four", "emoji": "4\ufe0f\u20e3" },
+          { "word": "Yellow", "emoji": "\ud83d\udfe1" }
+        ]
       },
       {
         "id": "l3_bird",
         "word": "Bird",
-        "image": "/assets/images/bird.png",
-
-        "distractors": ["/assets/images/one.png", "/assets/images/red.png", "/assets/images/three.png"]
+        "emoji": "\ud83d\udc26",
+        "distractors": [
+          { "word": "One", "emoji": "1\ufe0f\u20e3" },
+          { "word": "Red", "emoji": "\ud83d\udd34" },
+          { "word": "Three", "emoji": "3\ufe0f\u20e3" }
+        ]
       },
       {
         "id": "l3_cow",
         "word": "Cow",
-        "image": "/assets/images/cow.png",
-
-        "distractors": ["/assets/images/yellow.png", "/assets/images/two.png", "/assets/images/blue.png"]
+        "emoji": "\ud83d\udc04",
+        "distractors": [
+          { "word": "Yellow", "emoji": "\ud83d\udfe1" },
+          { "word": "Two", "emoji": "2\ufe0f\u20e3" },
+          { "word": "Blue", "emoji": "\ud83d\udd35" }
+        ]
       }
     ]
   },
@@ -120,30 +124,42 @@
       {
         "id": "l4_one",
         "word": "One",
-        "image": "/assets/images/one.png",
-
-        "distractors": ["/assets/images/dog.png", "/assets/images/red.png", "/assets/images/green.png"]
+        "emoji": "1\ufe0f\u20e3",
+        "distractors": [
+          { "word": "Dog", "emoji": "\ud83d\udc36" },
+          { "word": "Red", "emoji": "\ud83d\udd34" },
+          { "word": "Green", "emoji": "\ud83d\udfe2" }
+        ]
       },
       {
         "id": "l4_two",
         "word": "Two",
-        "image": "/assets/images/two.png",
-
-        "distractors": ["/assets/images/cat.png", "/assets/images/blue.png", "/assets/images/yellow.png"]
+        "emoji": "2\ufe0f\u20e3",
+        "distractors": [
+          { "word": "Cat", "emoji": "\ud83d\udc31" },
+          { "word": "Blue", "emoji": "\ud83d\udd35" },
+          { "word": "Yellow", "emoji": "\ud83d\udfe1" }
+        ]
       },
       {
         "id": "l4_three",
         "word": "Three",
-        "image": "/assets/images/three.png",
-
-        "distractors": ["/assets/images/bird.png", "/assets/images/red.png", "/assets/images/blue.png"]
+        "emoji": "3\ufe0f\u20e3",
+        "distractors": [
+          { "word": "Bird", "emoji": "\ud83d\udc26" },
+          { "word": "Red", "emoji": "\ud83d\udd34" },
+          { "word": "Blue", "emoji": "\ud83d\udd35" }
+        ]
       },
       {
         "id": "l4_four",
         "word": "Four",
-        "image": "/assets/images/four.png",
-
-        "distractors": ["/assets/images/cow.png", "/assets/images/green.png", "/assets/images/yellow.png"]
+        "emoji": "4\ufe0f\u20e3",
+        "distractors": [
+          { "word": "Cow", "emoji": "\ud83d\udc04" },
+          { "word": "Green", "emoji": "\ud83d\udfe2" },
+          { "word": "Yellow", "emoji": "\ud83d\udfe1" }
+        ]
       }
     ]
   },
@@ -157,30 +173,42 @@
       {
         "id": "l5_dog",
         "word": "Dog",
-        "image": "/assets/images/dog.png",
-
-        "distractors": ["/assets/images/cat.png", "/assets/images/bird.png", "/assets/images/cow.png"]
+        "emoji": "\ud83d\udc36",
+        "distractors": [
+          { "word": "Cat", "emoji": "\ud83d\udc31" },
+          { "word": "Bird", "emoji": "\ud83d\udc26" },
+          { "word": "Cow", "emoji": "\ud83d\udc04" }
+        ]
       },
       {
         "id": "l5_cat",
         "word": "Cat",
-        "image": "/assets/images/cat.png",
-
-        "distractors": ["/assets/images/dog.png", "/assets/images/bird.png", "/assets/images/cow.png"]
+        "emoji": "\ud83d\udc31",
+        "distractors": [
+          { "word": "Dog", "emoji": "\ud83d\udc36" },
+          { "word": "Bird", "emoji": "\ud83d\udc26" },
+          { "word": "Cow", "emoji": "\ud83d\udc04" }
+        ]
       },
       {
         "id": "l5_bird",
         "word": "Bird",
-        "image": "/assets/images/bird.png",
-
-        "distractors": ["/assets/images/dog.png", "/assets/images/cat.png", "/assets/images/cow.png"]
+        "emoji": "\ud83d\udc26",
+        "distractors": [
+          { "word": "Dog", "emoji": "\ud83d\udc36" },
+          { "word": "Cat", "emoji": "\ud83d\udc31" },
+          { "word": "Cow", "emoji": "\ud83d\udc04" }
+        ]
       },
       {
         "id": "l5_cow",
         "word": "Cow",
-        "image": "/assets/images/cow.png",
-
-        "distractors": ["/assets/images/dog.png", "/assets/images/cat.png", "/assets/images/bird.png"]
+        "emoji": "\ud83d\udc04",
+        "distractors": [
+          { "word": "Dog", "emoji": "\ud83d\udc36" },
+          { "word": "Cat", "emoji": "\ud83d\udc31" },
+          { "word": "Bird", "emoji": "\ud83d\udc26" }
+        ]
       }
     ]
   }
