@@ -1,16 +1,29 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { getTheme } from '../data/themes';
 import { addXP, recordGameStats } from '../utils/storage';
 import { playCheerSound, playOopsSound } from '../utils/sounds';
 import { speakWord } from '../data/englishWords';
 import levelsConfig from '../data/levels_config.json';
 
-const ReadingMatchGame = ({ levelId = 'level_1', themeId, onBack, triggerConfetti }) => {
+// Fisher-Yates shuffle
+const shuffleArray = (arr) => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
+const ReadingMatchGame = ({ levelId = 1, themeId, onBack, triggerConfetti }) => {
   const theme = getTheme(themeId);
 
-  // Load level data
-  const level = levelsConfig.levels.find((l) => l.id === levelId) || levelsConfig.levels[0];
-  const words = level.words;
+  // Resolve level config (same schema as AuditoryMatchGame)
+  const levelConfig = useMemo(() => {
+    return levelsConfig.find((l) => l.level_id === levelId) || levelsConfig[0];
+  }, [levelId]);
+
+  const words = levelConfig.words;
   const total = words.length;
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -25,33 +38,21 @@ const ReadingMatchGame = ({ levelId = 'level_1', themeId, onBack, triggerConfett
   // Play the current word via TTS
   const playAudio = useCallback(() => {
     if (!currentWord) return;
-    speakWord(currentWord.audio);
+    speakWord(currentWord.word);
   }, [currentWord]);
 
   // Build shuffled text options for the current turn
   const buildOptions = useCallback(() => {
     if (!currentWord) return;
 
-    // Collect distractors from other words in the level
-    const others = words.filter((w) => w.id !== currentWord.id);
-    const shuffledOthers = [...others].sort(() => Math.random() - 0.5);
-    const distractorCount = words.length >= 5 ? 3 : 2;
-    const distractors = shuffledOthers.slice(0, distractorCount);
-
-    // Combine correct + distractors and shuffle positions
+    // Use the inline distractors from levels_config.json
     const allOptions = [
       { word: currentWord.word, isCorrect: true },
-      ...distractors.map((d) => ({ word: d.word, isCorrect: false })),
+      ...currentWord.distractors.map((d) => ({ word: d.word, isCorrect: false })),
     ];
 
-    // Fisher-Yates shuffle
-    for (let i = allOptions.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [allOptions[i], allOptions[j]] = [allOptions[j], allOptions[i]];
-    }
-
-    setOptions(allOptions);
-  }, [currentWord, words]);
+    setOptions(shuffleArray(allOptions));
+  }, [currentWord]);
 
   // On mount and each new turn: build options and auto-play audio
   useEffect(() => {
@@ -159,7 +160,7 @@ const ReadingMatchGame = ({ levelId = 'level_1', themeId, onBack, triggerConfett
           Back
         </button>
         <div className="bg-white/20 backdrop-blur-md rounded-full px-6 py-2">
-          <span className="text-white font-bold text-lg">
+          <span className="text-white font-bold text-lg" dir="ltr">
             {currentIndex + 1} / {total}
           </span>
         </div>
@@ -178,7 +179,7 @@ const ReadingMatchGame = ({ levelId = 'level_1', themeId, onBack, triggerConfett
       {/* Image display — large emoji */}
       <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl p-6 sm:p-8 mb-6 flex items-center justify-center">
         <span className="text-[100px] sm:text-[120px] leading-none select-none">
-          {currentWord.image}
+          {currentWord.emoji}
         </span>
       </div>
 

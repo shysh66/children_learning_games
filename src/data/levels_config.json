@@ -1,68 +1,215 @@
-{
-  "levels": [
-    {
-      "id": "level_1",
-      "name": "Animals 1",
-      "nameHe": "חיות 1",
-      "words": [
-        { "id": "dog", "word": "Dog", "image": "\ud83d\udc36", "audio": "Dog" },
-        { "id": "cat", "word": "Cat", "image": "\ud83d\udc31", "audio": "Cat" },
-        { "id": "bird", "word": "Bird", "image": "\ud83d\udc26", "audio": "Bird" },
-        { "id": "fish", "word": "Fish", "image": "\ud83d\udc1f", "audio": "Fish" },
-        { "id": "duck", "word": "Duck", "image": "\ud83e\udd86", "audio": "Duck" }
-      ]
+[
+  {
+    "level_id": 1,
+    "category": "animals",
+    "settings": {
+      "options_count": 2
     },
-    {
-      "id": "level_2",
-      "name": "Animals 2",
-      "nameHe": "חיות 2",
-      "words": [
-        { "id": "lion", "word": "Lion", "image": "\ud83e\udd81", "audio": "Lion" },
-        { "id": "bear", "word": "Bear", "image": "\ud83d\udc3b", "audio": "Bear" },
-        { "id": "horse", "word": "Horse", "image": "\ud83d\udc34", "audio": "Horse" },
-        { "id": "cow", "word": "Cow", "image": "\ud83d\udc04", "audio": "Cow" },
-        { "id": "pig", "word": "Pig", "image": "\ud83d\udc37", "audio": "Pig" }
-      ]
+    "words": [
+      {
+        "id": "l1_dog",
+        "word": "Dog",
+        "emoji": "\ud83d\udc36",
+        "distractors": [{ "word": "Cat", "emoji": "\ud83d\udc31" }]
+      },
+      {
+        "id": "l1_cat",
+        "word": "Cat",
+        "emoji": "\ud83d\udc31",
+        "distractors": [{ "word": "Bird", "emoji": "\ud83d\udc26" }]
+      },
+      {
+        "id": "l1_bird",
+        "word": "Bird",
+        "emoji": "\ud83d\udc26",
+        "distractors": [{ "word": "Cow", "emoji": "\ud83d\udc04" }]
+      },
+      {
+        "id": "l1_cow",
+        "word": "Cow",
+        "emoji": "\ud83d\udc04",
+        "distractors": [{ "word": "Dog", "emoji": "\ud83d\udc36" }]
+      }
+    ]
+  },
+  {
+    "level_id": 2,
+    "category": "colors",
+    "settings": {
+      "options_count": 2
     },
-    {
-      "id": "level_3",
-      "name": "Colors",
-      "nameHe": "צבעים",
-      "words": [
-        { "id": "red", "word": "Red", "image": "\ud83d\udd34", "audio": "Red" },
-        { "id": "blue", "word": "Blue", "image": "\ud83d\udd35", "audio": "Blue" },
-        { "id": "green", "word": "Green", "image": "\ud83d\udfe2", "audio": "Green" },
-        { "id": "yellow", "word": "Yellow", "image": "\ud83d\udfe1", "audio": "Yellow" },
-        { "id": "orange", "word": "Orange", "image": "\ud83d\udfe0", "audio": "Orange" },
-        { "id": "purple", "word": "Purple", "image": "\ud83d\udfe3", "audio": "Purple" }
-      ]
+    "words": [
+      {
+        "id": "l2_red",
+        "word": "Red",
+        "emoji": "\u2764\ufe0f",
+        "distractors": [{ "word": "Blue", "emoji": "\ud83d\udca7" }]
+      },
+      {
+        "id": "l2_blue",
+        "word": "Blue",
+        "emoji": "\ud83d\udca7",
+        "distractors": [{ "word": "Green", "emoji": "\ud83c\udf3f" }]
+      },
+      {
+        "id": "l2_green",
+        "word": "Green",
+        "emoji": "\ud83c\udf3f",
+        "distractors": [{ "word": "Yellow", "emoji": "\u2b50" }]
+      },
+      {
+        "id": "l2_yellow",
+        "word": "Yellow",
+        "emoji": "\u2b50",
+        "distractors": [{ "word": "Red", "emoji": "\u2764\ufe0f" }]
+      }
+    ]
+  },
+  {
+    "level_id": 3,
+    "category": "animals",
+    "settings": {
+      "options_count": 4
     },
-    {
-      "id": "level_4",
-      "name": "Objects",
-      "nameHe": "חפצים",
-      "words": [
-        { "id": "car", "word": "Car", "image": "\ud83d\ude97", "audio": "Car" },
-        { "id": "sun", "word": "Sun", "image": "\u2600\ufe0f", "audio": "Sun" },
-        { "id": "ball", "word": "Ball", "image": "\u26bd", "audio": "Ball" },
-        { "id": "book", "word": "Book", "image": "\ud83d\udcd6", "audio": "Book" },
-        { "id": "star", "word": "Star", "image": "\u2b50", "audio": "Star" },
-        { "id": "moon", "word": "Moon", "image": "\ud83c\udf19", "audio": "Moon" }
-      ]
+    "words": [
+      {
+        "id": "l3_dog",
+        "word": "Dog",
+        "emoji": "\ud83d\udc36",
+        "distractors": [
+          { "word": "Cat", "emoji": "\ud83d\udc31" },
+          { "word": "Bird", "emoji": "\ud83d\udc26" },
+          { "word": "Cow", "emoji": "\ud83d\udc04" }
+        ]
+      },
+      {
+        "id": "l3_cat",
+        "word": "Cat",
+        "emoji": "\ud83d\udc31",
+        "distractors": [
+          { "word": "Dog", "emoji": "\ud83d\udc36" },
+          { "word": "Bird", "emoji": "\ud83d\udc26" },
+          { "word": "Cow", "emoji": "\ud83d\udc04" }
+        ]
+      },
+      {
+        "id": "l3_bird",
+        "word": "Bird",
+        "emoji": "\ud83d\udc26",
+        "distractors": [
+          { "word": "Dog", "emoji": "\ud83d\udc36" },
+          { "word": "Cat", "emoji": "\ud83d\udc31" },
+          { "word": "Cow", "emoji": "\ud83d\udc04" }
+        ]
+      },
+      {
+        "id": "l3_cow",
+        "word": "Cow",
+        "emoji": "\ud83d\udc04",
+        "distractors": [
+          { "word": "Dog", "emoji": "\ud83d\udc36" },
+          { "word": "Cat", "emoji": "\ud83d\udc31" },
+          { "word": "Bird", "emoji": "\ud83d\udc26" }
+        ]
+      }
+    ]
+  },
+  {
+    "level_id": 4,
+    "category": "numbers",
+    "settings": {
+      "options_count": 4
     },
-    {
-      "id": "level_5",
-      "name": "Food & Nature",
-      "nameHe": "אוכל וטבע",
-      "words": [
-        { "id": "apple", "word": "Apple", "image": "\ud83c\udf4e", "audio": "Apple" },
-        { "id": "banana", "word": "Banana", "image": "\ud83c\udf4c", "audio": "Banana" },
-        { "id": "tree", "word": "Tree", "image": "\ud83c\udf33", "audio": "Tree" },
-        { "id": "flower", "word": "Flower", "image": "\ud83c\udf38", "audio": "Flower" },
-        { "id": "house", "word": "House", "image": "\ud83c\udfe0", "audio": "House" },
-        { "id": "rainbow", "word": "Rainbow", "image": "\ud83c\udf08", "audio": "Rainbow" },
-        { "id": "ice_cream", "word": "Ice Cream", "image": "\ud83c\udf66", "audio": "Ice Cream" }
-      ]
-    }
-  ]
-}
+    "words": [
+      {
+        "id": "l4_one",
+        "word": "One",
+        "emoji": "1\ufe0f\u20e3",
+        "distractors": [
+          { "word": "Two", "emoji": "2\ufe0f\u20e3" },
+          { "word": "Three", "emoji": "3\ufe0f\u20e3" },
+          { "word": "Four", "emoji": "4\ufe0f\u20e3" }
+        ]
+      },
+      {
+        "id": "l4_two",
+        "word": "Two",
+        "emoji": "2\ufe0f\u20e3",
+        "distractors": [
+          { "word": "One", "emoji": "1\ufe0f\u20e3" },
+          { "word": "Three", "emoji": "3\ufe0f\u20e3" },
+          { "word": "Four", "emoji": "4\ufe0f\u20e3" }
+        ]
+      },
+      {
+        "id": "l4_three",
+        "word": "Three",
+        "emoji": "3\ufe0f\u20e3",
+        "distractors": [
+          { "word": "One", "emoji": "1\ufe0f\u20e3" },
+          { "word": "Two", "emoji": "2\ufe0f\u20e3" },
+          { "word": "Four", "emoji": "4\ufe0f\u20e3" }
+        ]
+      },
+      {
+        "id": "l4_four",
+        "word": "Four",
+        "emoji": "4\ufe0f\u20e3",
+        "distractors": [
+          { "word": "One", "emoji": "1\ufe0f\u20e3" },
+          { "word": "Two", "emoji": "2\ufe0f\u20e3" },
+          { "word": "Three", "emoji": "3\ufe0f\u20e3" }
+        ]
+      }
+    ]
+  },
+  {
+    "level_id": 5,
+    "category": "animals",
+    "settings": {
+      "options_count": 4
+    },
+    "words": [
+      {
+        "id": "l5_dog",
+        "word": "Dog",
+        "emoji": "\ud83d\udc36",
+        "distractors": [
+          { "word": "Lion", "emoji": "\ud83e\udd81" },
+          { "word": "Rabbit", "emoji": "\ud83d\udc30" },
+          { "word": "Bear", "emoji": "\ud83d\udc3b" }
+        ]
+      },
+      {
+        "id": "l5_cat",
+        "word": "Cat",
+        "emoji": "\ud83d\udc31",
+        "distractors": [
+          { "word": "Fish", "emoji": "\ud83d\udc1f" },
+          { "word": "Monkey", "emoji": "\ud83d\udc35" },
+          { "word": "Duck", "emoji": "\ud83e\udd86" }
+        ]
+      },
+      {
+        "id": "l5_bird",
+        "word": "Bird",
+        "emoji": "\ud83d\udc26",
+        "distractors": [
+          { "word": "Elephant", "emoji": "\ud83d\udc18" },
+          { "word": "Horse", "emoji": "\ud83d\udc34" },
+          { "word": "Sheep", "emoji": "\ud83d\udc11" }
+        ]
+      },
+      {
+        "id": "l5_cow",
+        "word": "Cow",
+        "emoji": "\ud83d\udc04",
+        "distractors": [
+          { "word": "Pig", "emoji": "\ud83d\udc37" },
+          { "word": "Lion", "emoji": "\ud83e\udd81" },
+          { "word": "Rabbit", "emoji": "\ud83d\udc30" }
+        ]
+      }
+    ]
+  }
+]

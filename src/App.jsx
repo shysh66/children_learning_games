@@ -75,7 +75,7 @@ import { playCheerSound, playCelebrationSound } from './utils/sounds';
 
 // Version info
 const APP_VERSION = '6.15.0';
-const LAST_UPDATE = '28.02.2026';
+const LAST_UPDATE = '01.03.2026';
 
 // Screen names for navigation
 const SCREENS = {
@@ -837,13 +837,14 @@ const App = () => {
             themeId={selectedTheme}
             onBack={handleBackToEnglishPractice}
             triggerConfetti={triggerConfetti}
+            levelId={1}
           />
         );
 
       case SCREENS.READING_MATCH_GAME:
         return (
           <ReadingMatchGame
-            levelId="level_1"
+            levelId={1}
             themeId={selectedTheme}
             onBack={handleBackToEnglishPractice}
             triggerConfetti={triggerConfetti}
