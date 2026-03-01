@@ -59,6 +59,7 @@ The Class Champions zone is organized into 4 Hubs:
 | `AudioMemoryGame.jsx` | משחק הזיכרון | Matching pairs of English word images while listening to pronunciation. |
 | `FindItFastGame.jsx` | מצא את התמונה | Listening to an English word and selecting the correct image. |
 | `AuditoryMatchGame.jsx` | התאם לשמע | Hearing an English word and picking the correct image — 5 progressive levels across animals, colors, and numbers categories with 2-card and 4-card layouts. |
+| `ReadingMatchGame.jsx` | קרא ובחר | Seeing an image and selecting the correct English word from text buttons (Level 2). |
 | `SentenceMachineGame.jsx` | מכונת המשפטים | Building Hebrew sentences with Nikud (vowel marks) — 6 progressive levels covering word completion, grammar matching (masculine/feminine, singular/plural), and sentence construction with distractors. Tap-only mechanics. |
 
 ### Hub 4: Nature Lab / מעבדת הטבע 🔬

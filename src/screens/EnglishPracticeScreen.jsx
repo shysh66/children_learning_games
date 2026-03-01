@@ -30,6 +30,14 @@ const EnglishPracticeScreen = ({ themeId, onSelectGame, onBack }) => {
       description: 'הקשב למילה ובחר את התמונה הנכונה',
       color: 'from-green-500 to-emerald-500',
     },
+    {
+      id: 'readingMatch',
+      name: 'קרא ובחר',
+      englishName: 'Reading Match',
+      icon: '📖',
+      description: 'ראה תמונה ובחר את המילה הנכונה',
+      color: 'from-amber-500 to-yellow-500',
+    },
   ];
 
   return (
