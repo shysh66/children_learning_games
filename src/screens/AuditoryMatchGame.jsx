@@ -5,8 +5,8 @@ import { playCheerSound, playOopsSound } from '../utils/sounds';
 import { speakWord } from '../data/englishWords';
 import levelsConfig from '../data/levels_config.json';
 
-// Fallback color palette keyed by lowercase word name
-const FALLBACK_COLORS = {
+// Background color palette keyed by lowercase word name
+const CARD_COLORS = {
   dog: 'bg-amber-300',
   cat: 'bg-orange-300',
   bird: 'bg-sky-300',
@@ -19,33 +19,6 @@ const FALLBACK_COLORS = {
   two: 'bg-pink-300',
   three: 'bg-teal-300',
   four: 'bg-orange-400',
-};
-
-// Build a lookup from image path → word name for fallback display
-const buildImageToWord = (words) => {
-  const map = {};
-  for (const w of words) {
-    map[w.image] = w.word;
-    for (const d of w.distractors) {
-      if (!map[d]) {
-        // Extract name from path: /assets/images/dog.png → Dog
-        const match = d.match(/\/([^/]+)\.png$/);
-        if (match) {
-          map[d] = match[1].charAt(0).toUpperCase() + match[1].slice(1);
-        }
-      }
-    }
-  }
-  return map;
-};
-
-// Get fallback color for an image path
-const getFallbackColor = (src) => {
-  const match = src.match(/\/([^/]+)\.png$/);
-  if (match) {
-    return FALLBACK_COLORS[match[1]] || 'bg-purple-300';
-  }
-  return 'bg-purple-300';
 };
 
 // Fisher-Yates shuffle (works for any array length)
@@ -70,13 +43,10 @@ const AuditoryMatchGame = ({ themeId, onBack, triggerConfetti, levelId = 1 }) =>
   const optionsCount = levelConfig.settings.options_count;
   const total = words.length;
 
-  const imageToWord = useMemo(() => buildImageToWord(words), [words]);
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const [shuffledOptions, setShuffledOptions] = useState([]);
   const [feedback, setFeedback] = useState(null); // null | 'correct' | 'wrong'
-  const [selectedSrc, setSelectedSrc] = useState(null);
-  const [imgErrors, setImgErrors] = useState({});
+  const [selectedWord, setSelectedWord] = useState(null);
   const [gameComplete, setGameComplete] = useState(false);
   const [score, setScore] = useState(0);
 
@@ -93,8 +63,8 @@ const AuditoryMatchGame = ({ themeId, onBack, triggerConfetti, levelId = 1 }) =>
     if (!currentItem) return;
     const distractors = currentItem.distractors.slice(0, optionsCount - 1);
     const options = [
-      { src: currentItem.image, isCorrect: true },
-      ...distractors.map((d) => ({ src: d, isCorrect: false })),
+      { word: currentItem.word, emoji: currentItem.emoji, isCorrect: true },
+      ...distractors.map((d) => ({ word: d.word, emoji: d.emoji, isCorrect: false })),
     ];
     setShuffledOptions(shuffleArray(options));
   }, [currentItem, optionsCount]);
@@ -103,7 +73,7 @@ const AuditoryMatchGame = ({ themeId, onBack, triggerConfetti, levelId = 1 }) =>
   useEffect(() => {
     if (gameComplete) return;
     setFeedback(null);
-    setSelectedSrc(null);
+    setSelectedWord(null);
     buildShuffledOptions();
     const timer = setTimeout(() => {
       playAudio();
@@ -111,11 +81,11 @@ const AuditoryMatchGame = ({ themeId, onBack, triggerConfetti, levelId = 1 }) =>
     return () => clearTimeout(timer);
   }, [currentIndex, gameComplete, buildShuffledOptions, playAudio]);
 
-  // Handle image click
-  const handleImageClick = (item) => {
+  // Handle card click
+  const handleCardClick = (item) => {
     if (feedback) return;
 
-    setSelectedSrc(item.src);
+    setSelectedWord(item.word);
 
     if (item.isCorrect) {
       setFeedback('correct');
@@ -139,21 +109,16 @@ const AuditoryMatchGame = ({ themeId, onBack, triggerConfetti, levelId = 1 }) =>
 
       setTimeout(() => {
         setFeedback(null);
-        setSelectedSrc(null);
+        setSelectedWord(null);
       }, 800);
     }
-  };
-
-  const handleImgError = (src) => {
-    setImgErrors((prev) => ({ ...prev, [src]: true }));
   };
 
   const resetGame = () => {
     setCurrentIndex(0);
     setShuffledOptions([]);
     setFeedback(null);
-    setSelectedSrc(null);
-    setImgErrors({});
+    setSelectedWord(null);
     setGameComplete(false);
     setScore(0);
   };
@@ -200,9 +165,9 @@ const AuditoryMatchGame = ({ themeId, onBack, triggerConfetti, levelId = 1 }) =>
     ? 'grid grid-cols-2 gap-4 sm:gap-6 w-full max-w-xl px-2'
     : 'flex gap-4 sm:gap-8 justify-center w-full max-w-2xl px-2';
   const cardMaxWidth = is4Cards ? 'max-w-[220px]' : 'max-w-[280px]';
-  const fallbackTextSize = is4Cards
-    ? 'text-3xl sm:text-4xl'
-    : 'text-4xl sm:text-5xl';
+  const emojiSize = is4Cards
+    ? 'text-6xl sm:text-7xl'
+    : 'text-7xl sm:text-8xl';
 
   // --- Game Screen ---
   return (
@@ -218,7 +183,7 @@ const AuditoryMatchGame = ({ themeId, onBack, triggerConfetti, levelId = 1 }) =>
           Back
         </button>
         <div className="bg-white/20 backdrop-blur-md rounded-full px-6 py-2">
-          <span className="text-white font-bold text-lg">
+          <span className="text-white font-bold text-lg" dir="ltr">
             {currentIndex + 1} / {total}
           </span>
         </div>
@@ -243,23 +208,23 @@ const AuditoryMatchGame = ({ themeId, onBack, triggerConfetti, levelId = 1 }) =>
         <span className={`${is4Cards ? 'text-4xl sm:text-5xl' : 'text-5xl sm:text-6xl'}`}>🔊</span>
       </button>
 
-      {/* Image Cards — dynamic 2-card or 4-card layout */}
+      {/* Emoji Cards — dynamic 2-card or 4-card layout */}
       <div className={gridClasses}>
         {shuffledOptions.map((item, index) => {
-          const isSelected = selectedSrc === item.src;
+          const isSelected = selectedWord === item.word;
           const isCorrectFeedback = isSelected && feedback === 'correct';
           const isWrongFeedback = isSelected && feedback === 'wrong';
-          const hasError = imgErrors[item.src];
+          const bgColor = CARD_COLORS[item.word.toLowerCase()] || 'bg-purple-300';
 
           return (
             <button
               key={`${currentItem.id}-${index}`}
-              onClick={() => handleImageClick(item)}
+              onClick={() => handleCardClick(item)}
               disabled={feedback === 'correct'}
               className={`
                 relative ${is4Cards ? 'w-full' : 'flex-1'} aspect-square ${cardMaxWidth} rounded-3xl shadow-lg
                 transition-all duration-200 cursor-pointer overflow-hidden
-                bg-white/90 backdrop-blur-sm
+                ${bgColor}
                 hover:shadow-2xl hover:scale-105 active:scale-95
                 ${isCorrectFeedback ? 'border-[6px] border-green-400 ring-4 ring-green-300/50 animate-game-bounce' : ''}
                 ${isWrongFeedback ? 'border-[6px] border-red-400 ring-4 ring-red-300/50 animate-game-shake' : ''}
@@ -267,23 +232,11 @@ const AuditoryMatchGame = ({ themeId, onBack, triggerConfetti, levelId = 1 }) =>
                 ${feedback === 'correct' && !isSelected ? 'opacity-50 scale-90' : ''}
               `}
             >
-              {hasError ? (
-                <div
-                  className={`w-full h-full flex items-center justify-center rounded-3xl ${getFallbackColor(item.src)}`}
-                >
-                  <span className={`${fallbackTextSize} font-black text-white drop-shadow-lg select-none`}>
-                    {imageToWord[item.src] || '?'}
-                  </span>
-                </div>
-              ) : (
-                <img
-                  src={item.src}
-                  alt=""
-                  draggable={false}
-                  className="w-full h-full object-cover rounded-3xl select-none"
-                  onError={() => handleImgError(item.src)}
-                />
-              )}
+              <div className="w-full h-full flex items-center justify-center select-none">
+                <span className={`${emojiSize} drop-shadow-lg`}>
+                  {item.emoji}
+                </span>
+              </div>
 
               {/* Success overlay */}
               {isCorrectFeedback && (
