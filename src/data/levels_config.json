@@ -10,13 +10,13 @@
         "id": "l1_dog",
         "word": "Dog",
         "emoji": "\ud83d\udc36",
-        "distractors": [{ "word": "Red", "emoji": "\ud83d\udd34" }]
+        "distractors": [{ "word": "Red", "emoji": "\u2764\ufe0f" }]
       },
       {
         "id": "l1_cat",
         "word": "Cat",
         "emoji": "\ud83d\udc31",
-        "distractors": [{ "word": "Blue", "emoji": "\ud83d\udd35" }]
+        "distractors": [{ "word": "Blue", "emoji": "\ud83d\udca7" }]
       },
       {
         "id": "l1_bird",
@@ -42,25 +42,25 @@
       {
         "id": "l2_red",
         "word": "Red",
-        "emoji": "\ud83d\udd34",
+        "emoji": "\u2764\ufe0f",
         "distractors": [{ "word": "Dog", "emoji": "\ud83d\udc36" }]
       },
       {
         "id": "l2_blue",
         "word": "Blue",
-        "emoji": "\ud83d\udd35",
+        "emoji": "\ud83d\udca7",
         "distractors": [{ "word": "One", "emoji": "1\ufe0f\u20e3" }]
       },
       {
         "id": "l2_green",
         "word": "Green",
-        "emoji": "\ud83d\udfe2",
+        "emoji": "\ud83c\udf3f",
         "distractors": [{ "word": "Cow", "emoji": "\ud83d\udc04" }]
       },
       {
         "id": "l2_yellow",
         "word": "Yellow",
-        "emoji": "\ud83d\udfe1",
+        "emoji": "\u2b50",
         "distractors": [{ "word": "Four", "emoji": "4\ufe0f\u20e3" }]
       }
     ]
@@ -77,9 +77,9 @@
         "word": "Dog",
         "emoji": "\ud83d\udc36",
         "distractors": [
-          { "word": "Red", "emoji": "\ud83d\udd34" },
+          { "word": "Red", "emoji": "\u2764\ufe0f" },
           { "word": "Two", "emoji": "2\ufe0f\u20e3" },
-          { "word": "Green", "emoji": "\ud83d\udfe2" }
+          { "word": "Green", "emoji": "\ud83c\udf3f" }
         ]
       },
       {
@@ -87,9 +87,9 @@
         "word": "Cat",
         "emoji": "\ud83d\udc31",
         "distractors": [
-          { "word": "Blue", "emoji": "\ud83d\udd35" },
+          { "word": "Blue", "emoji": "\ud83d\udca7" },
           { "word": "Four", "emoji": "4\ufe0f\u20e3" },
-          { "word": "Yellow", "emoji": "\ud83d\udfe1" }
+          { "word": "Yellow", "emoji": "\u2b50" }
         ]
       },
       {
@@ -98,7 +98,7 @@
         "emoji": "\ud83d\udc26",
         "distractors": [
           { "word": "One", "emoji": "1\ufe0f\u20e3" },
-          { "word": "Red", "emoji": "\ud83d\udd34" },
+          { "word": "Red", "emoji": "\u2764\ufe0f" },
           { "word": "Three", "emoji": "3\ufe0f\u20e3" }
         ]
       },
@@ -107,9 +107,9 @@
         "word": "Cow",
         "emoji": "\ud83d\udc04",
         "distractors": [
-          { "word": "Yellow", "emoji": "\ud83d\udfe1" },
+          { "word": "Yellow", "emoji": "\u2b50" },
           { "word": "Two", "emoji": "2\ufe0f\u20e3" },
-          { "word": "Blue", "emoji": "\ud83d\udd35" }
+          { "word": "Blue", "emoji": "\ud83d\udca7" }
         ]
       }
     ]
@@ -127,8 +127,8 @@
         "emoji": "1\ufe0f\u20e3",
         "distractors": [
           { "word": "Dog", "emoji": "\ud83d\udc36" },
-          { "word": "Red", "emoji": "\ud83d\udd34" },
-          { "word": "Green", "emoji": "\ud83d\udfe2" }
+          { "word": "Red", "emoji": "\u2764\ufe0f" },
+          { "word": "Green", "emoji": "\ud83c\udf3f" }
         ]
       },
       {
@@ -137,8 +137,8 @@
         "emoji": "2\ufe0f\u20e3",
         "distractors": [
           { "word": "Cat", "emoji": "\ud83d\udc31" },
-          { "word": "Blue", "emoji": "\ud83d\udd35" },
-          { "word": "Yellow", "emoji": "\ud83d\udfe1" }
+          { "word": "Blue", "emoji": "\ud83d\udca7" },
+          { "word": "Yellow", "emoji": "\u2b50" }
         ]
       },
       {
@@ -147,8 +147,8 @@
         "emoji": "3\ufe0f\u20e3",
         "distractors": [
           { "word": "Bird", "emoji": "\ud83d\udc26" },
-          { "word": "Red", "emoji": "\ud83d\udd34" },
-          { "word": "Blue", "emoji": "\ud83d\udd35" }
+          { "word": "Red", "emoji": "\u2764\ufe0f" },
+          { "word": "Blue", "emoji": "\ud83d\udca7" }
         ]
       },
       {
@@ -157,8 +157,8 @@
         "emoji": "4\ufe0f\u20e3",
         "distractors": [
           { "word": "Cow", "emoji": "\ud83d\udc04" },
-          { "word": "Green", "emoji": "\ud83d\udfe2" },
-          { "word": "Yellow", "emoji": "\ud83d\udfe1" }
+          { "word": "Green", "emoji": "\ud83c\udf3f" },
+          { "word": "Yellow", "emoji": "\u2b50" }
         ]
       }
     ]
